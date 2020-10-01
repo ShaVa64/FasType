@@ -50,30 +50,27 @@ namespace FasType
 
             services.AddSingleton(Configuration);
             services.AddSingleton<MainWindow>();
-            services.AddSingleton<IDataStorage>(new FileDataStorage(Configuration["DataFilePath"]));
+            services.AddSingleton<IDataStorage, FileDataStorage>();
             services.AddTransient<IKeyboardListenerHandler, KeyboardListenerHandler>();
             services.AddTransient<ToolWindow>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)
         {
-            Task.Run(CheckStartupShortcut);
-
             MainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             MainWindow.Show();
         }
 
-        void CheckStartupShortcut()
+        protected override void OnExit(ExitEventArgs e)
         {
-            if (FasType.Properties.Settings.Default.OnStartUp is false)
-                return;
+            FasType.Properties.Settings.Default.Save();
+            base.OnExit(e);
+        }
 
-            var startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+        void CreateStartupShortcut(string path)
+        {
             var shell = new WshShellClass();
-
-            var shortcutLinkFilePath = Path.Combine(startupFolderPath, FasType.Properties.Resources.AppName + ".lnk");
-
-            var shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLinkFilePath);
+            var shortcut = (IWshShortcut)shell.CreateShortcut(path);
 
             var targetPath = Process.GetCurrentProcess().MainModule.FileName;
             var workingDirectory = new FileInfo(targetPath).Directory.FullName;
@@ -84,5 +81,21 @@ namespace FasType
             shortcut.Save();
         }
 
+        void RemoveStartupShortcut(string path)
+        {
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+        }
+
+        public void UpdateStartupShortcut(bool create)
+        {
+            var startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            var shortcutLinkFilePath = Path.Combine(startupFolderPath, FasType.Properties.Resources.AppName + ".lnk");
+
+            if (create)
+                CreateStartupShortcut(shortcutLinkFilePath);
+            else
+                RemoveStartupShortcut(shortcutLinkFilePath);
+        }
     }
 }

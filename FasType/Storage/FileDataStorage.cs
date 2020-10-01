@@ -1,6 +1,7 @@
 ﻿using FasType.Abbreviations;
 using FasType.Converters;
 using FasType.Services;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,9 @@ namespace FasType.Storage
             }
         }
         
-        public FileDataStorage(string filepath)
+        public FileDataStorage(IConfiguration _configuration)
         {
-            _filepath = filepath;
+            _filepath = _configuration["DataFilePath"];
 
             serializerOptions = new JsonSerializerOptions();
 #if DEBUG

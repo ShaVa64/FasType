@@ -1,4 +1,6 @@
-﻿namespace FasType.Abbreviations
+﻿using System.Diagnostics;
+
+namespace FasType.Abbreviations
 {
     public interface IAbbreviation
     {
@@ -6,7 +8,7 @@
         string ShortForm { get; }
 
         bool IsAbbreviation(string shortForm);
-        string GetFullForm(string shortForm);
-        bool TryGetFullForm(string shortForm, out string fullForm);
+        string? GetFullForm(string shortForm);
+        bool TryGetFullForm(string shortForm, out string? fullForm);
     }
 }

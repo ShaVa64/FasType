@@ -3,16 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:resx="clr-namespace:FasType.Properties"
+        xmlns:prop="clr-namespace:FasType.Properties"
         xmlns:local="clr-namespace:FasType"
         mc:Ignorable="d"
         Topmost="True" WindowStartupLocation="Manual" ResizeMode="CanMinimize"
         Loaded="Window_Loaded" Closing="Window_Closing"
-        Title="{x:Static resx:Resources.AppName}"
+        Title="{x:Static prop:Resources.AppName}"
         Height="300" MinHeight="300" Width="400" MinWidth="400">
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
-            <ToggleButton Content="Activate"/>
+            <ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
             <Button Content="Add" Click="Button_Click"/>
             <Menu>
                 <MenuItem Header="_Menu">
