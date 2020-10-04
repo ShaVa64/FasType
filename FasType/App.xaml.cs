@@ -1,4 +1,5 @@
 ﻿using FasType.LLKeyboardListener;
+using FasType.Pages;
 using FasType.Services;
 using FasType.Storage;
 using IWshRuntimeLibrary;
@@ -50,9 +51,12 @@ namespace FasType
 
             services.AddSingleton(Configuration);
             services.AddSingleton<MainWindow>();
+            
             services.AddSingleton<IDataStorage, FileDataStorage>();
             services.AddTransient<IKeyboardListenerHandler, KeyboardListenerHandler>();
+            
             services.AddTransient<ToolWindow>();
+            services.AddTransient<SimpleAbbreviationPage>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)
@@ -77,6 +81,8 @@ namespace FasType
 
             shortcut.WorkingDirectory = workingDirectory;
             shortcut.TargetPath = targetPath;
+            shortcut.IconLocation = Path.Combine(workingDirectory, @"Assets\keyboard.ico");
+            shortcut.Description = "Shortcut to FasType App";
 
             shortcut.Save();
         }

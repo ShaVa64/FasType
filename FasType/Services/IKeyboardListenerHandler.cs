@@ -14,5 +14,8 @@ namespace FasType.Services
 
         void Load(Action<string> currentWordCallback);
         void Close();
+
+        void Pause();
+        void Continue();
     }
 }

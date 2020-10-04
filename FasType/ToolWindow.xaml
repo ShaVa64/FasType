@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FasType"
-        mc:Ignorable="d" WindowStyle="ToolWindow"
-        WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" Topmost="True"
         Title="ToolWindow" Height="450" Width="800">
     <Grid>
         

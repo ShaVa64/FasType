@@ -1,4 +1,4 @@
-﻿using FasType.Abbreviations;
+﻿using FasType.Models;
 using FasType.Services;
 using FasType.Utils;
 using Serilog;
@@ -58,7 +58,7 @@ namespace FasType.LLKeyboardListener
             if (e.KeyPressed == Key.Space)
             {
                 string shortForm = CurrentWord.ToLower();
-
+        
                 var abbrevs = _storage.GetAbbreviations(shortForm).ToList();
 
                 if (abbrevs.Count == 1)
@@ -119,15 +119,13 @@ namespace FasType.LLKeyboardListener
 
         public void Load(Action<string> currentWordCallback)
         {
-            _listener.HookKeyboard();
-            _listener.OnKeyPressed += ListenerEvent;
+            _listener.HookKeyboard(); 
+            Continue();
             CurrentWordCallback = currentWordCallback;
         }
-
-        public void Close()
-        {
-            _listener.UnHookKeyboard();
-        }
+        public void Close() => _listener.UnHookKeyboard();
+        public void Pause() => _listener.OnKeyPressed -= ListenerEvent;
+        public void Continue() => _listener.OnKeyPressed += ListenerEvent;
 
         enum ListenerStates
         {

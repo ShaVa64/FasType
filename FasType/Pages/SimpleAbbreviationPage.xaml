@@ -5,11 +5,52 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FasType.Pages"
       mc:Ignorable="d" 
-      WindowHeight="400" WindowWidth="200" WindowTitle="Add Simple Abbreviation"
-      d:DesignHeight="400" d:DesignWidth="200"
+      WindowHeight="200" WindowWidth="200" WindowTitle="Add Simple Abbreviation"
+      d:DesignHeight="200" d:DesignWidth="200"
       Title="SimpleAbbreviationPage">
 
+    <Page.Resources>
+        <Style TargetType="Control" x:Key="Style.Base">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource Style.Base}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="7,2"/>
+        </Style>
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource Style.Base}">
+            <Setter Property="Margin" Value="2, 0, 10, 0"/>
+        </Style>
+
+        <Style TargetType="Label" x:Key="Style.DescLabel" BasedOn="{StaticResource Style.Base}">
+            <Setter Property="Margin" Value="5, 0, 2, 0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        </Style>
+    </Page.Resources>
+
     <Grid>
-        <Label Content="Hello World!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height=".5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Short Form:" Style="{StaticResource Style.DescLabel}"
+               Grid.Row="0" Grid.Column="0"/>
+        <TextBox x:Name="sfTB" Grid.Row="0" Grid.Column="1" TextChanged="TB_TextChanged"/>
+        <Label Content="Full Form:" Style="{StaticResource Style.DescLabel}"
+                Grid.Row="1" Grid.Column="0"/>
+        <TextBox x:Name="ffTB" Grid.Row="1" Grid.Column="1" TextChanged="TB_TextChanged"/>
+
+        <TextBlock x:Name="PreviewText" TextAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2"/>
+        <Button Content="Add" Click="Button_Click"
+                Grid.Row="4" Grid.ColumnSpan="2"/>
     </Grid>
 </Page>

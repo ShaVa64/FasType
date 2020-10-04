@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prop="clr-namespace:FasType.Properties"
         xmlns:local="clr-namespace:FasType"
+        xmlns:page="clr-namespace:FasType.Pages"
         mc:Ignorable="d"
         Topmost="True" WindowStartupLocation="Manual" ResizeMode="CanMinimize"
         Loaded="Window_Loaded" Closing="Window_Closing"
@@ -12,18 +13,15 @@
         Height="300" MinHeight="300" Width="400" MinWidth="400">
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
-            <ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
-            <Button Content="Add" Click="Button_Click"/>
+            <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
             <Menu>
-                <MenuItem Header="_Menu">
-                    <MenuItem Header="_Active" IsCheckable="True" StaysOpenOnClick="True" InputGestureText="Ctrl+O" IsChecked="True" />
-                    <MenuItem Header="File">
-                        <MenuItem Header="Copy" IsCheckable="True" StaysOpenOnClick="True"/>
-                        <MenuItem Header="Paste" />
-                        <Separator/> 
-                        <MenuItem Header="Cut"/>
-                    </MenuItem>
+                <MenuItem Header="_Add New...">
+                    <MenuItem Header="_Simple Abbrev." Click="Button_Click" Tag="{x:Type page:SimpleAbbreviationPage}"/>
+                    <MenuItem Header="_Verb Abbrev." Click="Button_Click" Tag="{x:Type page:SimpleAbbreviationPage}"/>
                 </MenuItem>
+            </Menu>
+            <Menu ToolBar.OverflowMode="Always">
+                <MenuItem Header="Run On Start Up" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
             </Menu>
         </ToolBar>
         

@@ -77,13 +77,13 @@ namespace FasType.LLKeyboardListener
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             KeyPressedArgs eventArgs = null;
-            if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
+            if (OnKeyPressed is not null && nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Key key = KeyInterop.KeyFromVirtualKey(vkCode);
 
                 eventArgs = new (key, vkCode, false);
-                OnKeyPressed?.Invoke(this, eventArgs);
+                OnKeyPressed(this, eventArgs);
             }
 
             IntPtr r = CallNextHookEx(_hookID, nCode, wParam, lParam);

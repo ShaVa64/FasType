@@ -1,15 +1,8 @@
-﻿using FasType.LLKeyboardListener;
-using FasType.Utils;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using WindowsInput;
-using Serilog;
+﻿using System.Windows;
 using FasType.Services;
-using Microsoft.Extensions.Options;
-using FasType.Abbreviations;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace FasType
 {
@@ -36,12 +29,20 @@ namespace FasType
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (sender is not FrameworkElement fe)
+                return;
+
+            if (fe.Tag is not Type t)
+                return;
+
             var tw = App.Current.ServiceProvider.GetRequiredService<ToolWindow>();
-            var p = new Pages.SimpleAbbreviationPage();
+            var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;// Activator.CreateInstance(t) as Page;//new Pages.SimpleAbbreviationPage();
 
             tw.Content = p;
 
+            _listenerHandler.Pause();
             tw.ShowDialog();
+            _listenerHandler.Continue();
         }
     }
 }

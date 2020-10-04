@@ -1,5 +1,5 @@
-﻿using FasType.Abbreviations;
-using FasType.Converters;
+﻿using FasType.Converters;
+using FasType.Models;
 using FasType.Services;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -26,7 +26,7 @@ namespace FasType.Storage
             set
             {
                 _allAbbreviations = value.ToList();
-                AbbreviationsLookup = _allAbbreviations.ToLookup(a => string.Join(null, a.ShortForm.Take(2)), a => a);
+                AbbreviationsLookup = _allAbbreviations.ToLookup(a => string.Concat(a.ShortForm.Take(2)), a => a);
             }
         }
         
@@ -108,6 +108,6 @@ namespace FasType.Storage
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IAbbreviation> GetAbbreviations(string shortForm) => AbbreviationsLookup[string.Join("", shortForm.Take(2))];
+        public IEnumerable<IAbbreviation> GetAbbreviations(string shortForm) => AbbreviationsLookup[string.Concat(shortForm.Take(2))];
     }
 }

@@ -20,6 +20,7 @@ namespace FasType
         public ToolWindow()
         {
             InitializeComponent();
+            Owner = App.Current.MainWindow;
         }
     }
 }

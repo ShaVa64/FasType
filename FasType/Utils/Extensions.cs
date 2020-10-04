@@ -16,14 +16,14 @@ namespace FasType.Utils
         public static bool IsFirstCharUpper(this string input) => input switch
         {
             null => throw new ArgumentNullException(nameof(input)),
-            "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+            "" => false, //throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
             _ => char.IsUpper(input[0])
         };
 
         public static string FirstCharToUpper(this string input) => input switch
         {
              null => throw new ArgumentNullException(nameof(input)),
-             "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+             "" => "",// throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
              _ => input.First().ToString().ToUpper() + input.Substring(1)
         };
     }

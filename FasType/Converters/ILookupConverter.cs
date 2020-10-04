@@ -1,4 +1,4 @@
-﻿using FasType.Abbreviations;
+﻿using FasType.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,7 +46,7 @@ namespace FasType.Converters
                 }
             }
             //var list = JsonSerializer.Deserialize<List<IAbbreviation>>(ref reader, options);
-            var lookup = list.ToLookup(e => string.Join("", e.ShortForm.Take(2)), e => e);
+            var lookup = list.ToLookup(e => string.Concat(e.ShortForm.Take(2)), e => e);
             return lookup;
         }
 
