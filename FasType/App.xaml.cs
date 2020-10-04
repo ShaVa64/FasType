@@ -2,6 +2,7 @@
 using FasType.Pages;
 using FasType.Services;
 using FasType.Storage;
+using FasType.ViewModels;
 using IWshRuntimeLibrary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,12 +52,14 @@ namespace FasType
 
             services.AddSingleton(Configuration);
             services.AddSingleton<MainWindow>();
-            
+            services.AddTransient<MainWindowViewModel>();
+
             services.AddSingleton<IDataStorage, FileDataStorage>();
-            services.AddTransient<IKeyboardListenerHandler, KeyboardListenerHandler>();
+            //services.AddTransient<IKeyboardListenerHandler, KeyboardListenerHandler>();
             
             services.AddTransient<ToolWindow>();
             services.AddTransient<SimpleAbbreviationPage>();
+            services.AddTransient<ToolWindowViewModel>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)

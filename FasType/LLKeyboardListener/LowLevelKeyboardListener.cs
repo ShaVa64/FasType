@@ -30,7 +30,7 @@ namespace FasType.LLKeyboardListener
 
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        public event EventHandler<KeyPressedArgs> OnKeyPressed;
+        public event EventHandler<KeyPressedEventArgs> OnKeyPressed;
 
         private readonly LowLevelKeyboardProc _proc;
         private IntPtr _hookID = IntPtr.Zero;
@@ -76,7 +76,7 @@ namespace FasType.LLKeyboardListener
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            KeyPressedArgs eventArgs = null;
+            KeyPressedEventArgs eventArgs = null;
             if (OnKeyPressed is not null && nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 int vkCode = Marshal.ReadInt32(lParam);
@@ -91,14 +91,14 @@ namespace FasType.LLKeyboardListener
         }
     }
 
-    public class KeyPressedArgs : EventArgs
+    public class KeyPressedEventArgs : EventArgs
     {
         public int VkCode { get; private set; }
         public Key KeyPressed { get; private set; }
         public bool IsSystemKey { get; private set; }
         public bool StopChain { get; set; }
 
-        public KeyPressedArgs(Key key, int vkCode, bool isSystemKey)
+        public KeyPressedEventArgs(Key key, int vkCode, bool isSystemKey)
         {
             KeyPressed = key;
             VkCode = vkCode;

@@ -1,5 +1,6 @@
 ﻿using FasType.Models;
 using FasType.Services;
+using FasType.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,50 +24,45 @@ namespace FasType.Pages
     /// </summary>
     public partial class SimpleAbbreviationPage : Page
     {
-        readonly IDataStorage _storage;
-        SimpleAbbreviation _currentAbbrev;
+        readonly ToolWindowViewModel _vm;
 
-        public SimpleAbbreviationPage(IDataStorage storage)
+        public SimpleAbbreviationPage(ToolWindowViewModel vm)
         {
             InitializeComponent();
 
-            _storage = storage;
-            _currentAbbrev = null;
-            sfTB.Focus();
+            DataContext = _vm = vm;
+            FirstTB.Focus();
+
+            this.CommandBindings.Add(new CommandBinding(_vm.CreateNewCommand, _vm.CreateNew, _vm.CanCreateNew));
             //Init();
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
-            {
-                MessageBox.Show("You can't create an empty abbreviation", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
-                return;
-            }
+        //private async void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
+        //    {
+        //        MessageBox.Show("You can't create an empty abbreviation", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+        //        return;
+        //    }
 
-            bool b = await _storage.AddAsync(_currentAbbrev);
-            if (!b)
-            {
-                MessageBox.Show($"An error has occured while trying to create the abbreviation ({_currentAbbrev.ElementaryRepresentation}).", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
-                return;
-            }
+        //    bool b = await _storage.AddAsync(_currentAbbrev);
+        //    if (!b)
+        //    {
+        //        MessageBox.Show($"An error has occured while trying to create the abbreviation ({_currentAbbrev.ElementaryRepresentation}).", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+        //        return;
+        //    }
 
-            (Parent as Window).Close();
-        }
+        //    (Parent as Window).Close();
+        //}
         
-        private void TB_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            PreviewText.Text = "";
+        //private void TB_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    PreviewText.Text = "";
 
-            string sf = sfTB.Text.Trim();
-            string ff = ffTB.Text.Trim();
-            if (string.IsNullOrEmpty(sf) && string.IsNullOrEmpty(ff))
-                return;
+        //    string sf = sfTB.Text.Trim();
+        //    string ff = ffTB.Text.Trim();
 
-            _currentAbbrev = new SimpleAbbreviation(sf, ff);
-
-            PreviewText.Text = _currentAbbrev.ComplexRepresentation;
-        }
+        //}
 
         //void Init()
         //{

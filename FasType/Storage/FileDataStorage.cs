@@ -41,7 +41,7 @@ namespace FasType.Storage
             serializerOptions.Converters.Add(new IAbbreviationConverter());
             serializerOptions.Converters.Add(new IEnumerableConverter(serializerOptions));
 
-            Task.Run(LoadAsync);
+            Load();
         }
 
         protected bool Load()

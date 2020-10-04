@@ -23,7 +23,7 @@
             <Setter Property="Margin" Value="2, 0, 10, 0"/>
         </Style>
 
-        <Style TargetType="Label" x:Key="Style.DescLabel" BasedOn="{StaticResource Style.Base}">
+        <Style TargetType="Label" BasedOn="{StaticResource Style.Base}">
             <Setter Property="Margin" Value="5, 0, 2, 0"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
         </Style>
@@ -42,15 +42,17 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Short Form:" Style="{StaticResource Style.DescLabel}"
-               Grid.Row="0" Grid.Column="0"/>
-        <TextBox x:Name="sfTB" Grid.Row="0" Grid.Column="1" TextChanged="TB_TextChanged"/>
-        <Label Content="Full Form:" Style="{StaticResource Style.DescLabel}"
-                Grid.Row="1" Grid.Column="0"/>
-        <TextBox x:Name="ffTB" Grid.Row="1" Grid.Column="1" TextChanged="TB_TextChanged"/>
+        <Label Content="Short Form:" Grid.Row="0" Grid.Column="0"/>
+        <TextBox Text="{Binding ShortForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="FirstTB"
+                 Grid.Row="0" Grid.Column="1"/>
+        <Label Content="Full Form:" Grid.Row="1" Grid.Column="0"/>
+        <TextBox Text="{Binding FullForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                 Grid.Row="1" Grid.Column="1"/>
 
-        <TextBlock x:Name="PreviewText" TextAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2"/>
-        <Button Content="Add" Click="Button_Click"
+        <TextBlock Text="{Binding Preview, Mode=OneWay}" FontStyle="Italic" TextAlignment="Center"
+                   Grid.Row="3" Grid.ColumnSpan="2"/>
+
+        <Button Content="Add" Command="{Binding CreateNewCommand}"
                 Grid.Row="4" Grid.ColumnSpan="2"/>
     </Grid>
 </Page>

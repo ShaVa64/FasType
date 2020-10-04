@@ -6,18 +6,19 @@
         xmlns:prop="clr-namespace:FasType.Properties"
         xmlns:local="clr-namespace:FasType"
         xmlns:page="clr-namespace:FasType.Pages"
+        xmlns:vm="clr-namespace:FasType.ViewModels"
         mc:Ignorable="d"
         Topmost="True" WindowStartupLocation="Manual" ResizeMode="CanMinimize"
-        Loaded="Window_Loaded" Closing="Window_Closing"
         Title="{x:Static prop:Resources.AppName}"
-        Height="300" MinHeight="300" Width="400" MinWidth="400">
+        Height="300" Width="250">
+    
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
             <Menu>
                 <MenuItem Header="_Add New...">
-                    <MenuItem Header="_Simple Abbrev." Click="Button_Click" Tag="{x:Type page:SimpleAbbreviationPage}"/>
-                    <MenuItem Header="_Verb Abbrev." Click="Button_Click" Tag="{x:Type page:SimpleAbbreviationPage}"/>
+                    <MenuItem Header="_Simple Abbrev." Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
+                    <MenuItem Header="_Verb Abbrev." Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
                 </MenuItem>
             </Menu>
             <Menu ToolBar.OverflowMode="Always">
@@ -26,11 +27,22 @@
         </ToolBar>
         
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox IsReadOnly="True" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Center" Name="label" TextWrapping="Wrap" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ListBox ItemsSource="{Binding MatchingAbbrevs}" Grid.Row="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ElementaryRepresentation}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBox Name="label" Text="{Binding CurrentWord, Mode=OneWay}"
+                     TextWrapping="Wrap" IsReadOnly="True"
+                     HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                     Margin="10" Grid.Row="1"/>
+            <!--Grid.ColumnSpan="2"--> 
         </Grid>
     </DockPanel>
 </Window>

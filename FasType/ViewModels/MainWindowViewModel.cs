@@ -1,35 +1,60 @@
-﻿using FasType.Models;
+﻿using FasType.LLKeyboardListener;
+using FasType.Models;
 using FasType.Services;
 using FasType.Utils;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Security.AccessControl;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using WindowsInput;
 
-namespace FasType.LLKeyboardListener
+namespace FasType.ViewModels
 {
-    class KeyboardListenerHandler : IKeyboardListenerHandler
+    public class MainWindowViewModel : BaseViewModel, IKeyboardListenerHandler
     {
-        public string CurrentWord { get; private set; }
-        Action<string> CurrentWordCallback { get; set; }
-
+        string _currentWord;
         readonly LowLevelKeyboardListener _listener;
         readonly InputSimulator _sim;
         ListenerStates _currentListenerState;
         readonly IDataStorage _storage;
 
-        public KeyboardListenerHandler(IDataStorage storage)
+        public string CurrentWord { get => _currentWord; private set => SetProperty(ref _currentWord, value); }
+        public RoutedCommand AddNewCommand { get; set; }
+
+        public MainWindowViewModel(IDataStorage storage)
         {
             _listener = new LowLevelKeyboardListener();
             _sim = new InputSimulator();
             _storage = storage;
             _currentListenerState = ListenerStates.Inserting;
+            AddNewCommand = new("AddNew", typeof(MainWindowViewModel));
         }
 
+        public void AddNew(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Parameter is not Type t)
+                return;
+
+            var tw = App.Current.ServiceProvider.GetRequiredService<ToolWindow>();
+            var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;// Activator.CreateInstance(t) as Page;//new Pages.SimpleAbbreviationPage();
+
+            tw.Content = p;
+
+            Pause();
+            tw.ShowDialog();
+            Continue();
+        }
+
+        public void CanAddNew(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = true;
+
+        #region IKeyboardListenerHandler
         bool TryWriteAbbreviation(IAbbreviation abbrev, string shortForm)
         {
             if (abbrev.TryGetFullForm(shortForm, out string fullForm))
@@ -42,23 +67,21 @@ namespace FasType.LLKeyboardListener
             return false;
         }
 
-        void ListenerEvent(object sender, KeyPressedArgs e)
+        void ListenerEvent(object sender, KeyPressedEventArgs e)
         {
             Log.Information("Current Listener State: {listenerState}", _currentListenerState);
             if (_currentListenerState is ListenerStates.Inserting)
                 Inserting(sender, e);
             else if (_currentListenerState is ListenerStates.Choosing)
                 Choosing(sender, e);
-
-            CurrentWordCallback?.Invoke(CurrentWord);
         }
 
-        void Inserting(object sender, KeyPressedArgs e)
+        void Inserting(object sender, KeyPressedEventArgs e)
         {
             if (e.KeyPressed == Key.Space)
             {
                 string shortForm = CurrentWord.ToLower();
-        
+
                 var abbrevs = _storage.GetAbbreviations(shortForm).ToList();
 
                 if (abbrevs.Count == 1)
@@ -108,7 +131,7 @@ namespace FasType.LLKeyboardListener
             }
         }
 
-        void Choosing(object sender, KeyPressedArgs e)
+        void Choosing(object sender, KeyPressedEventArgs e)
         {
             if (e.KeyPressed is Key.Escape or Key.Space)
             {
@@ -117,13 +140,14 @@ namespace FasType.LLKeyboardListener
             }
         }
 
-        public void Load(Action<string> currentWordCallback)
+        public void Load() => Load(null, null);
+        public void Load(object sender, RoutedEventArgs e)
         {
-            _listener.HookKeyboard(); 
+            _listener.HookKeyboard();
             Continue();
-            CurrentWordCallback = currentWordCallback;
         }
-        public void Close() => _listener.UnHookKeyboard();
+        public void Close() => Load(null, null);
+        public void Close(object sender, CancelEventArgs e) => _listener.UnHookKeyboard();
         public void Pause() => _listener.OnKeyPressed -= ListenerEvent;
         public void Continue() => _listener.OnKeyPressed += ListenerEvent;
 
@@ -132,5 +156,6 @@ namespace FasType.LLKeyboardListener
             Inserting,
             Choosing
         }
+        #endregion
     }
 }

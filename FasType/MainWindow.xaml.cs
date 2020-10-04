@@ -3,6 +3,7 @@ using FasType.Services;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using FasType.ViewModels;
 
 namespace FasType
 {
@@ -11,38 +12,22 @@ namespace FasType
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly IKeyboardListenerHandler _listenerHandler;
+        readonly MainWindowViewModel _vm;
 
-        public MainWindow(IKeyboardListenerHandler listenerHandler)
+        public MainWindow(MainWindowViewModel vm)
         {
             InitializeComponent();
-            _listenerHandler = listenerHandler;
+
+            DataContext = _vm = vm;// App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>();
+            //_listenerHandler = listenerHandler;
+            this.CommandBindings.Add(new(_vm.AddNewCommand, _vm.AddNew, _vm.CanAddNew));
 
             var area = System.Windows.SystemParameters.WorkArea;
             this.Left = area.Right - this.Width;
             this.Top = area.Bottom - this.Height;
-        }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e) => _listenerHandler.Load(CurrentWordCallback);
-        void CurrentWordCallback(string currentWord) => label.Text = currentWord;
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) => _listenerHandler.Close();
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is not FrameworkElement fe)
-                return;
-
-            if (fe.Tag is not Type t)
-                return;
-
-            var tw = App.Current.ServiceProvider.GetRequiredService<ToolWindow>();
-            var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;// Activator.CreateInstance(t) as Page;//new Pages.SimpleAbbreviationPage();
-
-            tw.Content = p;
-
-            _listenerHandler.Pause();
-            tw.ShowDialog();
-            _listenerHandler.Continue();
+            this.Loaded += _vm.Load;
+            this.Closing += _vm.Close;
         }
     }
 }
