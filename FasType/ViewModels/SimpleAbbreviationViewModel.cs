@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace FasType.ViewModels
 {
-    public class ToolWindowViewModel : BaseViewModel
+    public class SimpleAbbreviationViewModel : BaseViewModel
     {
         readonly IDataStorage _storage;
         SimpleAbbreviation _currentAbbrev;
@@ -38,12 +38,12 @@ namespace FasType.ViewModels
 
         public RoutedCommand CreateNewCommand { get; set; }
 
-        public ToolWindowViewModel(IDataStorage storage)
+        public SimpleAbbreviationViewModel(IDataStorage storage)
         {
             _storage = storage;
             _currentAbbrev = null;
 
-            CreateNewCommand = new("CreateNew", typeof(ToolWindowViewModel));            
+            CreateNewCommand = new("CreateNew", typeof(SimpleAbbreviationViewModel));            
         }
 
         public void CreateNew(object sender, ExecutedRoutedEventArgs e)

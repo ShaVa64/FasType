@@ -1,4 +1,5 @@
 ﻿using FasType.LLKeyboardListener;
+using FasType.Windows;
 using FasType.Models;
 using FasType.Services;
 using FasType.Utils;
@@ -24,19 +25,50 @@ namespace FasType.ViewModels
         readonly InputSimulator _sim;
         ListenerStates _currentListenerState;
         readonly IDataStorage _storage;
-
+        IAbbreviation _choosedAbbrev;
+        List<IAbbreviation> _matchingAbbrevs;
+        int _abbrevIndex;
+        
+        public int AbbrevIndex
+        {
+            get => _abbrevIndex;
+            set => SetProperty(ref _abbrevIndex, value);
+        }
+        public IAbbreviation ChoosedAbbrev
+        {
+            get => _choosedAbbrev;
+            set => SetProperty(ref _choosedAbbrev, value);
+        }
+        public List<IAbbreviation> MatchingAbbrevs
+        {
+            get => _matchingAbbrevs;
+            set => SetProperty(ref _matchingAbbrevs, value);
+        }
+        ListenerStates CurrentListenerState 
+        {
+            get => _currentListenerState; 
+            set 
+            {
+                if (SetProperty(ref _currentListenerState, value))
+                    OnPropertyChanged(nameof(IsChoosing));
+            }
+        }
+        public bool IsChoosing => CurrentListenerState == ListenerStates.Choosing;
         public string CurrentWord { get => _currentWord; private set => SetProperty(ref _currentWord, value); }
-        public RoutedCommand AddNewCommand { get; set; }
+        public RoutedCommand AddNewCommand { get; }
+        public RoutedCommand SeeAllCommand { get; }
 
         public MainWindowViewModel(IDataStorage storage)
         {
             _listener = new LowLevelKeyboardListener();
             _sim = new InputSimulator();
             _storage = storage;
-            _currentListenerState = ListenerStates.Inserting;
+            CurrentListenerState = ListenerStates.Inserting;
             AddNewCommand = new("AddNew", typeof(MainWindowViewModel));
+            SeeAllCommand = new("SeeAll", typeof(MainWindowViewModel));
         }
 
+        public void CanAddNew(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = true;
         public void AddNew(object sender, ExecutedRoutedEventArgs e)
         {
             if (e.Parameter is not Type t)
@@ -52,15 +84,23 @@ namespace FasType.ViewModels
             Continue();
         }
 
-        public void CanAddNew(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = true;
+        public void CanSeeAll(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = _storage.Count > 0;
+        public void SeeAll(object sender, ExecutedRoutedEventArgs e)
+        {
+            var tw = App.Current.ServiceProvider.GetRequiredService<SeeAllWindow>();
+
+            Pause();
+            tw.ShowDialog();
+            Continue();
+        }
 
         #region IKeyboardListenerHandler
-        bool TryWriteAbbreviation(IAbbreviation abbrev, string shortForm)
+        bool TryWriteAbbreviation(IAbbreviation abbrev, string shortForm, bool plusOne = false)
         {
             if (abbrev.TryGetFullForm(shortForm, out string fullForm))
             {
                 string word = CurrentWord.IsFirstCharUpper() ? fullForm.FirstCharToUpper() : fullForm;
-                _sim.Keyboard.KeyPress(Enumerable.Repeat(WindowsInput.Native.VirtualKeyCode.BACK, CurrentWord.Length).ToArray());
+                _sim.Keyboard.KeyPress(Enumerable.Repeat(WindowsInput.Native.VirtualKeyCode.BACK, CurrentWord.Length + (plusOne ? 1 : 0)).ToArray());
                 _sim.Keyboard.TextEntry(word + " ");
                 return true;
             }
@@ -69,10 +109,10 @@ namespace FasType.ViewModels
 
         void ListenerEvent(object sender, KeyPressedEventArgs e)
         {
-            Log.Information("Current Listener State: {listenerState}", _currentListenerState);
-            if (_currentListenerState is ListenerStates.Inserting)
+            Log.Information("Current Listener State: {listenerState}", CurrentListenerState);
+            if (CurrentListenerState is ListenerStates.Inserting)
                 Inserting(sender, e);
-            else if (_currentListenerState is ListenerStates.Choosing)
+            else if (CurrentListenerState is ListenerStates.Choosing)
                 Choosing(sender, e);
         }
 
@@ -82,24 +122,33 @@ namespace FasType.ViewModels
             {
                 string shortForm = CurrentWord.ToLower();
 
-                var abbrevs = _storage.GetAbbreviations(shortForm).ToList();
+                var abbrevs = _storage[shortForm].ToList();
+
+                if (abbrevs.Count == 0)
+                {
+                    CurrentWord = "";
+                    return;
+                }
 
                 if (abbrevs.Count == 1)
                 {
                     var abbrev = abbrevs.Single();
                     e.StopChain |= TryWriteAbbreviation(abbrev, shortForm);
+                    CurrentWord = "";
+                    return;
                 }
-                else if (abbrevs.Count > 1)
-                {
-                    foreach (var abbrev in abbrevs)
-                    {
-                        e.StopChain |= TryWriteAbbreviation(abbrev, shortForm);
-                        if (e.StopChain)
-                            break;
-                    }
-                }
+                //else if (abbrevs.Count > 1)
+                CurrentListenerState = ListenerStates.Choosing;
 
-                CurrentWord = "";
+
+                MatchingAbbrevs = abbrevs;
+                ChoosedAbbrev = MatchingAbbrevs[0];
+                //foreach (var abbrev in abbrevs)
+                //{
+                //    e.StopChain |= TryWriteAbbreviation(abbrev, shortForm);
+                //    if (e.StopChain)
+                //        break;
+                //}
             }
             else if (e.KeyPressed.IsAlpha())
             {
@@ -133,9 +182,36 @@ namespace FasType.ViewModels
 
         void Choosing(object sender, KeyPressedEventArgs e)
         {
-            if (e.KeyPressed is Key.Escape or Key.Space)
+            e.StopChain = true;
+            if (e.KeyPressed is Key.Enter)
             {
-                _currentListenerState = ListenerStates.Inserting;
+                CurrentListenerState = ListenerStates.Inserting;
+
+                bool b = TryWriteAbbreviation(ChoosedAbbrev, CurrentWord, plusOne: true);
+                if (b)
+                {
+                    ChoosedAbbrev = null;
+                    MatchingAbbrevs = null;
+                    CurrentWord = "";
+                }
+                else
+                    CurrentListenerState = ListenerStates.Choosing;
+            }
+            else if (e.KeyPressed is Key.Down)
+            {
+                if (AbbrevIndex < MatchingAbbrevs.Count - 1)
+                    AbbrevIndex++;
+            }
+            else if (e.KeyPressed is Key.Up)
+            {
+                if (AbbrevIndex > 0)
+                    AbbrevIndex--;
+            }
+            else //if (e.KeyPressed is Key.Escape or Key.Space)
+            {
+                ChoosedAbbrev = null;
+                MatchingAbbrevs = null;
+                CurrentListenerState = ListenerStates.Inserting;
                 CurrentWord = "";
             }
         }

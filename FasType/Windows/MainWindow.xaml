@@ -1,4 +1,4 @@
-﻿<Window x:Class="FasType.MainWindow"
+﻿<Window x:Class="FasType.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,25 +13,31 @@
         Height="300" Width="250">
     
     <DockPanel>
-        <ToolBar DockPanel.Dock="Top">
-            <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
-            <Menu>
-                <MenuItem Header="_Add New...">
-                    <MenuItem Header="_Simple Abbrev." Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
-                    <MenuItem Header="_Verb Abbrev." Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
-                </MenuItem>
-            </Menu>
-            <Menu ToolBar.OverflowMode="Always">
-                <MenuItem Header="Run On Start Up" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
-            </Menu>
-        </ToolBar>
+        <ToolBarTray DockPanel.Dock="Top" ClipToBounds="True">
+            <ToolBar ToolBarTray.IsLocked="True">
+                <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
+                <Menu>
+                    <MenuItem Header="_Add New...">
+                        <MenuItem Header="_Simple Abbrev." Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
+                        <MenuItem Header="_Verb Abbrev." Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
+                    </MenuItem>
+                    <MenuItem Header="_See All" Command="{Binding SeeAllCommand}"/>
+                </Menu>
+
+                <Menu ToolBar.OverflowMode="Always">
+                    <MenuItem Header="Run On Start Up" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
+                </Menu>
+            </ToolBar>
+        </ToolBarTray>
         
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ListBox ItemsSource="{Binding MatchingAbbrevs}" Grid.Row="0">
+            <ListBox ItemsSource="{Binding MatchingAbbrevs}" IsEnabled="{Binding IsChoosing}"
+                     SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"
+                     Grid.Row="0" SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding ElementaryRepresentation}"/>

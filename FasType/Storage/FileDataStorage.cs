@@ -19,6 +19,8 @@ namespace FasType.Storage
         List<IAbbreviation> _allAbbreviations;
         readonly JsonSerializerOptions serializerOptions;
 
+        public int Count => AllAbbreviations.Count;
+
         ILookup<string, IAbbreviation> AbbreviationsLookup { get; set; }
         IList<IAbbreviation> AllAbbreviations
         {
@@ -108,6 +110,19 @@ namespace FasType.Storage
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IAbbreviation> GetAbbreviations(string shortForm) => AbbreviationsLookup[string.Concat(shortForm.Take(2))];
+        public IEnumerable<IAbbreviation> GetAbbreviations(string shortForm)
+        {
+            var approx = AbbreviationsLookup[string.Concat(shortForm.Take(2))];
+            var matching = approx.Where(a => a.IsAbbreviation(shortForm)).ToList();
+            return matching;
+        }
+
+        void ICollection<IAbbreviation>.Add(IAbbreviation item) => throw new NotImplementedException();
+        public void Clear() => throw new NotImplementedException();
+        public bool Contains(IAbbreviation item) => AllAbbreviations.Contains(item);
+        public void CopyTo(IAbbreviation[] array, int arrayIndex) => AllAbbreviations.CopyTo(array, arrayIndex);
+        public bool Remove(IAbbreviation item) => throw new NotImplementedException();
+        public IEnumerator<IAbbreviation> GetEnumerator() => AllAbbreviations.GetEnumerator();
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => AllAbbreviations.GetEnumerator();
     }
 }

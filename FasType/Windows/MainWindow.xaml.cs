@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using FasType.ViewModels;
 
-namespace FasType
+namespace FasType.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -18,9 +18,10 @@ namespace FasType
         {
             InitializeComponent();
 
-            DataContext = _vm = vm;// App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>();
-            //_listenerHandler = listenerHandler;
+            DataContext = _vm = vm;
+
             this.CommandBindings.Add(new(_vm.AddNewCommand, _vm.AddNew, _vm.CanAddNew));
+            this.CommandBindings.Add(new(_vm.SeeAllCommand, _vm.SeeAll, _vm.CanSeeAll));
 
             var area = System.Windows.SystemParameters.WorkArea;
             this.Left = area.Right - this.Width;

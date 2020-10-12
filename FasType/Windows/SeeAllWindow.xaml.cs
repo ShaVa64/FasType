@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FasType.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -10,17 +11,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace FasType
+namespace FasType.Windows
 {
     /// <summary>
-    /// Interaction logic for ToolWindow.xaml
+    /// Interaction logic for SeeAllWindow.xaml
     /// </summary>
-    public partial class ToolWindow : Window
+    public partial class SeeAllWindow : Window
     {
-        public ToolWindow()
+        readonly SeeAllViewModel _vm;
+
+        public SeeAllWindow(SeeAllViewModel vm)
         {
             InitializeComponent();
             Owner = App.Current.MainWindow;
+
+            DataContext = _vm = vm;
         }
     }
 }

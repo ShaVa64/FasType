@@ -24,9 +24,9 @@ namespace FasType.Pages
     /// </summary>
     public partial class SimpleAbbreviationPage : Page
     {
-        readonly ToolWindowViewModel _vm;
+        readonly SimpleAbbreviationViewModel _vm;
 
-        public SimpleAbbreviationPage(ToolWindowViewModel vm)
+        public SimpleAbbreviationPage(SimpleAbbreviationViewModel vm)
         {
             InitializeComponent();
 

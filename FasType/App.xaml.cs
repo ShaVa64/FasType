@@ -1,4 +1,5 @@
 ﻿using FasType.LLKeyboardListener;
+using FasType.Windows;
 using FasType.Pages;
 using FasType.Services;
 using FasType.Storage;
@@ -59,7 +60,10 @@ namespace FasType
             
             services.AddTransient<ToolWindow>();
             services.AddTransient<SimpleAbbreviationPage>();
-            services.AddTransient<ToolWindowViewModel>();
+            services.AddTransient<SimpleAbbreviationViewModel>();
+
+            services.AddTransient<SeeAllWindow>();
+            services.AddTransient<SeeAllViewModel>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)
