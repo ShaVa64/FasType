@@ -1,4 +1,5 @@
 ﻿using FasType.Models;
+using FasType.Properties;
 using FasType.Services;
 using System;
 using System.Collections.Generic;
@@ -50,14 +51,15 @@ namespace FasType.ViewModels
         {
             if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
             {
-                MessageBox.Show("You can't create an empty abbreviation", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                MessageBox.Show(Resources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
 
             bool b = _storage.Add(_currentAbbrev);
             if (!b)
             {
-                MessageBox.Show($"An error has occured while trying to create the abbreviation ({_currentAbbrev.ElementaryRepresentation}).", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                var message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
 

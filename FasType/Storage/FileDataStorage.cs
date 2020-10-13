@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace FasType.Storage
 {
-    public class FileDataStorage : IDataStorage
+    public class FileDataStorage : IDataStorage, IEnumerable<IAbbreviation>
     {
         readonly string _filepath;
         List<IAbbreviation> _allAbbreviations;
@@ -31,7 +31,7 @@ namespace FasType.Storage
                 AbbreviationsLookup = _allAbbreviations.ToLookup(a => string.Concat(a.ShortForm.Take(2)), a => a);
             }
         }
-        
+
         public FileDataStorage(IConfiguration _configuration)
         {
             _filepath = _configuration["DataFilePath"];
@@ -52,25 +52,25 @@ namespace FasType.Storage
             using var reader = new StreamReader(stream);
             string content = reader.ReadToEnd();
 
-            AllAbbreviations = JsonSerializer.Deserialize<IList<IAbbreviation>>(content, serializerOptions);
+            AllAbbreviations = content == "" ? new List<IAbbreviation>() : JsonSerializer.Deserialize<IList<IAbbreviation>>(content, serializerOptions);
             Log.Information("Abbreviations Data Storage Loaded.");
 
             return true;
         }
 
-        protected async Task<bool> LoadAsync()
-        {
-            using var stream = new FileStream(_filepath, FileMode.OpenOrCreate, FileAccess.Read);
+        //protected async Task<bool> LoadAsync()
+        //{
+        //    using var stream = new FileStream(_filepath, FileMode.OpenOrCreate, FileAccess.Read);
 
-            AllAbbreviations = await JsonSerializer.DeserializeAsync<IList<IAbbreviation>>(stream, serializerOptions);
-            Log.Information("Abbreviations Data Storage Loaded.");
+        //    AllAbbreviations = await JsonSerializer.DeserializeAsync<IList<IAbbreviation>>(stream, serializerOptions);
+        //    Log.Information("Abbreviations Data Storage Loaded.");
 
-            return true;
-        }
+        //    return true;
+        //}
 
         protected bool Save()
         {
-            using var stream = new FileStream(_filepath, FileMode.OpenOrCreate, FileAccess.Write);
+            using var stream = new FileStream(_filepath, FileMode.Truncate, FileAccess.Write);
             using var writer = new StreamWriter(stream);
             var ser = JsonSerializer.Serialize(AllAbbreviations, serializerOptions);
 
@@ -81,15 +81,15 @@ namespace FasType.Storage
             return true;
         }
 
-        protected async Task<bool> SaveAsync()
-        {
-            using var stream = new FileStream(_filepath, FileMode.OpenOrCreate, FileAccess.Write);
-            await JsonSerializer.SerializeAsync(stream, AllAbbreviations, serializerOptions);
+        //protected async Task<bool> SaveAsync()
+        //{
+        //    using var stream = new FileStream(_filepath, FileMode.OpenOrCreate, FileAccess.Write);
+        //    await JsonSerializer.SerializeAsync(stream, AllAbbreviations, serializerOptions);
 
-            Log.Information("Abbreviations Data Storage Saved.");
+        //    Log.Information("Abbreviations Data Storage Saved.");
 
-            return true;
-        }
+        //    return true;
+        //}
 
         public bool Add(IAbbreviation abbrev)
         {
@@ -98,17 +98,12 @@ namespace FasType.Storage
             return Save() && Load();
         }
 
-        public async Task<bool> AddAsync(IAbbreviation abbrev)
-        {
-            AllAbbreviations.Add(abbrev);
+        //public async Task<bool> AddAsync(IAbbreviation abbrev)
+        //{
+        //    AllAbbreviations.Add(abbrev);
 
-            return await SaveAsync() && await LoadAsync();
-        }
-
-        public IAbbreviation GetAbbreviation(string shortForm)
-        {
-            throw new NotImplementedException();
-        }
+        //    return await SaveAsync() && await LoadAsync();
+        //}
 
         public IEnumerable<IAbbreviation> GetAbbreviations(string shortForm)
         {
@@ -117,12 +112,14 @@ namespace FasType.Storage
             return matching;
         }
 
-        void ICollection<IAbbreviation>.Add(IAbbreviation item) => throw new NotImplementedException();
-        public void Clear() => throw new NotImplementedException();
-        public bool Contains(IAbbreviation item) => AllAbbreviations.Contains(item);
-        public void CopyTo(IAbbreviation[] array, int arrayIndex) => AllAbbreviations.CopyTo(array, arrayIndex);
-        public bool Remove(IAbbreviation item) => throw new NotImplementedException();
         public IEnumerator<IAbbreviation> GetEnumerator() => AllAbbreviations.GetEnumerator();
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => AllAbbreviations.GetEnumerator();
+        public bool Clear()
+        {
+            AllAbbreviations.Clear();
+            return Save() && Load();
+        }
+        public bool Contains(IAbbreviation item) => AllAbbreviations.Contains(item);
+        public bool Remove(IAbbreviation item) => AllAbbreviations.Remove(item) && Save() && Load();
     }
 }

@@ -17,15 +17,14 @@
             <ToolBar ToolBarTray.IsLocked="True">
                 <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
                 <Menu>
-                    <MenuItem Header="_Add New...">
-                        <MenuItem Header="_Simple Abbrev." Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
-                        <MenuItem Header="_Verb Abbrev." Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
+                    <MenuItem Header="{x:Static prop:Resources.AddNewHeader}">
+                        <MenuItem Header="{x:Static prop:Resources.SimpleAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
+                        <MenuItem Header="{x:Static prop:Resources.VerbAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
                     </MenuItem>
-                    <MenuItem Header="_See All" Command="{Binding SeeAllCommand}"/>
-                </Menu>
-
+                    <MenuItem Header="{x:Static prop:Resources.SeeAll}" Command="{Binding SeeAllCommand}"/>
+                </Menu> 
                 <Menu ToolBar.OverflowMode="Always">
-                    <MenuItem Header="Run On Start Up" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
+                    <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
                 </Menu>
             </ToolBar>
         </ToolBarTray>

@@ -4,47 +4,63 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FasType.Windows"
+        xmlns:prop="clr-namespace:FasType.Properties"
         xmlns:vm="clr-namespace:FasType.ViewModels"
+        xmlns:ctrl="clr-namespace:FasType.Controls"
         WindowStyle="ToolWindow"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="All Abbreviations" Height="300" Width="300">
-
+        Title="{x:Static prop:Resources.AllAbbrevs}" Height="300" Width="300">
 
     <Window.Resources>
+        <Style TargetType="Separator" x:Key="edgeSep">
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <Style TargetType="Separator" x:Key="middleSep">
+            <Setter Property="Margin" Value="10, 0"/>
+        </Style>
+
         <DataTemplate x:Key="FirstDisplayTemplate">
             <StackPanel>
-                <Separator Margin="0"/>
-                <TextBlock Text="{Binding ComplexRepresentation}" TextAlignment="Center" Margin="5"/>
+                <Separator Style="{StaticResource edgeSep}"/>
+                <ctrl:SeeAllAbbreviationControl/>
             </StackPanel>
         </DataTemplate>
-        
+
         <DataTemplate x:Key="DisplayTemplate">
-            <StackPanel x:Name="Panel">
-                <Separator Margin="10, 0"/>
-                <TextBlock Text="{Binding ComplexRepresentation}" TextAlignment="Center" Margin="5"/>
+            <StackPanel>
+                <Separator Style="{StaticResource middleSep}"/>
+                <ctrl:SeeAllAbbreviationControl/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="LastDisplayTemplate">
-            <StackPanel x:Name="Panel">
-                <Separator Margin="10, 0"/>
-                <TextBlock Text="{Binding ComplexRepresentation}" TextAlignment="Center" Margin="5"/>
-                <Separator Margin="0"/>
+            <StackPanel>
+                <Separator Style="{StaticResource middleSep}"/>
+                <ctrl:SeeAllAbbreviationControl/>
+                <Separator Style="{StaticResource edgeSep}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="OnlyDisplayTemplate">
+            <StackPanel>
+                <Separator Style="{StaticResource edgeSep}"/>
+                <ctrl:SeeAllAbbreviationControl/>
+                <Separator Style="{StaticResource edgeSep}"/>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
-    
+
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
                   VerticalScrollBarVisibility="Auto">
+        
         <ItemsControl x:Name="Control" ItemsSource="{Binding AllAbbreviations}" AlternationCount="{Binding Count}">
             <ItemsControl.ItemTemplateSelector>
                 <vm:SeeAllSelector First="{StaticResource FirstDisplayTemplate}"
                                    Default="{StaticResource DisplayTemplate}"
                                    Last="{StaticResource LastDisplayTemplate}"
-                                   Control="{x:Reference Control}"/>
+                                   Only="{StaticResource OnlyDisplayTemplate}"/>
             </ItemsControl.ItemTemplateSelector>
         </ItemsControl>
-            
-
     </ScrollViewer>
 </Window>

@@ -119,55 +119,50 @@
   </resheader>
   <data name="AppName" xml:space="preserve">
     <value>FasType</value>
-    <comment>The Application Name</comment>
   </data>
   <data name="AddNewHeader" xml:space="preserve">
-    <value>_Add New...</value>
+    <value>_Ajouter...</value>
   </data>
   <data name="SimpleAbbrevHeader" xml:space="preserve">
-    <value>_Simple Abbrev.</value>
-    <comment>@MutedRule(PunctuationTail)</comment>
-  </data>
-  <data name="VerbAbbrevHeader" xml:space="preserve">
-    <value>_Verb Abbrev.</value>
-    <comment>@MutedRule(PunctuationTail)</comment>
+    <value>Abbrev. _Simple</value>
   </data>
   <data name="SeeAll" xml:space="preserve">
-    <value>_See All</value>
+    <value>Voir _Tout</value>
+  </data>
+  <data name="VerbAbbrevHeader" xml:space="preserve">
+    <value>Abbrev. de _Verbe</value>
   </data>
   <data name="AllAbbrevs" xml:space="preserve">
-    <value>All Abbreviations</value>
+    <value>Toutes les Abbreviations</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Erreur</value>
   </data>
   <data name="EmptyAbbrevDialog" xml:space="preserve">
-    <value>You can't create an empty abbreviation.</value>
-  </data>
-  <data name="ErrorDialogFormat" xml:space="preserve">
-    <value>An error has occured while trying to create the abbreviation.{0} ({1})</value>
-  </data>
-  <data name="DeleteDIalogFormat" xml:space="preserve">
-    <value>Are you sure to delete this abbreviation?{0}({1})</value>
+    <value>Vous ne pouvez pas créer une abréviation vide.</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Supprimer</value>
+  </data>
+  <data name="DeleteDIalogFormat" xml:space="preserve">
+    <value>Etes-vous sûr de vouloir supprimer cette abréviation ?{0}({1})</value>
+  </data>
+  <data name="ErrorDialogFormat" xml:space="preserve">
+    <value>Une erreur est apparu lors de la création de l'abréviation.{0}({1})</value>
   </data>
   <data name="RunAtStartUp" xml:space="preserve">
-    <value>Run At Start Up</value>
+    <value>Lancer au Démarrage</value>
   </data>
   <data name="SimpleAbbrevTitle" xml:space="preserve">
-    <value>Add Simple Abbreviation</value>
+    <value>Ajout d'Abréviation Simple</value>
   </data>
   <data name="ShortForm" xml:space="preserve">
-    <value>Short Form</value>
-    <comment>@MutedRule(WhiteSpaceTail)</comment>
+    <value>Forme Courte  </value>
   </data>
   <data name="FullForm" xml:space="preserve">
-    <value>Full Form</value>
-    <comment>@MutedRule(WhiteSpaceTail)</comment>
+    <value>Forme Complète </value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Ajouter</value>
   </data>
 </root>

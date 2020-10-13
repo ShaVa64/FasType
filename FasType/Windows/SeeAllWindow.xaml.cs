@@ -1,6 +1,7 @@
 ﻿using FasType.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,7 +26,16 @@ namespace FasType.Windows
             InitializeComponent();
             Owner = App.Current.MainWindow;
 
+            KeyDown += SeeAllWindow_KeyDown;
             DataContext = _vm = vm;
+
+            CommandBindings.Add(new(_vm.RemoveCommand, _vm.Remove, _vm.CanRemove));
+        }
+
+        private void SeeAllWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                Close();
         }
     }
 }

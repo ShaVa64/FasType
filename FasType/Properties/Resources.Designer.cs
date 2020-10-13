@@ -61,11 +61,146 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Add New....
+        /// </summary>
+        public static string AddNewHeader {
+            get {
+                return ResourceManager.GetString("AddNewHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Abbreviations.
+        /// </summary>
+        public static string AllAbbrevs {
+            get {
+                return ResourceManager.GetString("AllAbbrevs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FasType.
         /// </summary>
         public static string AppName {
             get {
                 return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete this abbreviation?{0}({1}).
+        /// </summary>
+        public static string DeleteDIalogFormat {
+            get {
+                return ResourceManager.GetString("DeleteDIalogFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t create an empty abbreviation..
+        /// </summary>
+        public static string EmptyAbbrevDialog {
+            get {
+                return ResourceManager.GetString("EmptyAbbrevDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error has occured while trying to create the abbreviation.{0} ({1}).
+        /// </summary>
+        public static string ErrorDialogFormat {
+            get {
+                return ResourceManager.GetString("ErrorDialogFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full Form.
+        /// </summary>
+        public static string FullForm {
+            get {
+                return ResourceManager.GetString("FullForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run At Start Up.
+        /// </summary>
+        public static string RunAtStartUp {
+            get {
+                return ResourceManager.GetString("RunAtStartUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _See All.
+        /// </summary>
+        public static string SeeAll {
+            get {
+                return ResourceManager.GetString("SeeAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Short Form.
+        /// </summary>
+        public static string ShortForm {
+            get {
+                return ResourceManager.GetString("ShortForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Simple Abbrev..
+        /// </summary>
+        public static string SimpleAbbrevHeader {
+            get {
+                return ResourceManager.GetString("SimpleAbbrevHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Simple Abbreviation.
+        /// </summary>
+        public static string SimpleAbbrevTitle {
+            get {
+                return ResourceManager.GetString("SimpleAbbrevTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Verb Abbrev..
+        /// </summary>
+        public static string VerbAbbrevHeader {
+            get {
+                return ResourceManager.GetString("VerbAbbrevHeader", resourceCulture);
             }
         }
     }
