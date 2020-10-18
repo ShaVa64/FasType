@@ -7,7 +7,7 @@ using FasType.ViewModels;
 using IWshRuntimeLibrary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+//using Microsoft.Extensions.Options;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -46,9 +46,9 @@ namespace FasType
         private void ConfigureServices(ServiceCollection services)
         {
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-                //.MinimumLevel.Verbose()
-                //.WriteTo.Debug()
+                //.ReadFrom.Configuration(Configuration)
+                .MinimumLevel.Verbose()
+                .WriteTo.Debug()
                 .CreateLogger();
 
             services.AddSingleton(Configuration);
