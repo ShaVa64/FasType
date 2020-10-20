@@ -20,9 +20,6 @@ namespace FasType.Windows
 
             DataContext = _vm = vm;
 
-            this.CommandBindings.Add(new(_vm.AddNewCommand, _vm.AddNew, _vm.CanAddNew));
-            this.CommandBindings.Add(new(_vm.SeeAllCommand, _vm.SeeAll, _vm.CanSeeAll));
-
             var area = System.Windows.SystemParameters.WorkArea;
             this.Left = area.Right - this.Width;
             this.Top = area.Bottom - this.Height;

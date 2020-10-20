@@ -144,7 +144,7 @@
   <data name="Delete" xml:space="preserve">
     <value>Supprimer</value>
   </data>
-  <data name="DeleteDIalogFormat" xml:space="preserve">
+  <data name="DeleteDialogFormat" xml:space="preserve">
     <value>Etes-vous sûr de vouloir supprimer cette abréviation ?{0}({1})</value>
   </data>
   <data name="ErrorDialogFormat" xml:space="preserve">
@@ -157,12 +157,15 @@
     <value>Ajout d'Abréviation Simple</value>
   </data>
   <data name="ShortForm" xml:space="preserve">
-    <value>Forme Courte  </value>
+    <value>Forme Courte </value>
   </data>
   <data name="FullForm" xml:space="preserve">
     <value>Forme Complète </value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Ajouter</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Rechercher...</value>
   </data>
 </root>

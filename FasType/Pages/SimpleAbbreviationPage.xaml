@@ -8,7 +8,7 @@
       mc:Ignorable="d" 
       WindowHeight="200" WindowWidth="250" WindowTitle="{x:Static prop:Resources.SimpleAbbrevTitle}"
       d:DesignHeight="200" d:DesignWidth="200"
-      Title="SimpleAbbreviationPage">
+      Title="SimpleAbbreviationPage" x:Name="Page">
 
     <Page.Resources>
         <Style TargetType="Control" x:Key="Style.Base">
@@ -55,7 +55,7 @@
         <TextBlock Text="{Binding Preview, Mode=OneWay}" FontStyle="Italic" TextAlignment="Center"
                    Grid.Row="3" Grid.ColumnSpan="2"/>
 
-        <Button Content="{x:Static prop:Resources.Add}" Command="{Binding CreateNewCommand}"
-                Grid.Row="4" Grid.ColumnSpan="2"/>
+        <Button Command="{Binding CreateNewCommand}" CommandParameter="{x:Reference Page}"
+                Content="{x:Static prop:Resources.Add}" Grid.Row="4" Grid.ColumnSpan="2"/>
     </Grid>
 </Page>

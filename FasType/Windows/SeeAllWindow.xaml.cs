@@ -28,8 +28,6 @@ namespace FasType.Windows
 
             KeyDown += SeeAllWindow_KeyDown;
             DataContext = _vm = vm;
-
-            CommandBindings.Add(new(_vm.RemoveCommand, _vm.Remove, _vm.CanRemove));
         }
 
         private void SeeAllWindow_KeyDown(object sender, KeyEventArgs e)

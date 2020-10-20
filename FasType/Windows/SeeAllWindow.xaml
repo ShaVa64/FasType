@@ -16,6 +16,7 @@
     <Window.Resources>
 
         <cvt:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
+        <cvt:ResourcesToEnumConverter x:Key="ResourcesToEnumConverter"/>
 
         <Style TargetType="Separator" x:Key="edgeSep">
             <Setter Property="Margin" Value="0"/>
@@ -59,16 +60,18 @@
 
     <DockPanel>
         <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
-            <ComboBox ToolBar.OverflowMode="Never" Padding="0, 0, 3, 0" behaviors:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True">
+            <ComboBox ToolBar.OverflowMode="Never" Padding="0, 0, 3, 0" SelectedItem="{Binding OrderBy, Mode=OneWayToSource, Converter={StaticResource ResourcesToEnumConverter}}"
+                      behaviors:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True">
                 <ComboBoxItem Content="{x:Static prop:Resources.ShortForm}" IsSelected="True"/>
                 <ComboBoxItem Content="{x:Static prop:Resources.FullForm}"/>
             </ComboBox>
 
             <Grid ToolBar.OverflowMode="Never" Width="125" Margin="5, 0">
                 <!-- enter term here -->
-                <TextBox Name="TxtSearchBox" Background="White" />
+                <TextBox Name="TxtSearchBox" Background="White" Text="{Binding QueryString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <!-- overlay with hint text -->
-                <TextBlock Padding="2, 0" Text="Search..." Foreground="LightSteelBlue" Background="Transparent" IsHitTestVisible="False" VerticalAlignment="Center"
+                <TextBlock Padding="2, 0" Text="{x:Static prop:Resources.Search}" Foreground="LightSteelBlue" 
+                           Background="Transparent" IsHitTestVisible="False" VerticalAlignment="Center"
                            Visibility="{Binding ElementName=TxtSearchBox, Path=Text, Converter={StaticResource TextToVisibilityConverter}}"/>
             </Grid>
         </ToolBar>

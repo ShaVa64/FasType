@@ -33,7 +33,6 @@ namespace FasType.Pages
             DataContext = _vm = vm;
             FirstTB.Focus();
 
-            this.CommandBindings.Add(new CommandBinding(_vm.CreateNewCommand, _vm.CreateNew, _vm.CanCreateNew));
             //Init();
         }
 

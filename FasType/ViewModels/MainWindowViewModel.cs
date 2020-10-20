@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using WindowsInput;
 using FasType.Models.Abbreviations;
+using FasType.Models;
 
 namespace FasType.ViewModels
 {
@@ -55,8 +56,8 @@ namespace FasType.ViewModels
         }
         public bool IsChoosing => CurrentListenerState == ListenerStates.Choosing;
         public string CurrentWord { get => _currentWord; private set => SetProperty(ref _currentWord, value); }
-        public RoutedCommand AddNewCommand { get; }
-        public RoutedCommand SeeAllCommand { get; }
+        public Command<Type> AddNewCommand { get; }
+        public Command SeeAllCommand { get; }
 
         public MainWindowViewModel(IDataStorage storage)
         {
@@ -64,16 +65,13 @@ namespace FasType.ViewModels
             _sim = new InputSimulator();
             _storage = storage;
             CurrentListenerState = ListenerStates.Inserting;
-            AddNewCommand = new("AddNew", typeof(MainWindowViewModel));
-            SeeAllCommand = new("SeeAll", typeof(MainWindowViewModel));
+            AddNewCommand = new(AddNew, CanAddNew);
+            SeeAllCommand = new(SeeAll, CanSeeAll);
         }
 
-        public void CanAddNew(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = true;
-        public void AddNew(object sender, ExecutedRoutedEventArgs e)
+        bool CanAddNew() => true;
+        void AddNew(Type t)
         {
-            if (e.Parameter is not Type t)
-                return;
-
             var tw = App.Current.ServiceProvider.GetRequiredService<AddAbbreviationWindow>();
             var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;// Activator.CreateInstance(t) as Page;//new Pages.SimpleAbbreviationPage();
 
@@ -84,8 +82,8 @@ namespace FasType.ViewModels
             Continue();
         }
 
-        public void CanSeeAll(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = _storage.Count > 0;
-        public void SeeAll(object sender, ExecutedRoutedEventArgs e)
+        bool CanSeeAll() => _storage.Count > 0;
+        public void SeeAll()
         {
             var tw = App.Current.ServiceProvider.GetRequiredService<SeeAllWindow>();
 

@@ -1,4 +1,5 @@
-﻿using FasType.Models.Abbreviations;
+﻿using FasType.Models;
+using FasType.Models.Abbreviations;
 using FasType.Properties;
 using FasType.Services;
 using System;
@@ -15,8 +16,40 @@ namespace FasType.ViewModels
 {
     public class SeeAllViewModel : BaseViewModel
     {
+        string _queryString;
+        FormOrderBy _sortBy;
         readonly IDataStorage _storage;
         IList<IAbbreviation> _allAbbreviations;
+
+        public FormOrderBy OrderBy
+        {
+            get => _sortBy;
+            set
+            {
+                SetProperty(ref _sortBy, value);
+                AllAbbreviations = (OrderBy switch
+                {
+                    FormOrderBy.FullForm => AllAbbreviations.OrderBy(a => a.FullForm),
+                    FormOrderBy.ShortForm => AllAbbreviations.OrderBy(a => a.ShortForm),
+                    _ => throw new NotImplementedException()
+                }).ToList();
+            }
+        }
+
+        public string QueryString
+        {
+            get => _queryString;
+            set
+            {
+                if (SetProperty(ref _queryString, value.TrimStart()))
+                    AllAbbreviations = (OrderBy switch
+                    {
+                        FormOrderBy.FullForm => _storage.Where(a => a.FullForm.StartsWith(QueryString)),
+                        FormOrderBy.ShortForm => _storage.Where(a => a.ShortForm.StartsWith(QueryString)),
+                        _ => throw new NotImplementedException()
+                    }).ToList();
+            }
+        }
 
         public int Count => AllAbbreviations.Count;
         public IList<IAbbreviation> AllAbbreviations
@@ -29,29 +62,33 @@ namespace FasType.ViewModels
             }
         }
 
-        public RoutedCommand RemoveCommand { get; }
+        public Command<IAbbreviation> RemoveCommand { get; }
 
         public SeeAllViewModel(IDataStorage storage)
         {
             _storage = storage;
 
-            RemoveCommand = new RoutedCommand("Remove", typeof(SeeAllViewModel));
+            RemoveCommand = new(Remove, CanRemove);
             AllAbbreviations = _storage.ToList();
             //AllAbbreviations = _storage.Take(2).ToList();
         }
 
-        public void CanRemove(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = true;
-        public void Remove(object sender, ExecutedRoutedEventArgs e)
+        bool CanRemove() => true;
+        void Remove(IAbbreviation abbrev)
         {
-            var abbrev = e.Parameter as IAbbreviation;
-
-            var message = string.Format(Resources.DeleteDIalogFormat, Environment.NewLine, abbrev.ElementaryRepresentation);
+            var message = string.Format(Resources.DeleteDialogFormat, Environment.NewLine, abbrev.ElementaryRepresentation);
             var res = MessageBox.Show(message, Resources.Delete, MessageBoxButton.OKCancel, MessageBoxImage.Question);
             if (res == MessageBoxResult.Cancel)
                 return;
 
             _storage.Remove(abbrev);
             AllAbbreviations = _storage.ToList();
+        }
+
+        public enum FormOrderBy
+        {
+            ShortForm,
+            FullForm
         }
     }
 

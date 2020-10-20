@@ -6,16 +6,7 @@
              xmlns:local="clr-namespace:FasType.Controls"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    
-    <UserControl.Resources>
-        <Style TargetType="TextBlock">
-        </Style>
 
-        <Style TargetType="Button">
-
-        </Style>
-    </UserControl.Resources>
-    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

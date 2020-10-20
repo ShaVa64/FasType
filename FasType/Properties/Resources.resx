@@ -147,7 +147,7 @@
   <data name="ErrorDialogFormat" xml:space="preserve">
     <value>An error has occured while trying to create the abbreviation.{0} ({1})</value>
   </data>
-  <data name="DeleteDIalogFormat" xml:space="preserve">
+  <data name="DeleteDialogFormat" xml:space="preserve">
     <value>Are you sure to delete this abbreviation?{0}({1})</value>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -169,5 +169,8 @@
   </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search...</value>
   </data>
 </root>

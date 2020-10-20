@@ -1,4 +1,5 @@
-﻿using FasType.Models.Abbreviations;
+﻿using FasType.Models;
+using FasType.Models.Abbreviations;
 using FasType.Properties;
 using FasType.Services;
 using System;
@@ -37,17 +38,19 @@ namespace FasType.ViewModels
         }
         public string Preview { get => _preview; set => SetProperty(ref _preview, value); }
 
-        public RoutedCommand CreateNewCommand { get; set; }
+        public Command<Page> CreateNewCommand { get; set; }
 
         public SimpleAbbreviationViewModel(IDataStorage storage)
         {
             _storage = storage;
             _currentAbbrev = null;
 
-            CreateNewCommand = new("CreateNew", typeof(SimpleAbbreviationViewModel));            
+            CreateNewCommand = new(CreateNew, CanCreateNew);            
         }
 
-        public void CreateNew(object sender, ExecutedRoutedEventArgs e)
+        bool CanCreateNew() => !(string.IsNullOrEmpty(ShortForm) || string.IsNullOrEmpty(FullForm));
+        
+        public void CreateNew(Page p)
         {
             if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
             {
@@ -63,12 +66,7 @@ namespace FasType.ViewModels
                 return;
             }
 
-            ((sender as Page).Parent as Window).Close();
-        }
-
-        public void CanCreateNew(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = !(string.IsNullOrEmpty(ShortForm) || string.IsNullOrEmpty(FullForm));
+            (p.Parent as Window).Close();
         }
 
         void SetPreview()

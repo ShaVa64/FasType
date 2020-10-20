@@ -108,9 +108,9 @@ namespace FasType.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure to delete this abbreviation?{0}({1}).
         /// </summary>
-        public static string DeleteDIalogFormat {
+        public static string DeleteDialogFormat {
             get {
-                return ResourceManager.GetString("DeleteDIalogFormat", resourceCulture);
+                return ResourceManager.GetString("DeleteDialogFormat", resourceCulture);
             }
         }
         
@@ -156,6 +156,15 @@ namespace FasType.Properties {
         public static string RunAtStartUp {
             get {
                 return ResourceManager.GetString("RunAtStartUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         
