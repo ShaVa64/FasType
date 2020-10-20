@@ -1,6 +1,5 @@
 ﻿using FasType.LLKeyboardListener;
 using FasType.Windows;
-using FasType.Models;
 using FasType.Services;
 using FasType.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WindowsInput;
+using FasType.Models.Abbreviations;
 
 namespace FasType.ViewModels
 {
@@ -74,7 +74,7 @@ namespace FasType.ViewModels
             if (e.Parameter is not Type t)
                 return;
 
-            var tw = App.Current.ServiceProvider.GetRequiredService<ToolWindow>();
+            var tw = App.Current.ServiceProvider.GetRequiredService<AddAbbreviationWindow>();
             var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;// Activator.CreateInstance(t) as Page;//new Pages.SimpleAbbreviationPage();
 
             tw.Content = p;

@@ -7,11 +7,16 @@
         xmlns:prop="clr-namespace:FasType.Properties"
         xmlns:vm="clr-namespace:FasType.ViewModels"
         xmlns:ctrl="clr-namespace:FasType.Controls"
-        WindowStyle="ToolWindow"
+        xmlns:behaviors="clr-namespace:FasType.Behaviors"
+        xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
+        WindowStyle="ToolWindow" ShowInTaskbar="False"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="{x:Static prop:Resources.AllAbbrevs}" Height="300" Width="300">
 
     <Window.Resources>
+
+        <cvt:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
+
         <Style TargetType="Separator" x:Key="edgeSep">
             <Setter Property="Margin" Value="0"/>
         </Style>
@@ -51,16 +56,35 @@
         </DataTemplate>
     </Window.Resources>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
-                  VerticalScrollBarVisibility="Auto">
-        
-        <ItemsControl x:Name="Control" ItemsSource="{Binding AllAbbreviations}" AlternationCount="{Binding Count}">
-            <ItemsControl.ItemTemplateSelector>
-                <vm:SeeAllSelector First="{StaticResource FirstDisplayTemplate}"
-                                   Default="{StaticResource DisplayTemplate}"
-                                   Last="{StaticResource LastDisplayTemplate}"
-                                   Only="{StaticResource OnlyDisplayTemplate}"/>
-            </ItemsControl.ItemTemplateSelector>
-        </ItemsControl>
-    </ScrollViewer>
+
+    <DockPanel>
+        <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
+            <ComboBox ToolBar.OverflowMode="Never" Padding="0, 0, 3, 0" behaviors:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True">
+                <ComboBoxItem Content="{x:Static prop:Resources.ShortForm}" IsSelected="True"/>
+                <ComboBoxItem Content="{x:Static prop:Resources.FullForm}"/>
+            </ComboBox>
+
+            <Grid ToolBar.OverflowMode="Never" Width="125" Margin="5, 0">
+                <!-- enter term here -->
+                <TextBox Name="TxtSearchBox" Background="White" />
+                <!-- overlay with hint text -->
+                <TextBlock Padding="2, 0" Text="Search..." Foreground="LightSteelBlue" Background="Transparent" IsHitTestVisible="False" VerticalAlignment="Center"
+                           Visibility="{Binding ElementName=TxtSearchBox, Path=Text, Converter={StaticResource TextToVisibilityConverter}}"/>
+            </Grid>
+        </ToolBar>
+
+        <Grid>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
+                          VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="Control" ItemsSource="{Binding AllAbbreviations}" AlternationCount="{Binding Count}">
+                    <ItemsControl.ItemTemplateSelector>
+                        <vm:SeeAllSelector First="{StaticResource FirstDisplayTemplate}"
+                                           Default="{StaticResource DisplayTemplate}"
+                                           Last="{StaticResource LastDisplayTemplate}"
+                                           Only="{StaticResource OnlyDisplayTemplate}"/>
+                    </ItemsControl.ItemTemplateSelector>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
 </Window>

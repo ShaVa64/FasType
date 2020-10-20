@@ -1,18 +1,18 @@
 [
   {
-    "FasType.Models.SimpleAbbreviation": {
+    "FasType.Models.Abbreviations.SimpleAbbreviation": {
       "ShortForm": "cc",
       "FullForm": "coucou"
     }
   },
   {
-    "FasType.Models.SimpleAbbreviation": {
+    "FasType.Models.Abbreviations.SimpleAbbreviation": {
       "ShortForm": "tlm",
       "FullForm": "tout le monde"
     }
   },
   {
-    "FasType.Models.SimpleAbbreviation": {
+    "FasType.Models.Abbreviations.SimpleAbbreviation": {
       "ShortForm": "tlmnt",
       "FullForm": "tellement"
     }

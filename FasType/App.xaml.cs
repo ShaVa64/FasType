@@ -58,7 +58,7 @@ namespace FasType
             services.AddSingleton<IDataStorage, FileDataStorage>();
             //services.AddTransient<IKeyboardListenerHandler, KeyboardListenerHandler>();
             
-            services.AddTransient<ToolWindow>();
+            services.AddTransient<AddAbbreviationWindow>();
             services.AddTransient<SimpleAbbreviationPage>();
             services.AddTransient<SimpleAbbreviationViewModel>();
 

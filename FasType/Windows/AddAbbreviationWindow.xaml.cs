@@ -15,9 +15,9 @@ namespace FasType.Windows
     /// <summary>
     /// Interaction logic for ToolWindow.xaml
     /// </summary>
-    public partial class ToolWindow : Window
+    public partial class AddAbbreviationWindow : Window
     {
-        public ToolWindow()
+        public AddAbbreviationWindow()
         {
             InitializeComponent();
             Owner = App.Current.MainWindow;

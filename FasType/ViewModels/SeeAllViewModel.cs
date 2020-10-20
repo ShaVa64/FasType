@@ -1,4 +1,4 @@
-﻿using FasType.Models;
+﻿using FasType.Models.Abbreviations;
 using FasType.Properties;
 using FasType.Services;
 using System;
@@ -71,13 +71,12 @@ namespace FasType.ViewModels
 
             if (altCount == 1)
                 return Only;
+
             if (altIndex == 0)
                 return First;
             if (altIndex == altCount - 1)
                 return Last;
-            
             return Default;
-            //return base.SelectTemplate(item, container);
         }
     }
 }

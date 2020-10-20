@@ -1,21 +1,16 @@
-﻿using FasType.Models;
+﻿using FasType.Models.Abbreviations;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Windows;
 
-namespace FasType.Converters
+namespace FasType.Converters.Json
 {
-    public class ILookupConverter : JsonConverter<ILookup<string, IAbbreviation>>
+    public class IEnumerableConverter : JsonConverter<IEnumerable<IAbbreviation>>
     {
         private readonly JsonConverter<IAbbreviation> _converter;
 
-        public ILookupConverter(JsonSerializerOptions options)
+        public IEnumerableConverter(JsonSerializerOptions options)
         {
             // For performance, use the existing converter if available.
             _converter = (JsonConverter<IAbbreviation>)options.GetConverter(typeof(IAbbreviation)) ?? new IAbbreviationConverter();
@@ -23,11 +18,11 @@ namespace FasType.Converters
 
         public override bool CanConvert(Type typeToConvert)
         {
-            bool isType = typeToConvert == typeof(ILookup<string, IAbbreviation>) || typeToConvert.GetInterface(typeof(ILookup<,>).FullName) != null;
+            bool isType = typeToConvert == typeof(IEnumerable<IAbbreviation>) || typeToConvert.GetInterface(typeof(IEnumerable<>).FullName) != null;
             return isType;// base.CanConvert(typeToConvert);
         }
 
-        public override ILookup<string, IAbbreviation> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override IEnumerable<IAbbreviation> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var list = new List<IAbbreviation>();
             if (reader.TokenType == JsonTokenType.StartArray)
@@ -45,18 +40,13 @@ namespace FasType.Converters
                     list.Add(abbrev);
                 }
             }
-            //var list = JsonSerializer.Deserialize<List<IAbbreviation>>(ref reader, options);
-            var lookup = list.ToLookup(e => string.Concat(e.ShortForm.Take(2)), e => e);
-            return lookup;
+            return list;
         }
 
-        public override void Write(Utf8JsonWriter writer, ILookup<string, IAbbreviation> value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, IEnumerable<IAbbreviation> value, JsonSerializerOptions options)
         {
-            var list = value.SelectMany(grp => grp.AsEnumerable()).ToArray();
-            //JsonSerializer.Serialize(writer, list, options);
-
             writer.WriteStartArray();
-            foreach (var abbrev in list)
+            foreach (var abbrev in value)
             {
                 _converter.Write(writer, abbrev, options);
             }

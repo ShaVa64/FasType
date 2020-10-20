@@ -1,4 +1,4 @@
-﻿using FasType.Models;
+﻿using FasType.Models.Abbreviations;
 using FasType.Properties;
 using FasType.Services;
 using System;

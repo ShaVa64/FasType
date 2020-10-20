@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace FasType.Models
+namespace FasType.Models.Abbreviations
 {
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public class SimpleAbbreviation : IAbbreviation

@@ -1,10 +1,10 @@
-﻿using FasType.Models;
+﻿using FasType.Models.Abbreviations;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FasType.Converters
+namespace FasType.Converters.Json
 {
     public class IAbbreviationConverter : JsonConverter<IAbbreviation>
     {

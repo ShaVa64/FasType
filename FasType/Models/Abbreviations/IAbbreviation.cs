@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace FasType.Models
+namespace FasType.Models.Abbreviations
 {
     public interface IAbbreviation
     {

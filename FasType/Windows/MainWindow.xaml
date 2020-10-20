@@ -13,21 +13,20 @@
         Height="300" Width="250">
     
     <DockPanel>
-        <ToolBarTray DockPanel.Dock="Top" ClipToBounds="True">
-            <ToolBar ToolBarTray.IsLocked="True">
-                <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
-                <Menu>
-                    <MenuItem Header="{x:Static prop:Resources.AddNewHeader}">
-                        <MenuItem Header="{x:Static prop:Resources.SimpleAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
-                        <MenuItem Header="{x:Static prop:Resources.VerbAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
-                    </MenuItem>
-                    <MenuItem Header="{x:Static prop:Resources.SeeAll}" Command="{Binding SeeAllCommand}"/>
-                </Menu> 
-                <Menu ToolBar.OverflowMode="Always">
-                    <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
-                </Menu>
-            </ToolBar>
-        </ToolBarTray>
+        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+            <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
+            <Menu>
+                <MenuItem Header="{x:Static prop:Resources.AddNewHeader}">
+                    <MenuItem Header="{x:Static prop:Resources.SimpleAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
+                    <MenuItem Header="{x:Static prop:Resources.VerbAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
+                </MenuItem>
+                <MenuItem Header="{x:Static prop:Resources.SeeAll}" Command="{Binding SeeAllCommand}"/>
+                <MenuItem Header="Settings" Command="{Binding Source={x:Null}}"/>
+            </Menu> 
+            <Menu ToolBar.OverflowMode="Always">
+                <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
+            </Menu>
+        </ToolBar>
         
         <Grid>
             <Grid.RowDefinitions>

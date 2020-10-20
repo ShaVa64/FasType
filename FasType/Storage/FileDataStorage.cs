@@ -1,5 +1,5 @@
-﻿using FasType.Converters;
-using FasType.Models;
+﻿using FasType.Converters.Json;
+using FasType.Models.Abbreviations;
 using FasType.Services;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -39,6 +39,8 @@ namespace FasType.Storage
             serializerOptions = new JsonSerializerOptions();
 #if DEBUG
             serializerOptions.WriteIndented = true;
+#else
+            serializerOptions.WriteIndented = false;
 #endif
             serializerOptions.Converters.Add(new IAbbreviationConverter());
             serializerOptions.Converters.Add(new IEnumerableConverter(serializerOptions));
