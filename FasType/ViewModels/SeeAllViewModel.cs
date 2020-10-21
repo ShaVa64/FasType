@@ -26,13 +26,13 @@ namespace FasType.ViewModels
             get => _sortBy;
             set
             {
-                SetProperty(ref _sortBy, value);
-                AllAbbreviations = (OrderBy switch
-                {
-                    FormOrderBy.FullForm => AllAbbreviations.OrderBy(a => a.FullForm),
-                    FormOrderBy.ShortForm => AllAbbreviations.OrderBy(a => a.ShortForm),
-                    _ => throw new NotImplementedException()
-                }).ToList();
+                if (SetProperty(ref _sortBy, value))
+                    AllAbbreviations = (OrderBy switch
+                    {
+                        FormOrderBy.FullForm => AllAbbreviations.OrderBy(a => a.FullForm),
+                        FormOrderBy.ShortForm => AllAbbreviations.OrderBy(a => a.ShortForm),
+                        _ => throw new NotImplementedException()
+                    }).ToList();
             }
         }
 

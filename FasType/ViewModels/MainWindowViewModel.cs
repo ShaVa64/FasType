@@ -193,7 +193,9 @@ namespace FasType.ViewModels
                     CurrentWord = "";
                 }
                 else
+                {
                     CurrentListenerState = ListenerStates.Choosing;
+                }
             }
             else if (e.KeyPressed is Key.Down)
             {

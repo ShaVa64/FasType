@@ -13,7 +13,7 @@ namespace FasType.Models.Abbreviations
         public string FullForm { get; private set; }
 
         public string ElementaryRepresentation => $"{ShortForm} -> {FullForm}";
-        public string ComplexRepresentation => $"{ShortForm} -> {FullForm} \n{ShortForm.FirstCharToUpper()} -> {FullForm.FirstCharToUpper()}";
+        public string ComplexRepresentation => $"{ShortForm} -> {FullForm}{Environment.NewLine}{ShortForm.FirstCharToUpper()} -> {FullForm.FirstCharToUpper()}";
 
         public SimpleAbbreviation(string shortForm, string fullForm)
         {

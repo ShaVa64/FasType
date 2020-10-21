@@ -55,6 +55,7 @@ namespace FasType.Storage
             string content = reader.ReadToEnd();
 
             AllAbbreviations = content == "" ? new List<IAbbreviation>() : JsonSerializer.Deserialize<IList<IAbbreviation>>(content, serializerOptions);
+            AllAbbreviations = AllAbbreviations.OrderBy(a => a.ShortForm).ToList();
             Log.Information("Abbreviations Data Storage Loaded.");
 
             return true;

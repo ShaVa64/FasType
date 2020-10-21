@@ -18,7 +18,7 @@ namespace FasType.Converters.Xaml
         {
             string form = (value as ContentControl).Content as string;
 
-            if (targetType == typeof(FasType.ViewModels.SeeAllViewModel.FormOrderBy))
+            if (targetType == typeof(SeeAllViewModel.FormOrderBy))
             {
                 if (form == Resources.FullForm)
                     return SeeAllViewModel.FormOrderBy.FullForm;

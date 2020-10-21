@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Resources;
 using System.Windows;
 
 //[assembly: AssemblyTitle("FasType")]
@@ -8,6 +9,8 @@ using System.Windows;
 
 //[assembly: AssemblyVersion("2.2.0.0")]
 //[assembly: AssemblyFileVersion("1.1.0.0")]
+
+[assembly: NeutralResourcesLanguage("en")]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
