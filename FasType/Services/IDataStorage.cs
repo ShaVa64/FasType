@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace FasType.Services
 {
-    public interface IDataStorage : IEnumerable<IAbbreviation>
+    public interface IDataStorage : IEnumerable<BaseAbbreviation>
     {
         int Count { get; }
 
-        IEnumerable<IAbbreviation> this[string shortForm] => GetAbbreviations(shortForm);
-        IEnumerable<IAbbreviation> GetAbbreviations(string shortForm);
+        IEnumerable<BaseAbbreviation> this[string shortForm] => GetAbbreviations(shortForm);
+        IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm);
 
-        bool Add(IAbbreviation abbrev);
+        bool Add(BaseAbbreviation abbrev);
         //Task<bool> AddAsync(IAbbreviation abbrev);
 
-        bool Remove(IAbbreviation abbrev);
+        bool Remove(BaseAbbreviation abbrev);
         bool Clear();
     }
 }

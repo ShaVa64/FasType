@@ -13,7 +13,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using WindowsInput;
 using FasType.Models.Abbreviations;
 using FasType.Models;
 
@@ -23,32 +22,31 @@ namespace FasType.ViewModels
     {
         string _currentWord;
         readonly LowLevelKeyboardListener _listener;
-        readonly InputSimulator _sim;
         ListenerStates _currentListenerState;
         readonly IDataStorage _storage;
-        IAbbreviation _choosedAbbrev;
-        List<IAbbreviation> _matchingAbbrevs;
+        BaseAbbreviation _choosedAbbrev;
+        List<BaseAbbreviation> _matchingAbbrevs;
         int _abbrevIndex;
-        
+
         public int AbbrevIndex
         {
             get => _abbrevIndex;
             set => SetProperty(ref _abbrevIndex, value);
         }
-        public IAbbreviation ChoosedAbbrev
+        public BaseAbbreviation ChoosedAbbrev
         {
             get => _choosedAbbrev;
             set => SetProperty(ref _choosedAbbrev, value);
         }
-        public List<IAbbreviation> MatchingAbbrevs
+        public List<BaseAbbreviation> MatchingAbbrevs
         {
             get => _matchingAbbrevs;
             set => SetProperty(ref _matchingAbbrevs, value);
         }
-        ListenerStates CurrentListenerState 
+        ListenerStates CurrentListenerState
         {
-            get => _currentListenerState; 
-            set 
+            get => _currentListenerState;
+            set
             {
                 if (SetProperty(ref _currentListenerState, value))
                     OnPropertyChanged(nameof(IsChoosing));
@@ -58,15 +56,28 @@ namespace FasType.ViewModels
         public string CurrentWord { get => _currentWord; private set => SetProperty(ref _currentWord, value); }
         public Command<Type> AddNewCommand { get; }
         public Command SeeAllCommand { get; }
+        public Command<BaseAbbreviation> ChooseCommand { get; }
+        public Command OpenSettingsCommand { get; }
 
         public MainWindowViewModel(IDataStorage storage)
         {
-            _listener = new LowLevelKeyboardListener();
-            _sim = new InputSimulator();
+            _listener = new();
             _storage = storage;
             CurrentListenerState = ListenerStates.Inserting;
             AddNewCommand = new(AddNew, CanAddNew);
             SeeAllCommand = new(SeeAll, CanSeeAll);
+            ChooseCommand = new(Choose, CanChoose);
+            OpenSettingsCommand = new(OpenSettings, CanOpenSettings);
+        }
+
+        bool CanOpenSettings() => true;
+        void OpenSettings()
+        {
+            var tw = App.Current.ServiceProvider.GetRequiredService<SettingsWindow>();
+
+            Pause();
+            tw.ShowDialog();
+            Continue();
         }
 
         bool CanAddNew() => true;
@@ -93,13 +104,25 @@ namespace FasType.ViewModels
         }
 
         #region IKeyboardListenerHandler
-        bool TryWriteAbbreviation(IAbbreviation abbrev, string shortForm, bool plusOne = false)
+
+        bool CanChoose() => CurrentListenerState == ListenerStates.Choosing;
+        void Choose(BaseAbbreviation abbrev)
+        {
+            TryWriteAbbreviation(abbrev, CurrentWord);
+
+            ChoosedAbbrev = null;
+            MatchingAbbrevs = null;
+            CurrentListenerState = ListenerStates.Inserting;
+            CurrentWord = "";
+        }
+
+        bool TryWriteAbbreviation(BaseAbbreviation abbrev, string shortForm, bool plusOne = false)
         {
             if (abbrev.TryGetFullForm(shortForm, out string fullForm))
             {
                 string word = CurrentWord.IsFirstCharUpper() ? fullForm.FirstCharToUpper() : fullForm;
-                _sim.Keyboard.KeyPress(Enumerable.Repeat(WindowsInput.Native.VirtualKeyCode.BACK, CurrentWord.Length + (plusOne ? 1 : 0)).ToArray());
-                _sim.Keyboard.TextEntry(word + " ");
+                Input.Erase(CurrentWord.Length + (plusOne ? 1 : 0));
+                Input.TextEntry(word + " ");
                 return true;
             }
             return false;

@@ -173,4 +173,7 @@
   <data name="Search" xml:space="preserve">
     <value>Search...</value>
   </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Settings</value>
+  </data>
 </root>

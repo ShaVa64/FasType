@@ -6,15 +6,15 @@ using System.Text.Json.Serialization;
 
 namespace FasType.Converters.Json
 {
-    public class IAbbreviationConverter : JsonConverter<IAbbreviation>
+    public class IAbbreviationConverter : JsonConverter<BaseAbbreviation>
     {
         public override bool CanConvert(Type typeToConvert)
         {
-            bool isType = typeToConvert == typeof(IAbbreviation) || typeToConvert.GetInterface(nameof(IAbbreviation)) != null;
+            bool isType = typeToConvert == typeof(BaseAbbreviation) || typeToConvert.GetInterface(nameof(BaseAbbreviation)) != null;
             return isType;// base.CanConvert(typeToConvert);
         }
 
-        public override IAbbreviation Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override BaseAbbreviation Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             List<string> propNames = new List<string>(), propValues = new List<string>();
             if (reader.TokenType == JsonTokenType.StartObject)
@@ -34,12 +34,12 @@ namespace FasType.Converters.Json
                 if (reader.TokenType == JsonTokenType.EndObject)
                     reader.Read();
             }
-            var abbrev = (IAbbreviation)Activator.CreateInstance(typeToConvert, propValues.ToArray());
+            var abbrev = (BaseAbbreviation)Activator.CreateInstance(typeToConvert, propValues.ToArray());
 
             return abbrev;
         }
 
-        public override void Write(Utf8JsonWriter writer, IAbbreviation value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, BaseAbbreviation value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
             writer.WriteStartObject(value.GetType().FullName);

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace FasType.Storage
 {
-    public class FileDataStorage : IDataStorage, IEnumerable<IAbbreviation>
+    public class FileDataStorage : IDataStorage, IEnumerable<BaseAbbreviation>
     {
         readonly string _filepath;
         List<IAbbreviation> _allAbbreviations;
@@ -34,7 +34,7 @@ namespace FasType.Storage
 
         public FileDataStorage(IConfiguration _configuration)
         {
-            _filepath = _configuration["DataFilePath"];
+            _filepath = _configuration.GetConnectionString("JsonDataFilePath");
 
             serializerOptions = new JsonSerializerOptions();
 #if DEBUG
@@ -45,8 +45,32 @@ namespace FasType.Storage
             serializerOptions.Converters.Add(new IAbbreviationConverter());
             serializerOptions.Converters.Add(new IEnumerableConverter(serializerOptions));
 
+            //T();
+            //Save();
+
             Load();
         }
+
+        //void T()
+        //{
+        //    string fp = @"C:\Users\evayn\Downloads\abréviations.txt";
+
+        //    using var stream = new FileStream(fp, FileMode.OpenOrCreate, FileAccess.Read);
+        //    using var reader = new StreamReader(stream);
+            
+        //    AllAbbreviations = new List<IAbbreviation>();
+
+        //    string l;
+        //    while ((l = reader.ReadLine()) != null)
+        //    {
+        //        var sp = l.Replace("\"", string.Empty).Split(';');
+
+        //        string sf = sp[0];
+        //        string ff = sp[1];
+
+        //        AllAbbreviations.Add(new SimpleAbbreviation(sf, ff));
+        //    }
+        //}
 
         protected bool Load()
         {

@@ -12,7 +12,6 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -21,6 +20,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 
 namespace FasType
 {
@@ -44,6 +44,10 @@ namespace FasType
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
+
+            using var _context = ServiceProvider.GetRequiredService<IDataStorage>() as DbContext;
+            _context.Database.Migrate();
+            //_context.Database.EnsureCreated();
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -54,11 +58,14 @@ namespace FasType
                 .WriteTo.Debug()
                 .CreateLogger();
 
+            services.AddDbContext<IDataStorage, EFSqliteContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFSqlite")), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            //services.AddTransient<IDataStorage, EFSqliteStorage>();
+
             services.AddSingleton(Configuration);
             services.AddSingleton<MainWindow>();
             services.AddTransient<MainWindowViewModel>();
 
-            services.AddSingleton<IDataStorage, FileDataStorage>();
+            //services.AddSingleton<IDataStorage, FileDataStorage>();
             //services.AddTransient<IKeyboardListenerHandler, KeyboardListenerHandler>();
             
             services.AddTransient<AddAbbreviationWindow>();
@@ -67,6 +74,9 @@ namespace FasType
 
             services.AddTransient<SeeAllWindow>();
             services.AddTransient<SeeAllViewModel>();
+
+            services.AddTransient<SettingsWindow>();
+            services.AddTransient<SettingsViewModel>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)

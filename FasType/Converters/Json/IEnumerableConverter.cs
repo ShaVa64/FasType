@@ -6,25 +6,25 @@ using System.Text.Json.Serialization;
 
 namespace FasType.Converters.Json
 {
-    public class IEnumerableConverter : JsonConverter<IEnumerable<IAbbreviation>>
+    public class IEnumerableConverter : JsonConverter<IEnumerable<BaseAbbreviation>>
     {
-        private readonly JsonConverter<IAbbreviation> _converter;
+        private readonly JsonConverter<BaseAbbreviation> _converter;
 
         public IEnumerableConverter(JsonSerializerOptions options)
         {
             // For performance, use the existing converter if available.
-            _converter = (JsonConverter<IAbbreviation>)options.GetConverter(typeof(IAbbreviation)) ?? new IAbbreviationConverter();
+            _converter = (JsonConverter<BaseAbbreviation>)options.GetConverter(typeof(BaseAbbreviation)) ?? new IAbbreviationConverter();
         }
 
         public override bool CanConvert(Type typeToConvert)
         {
-            bool isType = typeToConvert == typeof(IEnumerable<IAbbreviation>) || typeToConvert.GetInterface(typeof(IEnumerable<>).FullName) != null;
+            bool isType = typeToConvert == typeof(IEnumerable<BaseAbbreviation>) || typeToConvert.GetInterface(typeof(IEnumerable<>).FullName) != null;
             return isType;// base.CanConvert(typeToConvert);
         }
 
-        public override IEnumerable<IAbbreviation> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override IEnumerable<BaseAbbreviation> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var list = new List<IAbbreviation>();
+            var list = new List<BaseAbbreviation>();
             if (reader.TokenType == JsonTokenType.StartArray)
             {
                 while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
@@ -34,7 +34,7 @@ namespace FasType.Converters.Json
                     string typeString = reader.GetString();
                     Type type = Type.GetType(typeString);
                     reader.Read();
-                    IAbbreviation abbrev = null;
+                    BaseAbbreviation abbrev = null;
                     if (_converter.CanConvert(type))
                         abbrev = _converter.Read(ref reader, type, options);
                     list.Add(abbrev);
@@ -43,7 +43,7 @@ namespace FasType.Converters.Json
             return list;
         }
 
-        public override void Write(Utf8JsonWriter writer, IEnumerable<IAbbreviation> value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, IEnumerable<BaseAbbreviation> value, JsonSerializerOptions options)
         {
             writer.WriteStartArray();
             foreach (var abbrev in value)

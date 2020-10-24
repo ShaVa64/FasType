@@ -18,6 +18,11 @@
     <AssemblyVersion>0.1.0.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/eyalvayness/FasType</RepositoryUrl>
   </PropertyGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="Storage\FileDataStorage.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary.dll">
@@ -55,6 +60,11 @@
 
   <ItemGroup>
     <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.9" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
@@ -63,8 +73,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="abbreviations.json">
+    <None Update="abbreviation.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="abbreviations.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -7,11 +7,11 @@
         xmlns:local="clr-namespace:FasType"
         xmlns:page="clr-namespace:FasType.Pages"
         xmlns:vm="clr-namespace:FasType.ViewModels"
-        mc:Ignorable="d" 
-        Topmost="True" WindowStartupLocation="Manual" ResizeMode="CanMinimize"
+        mc:Ignorable="d" ResizeMode="CanMinimize"
+        Topmost="True" WindowStartupLocation="Manual"
         Title="{x:Static prop:Resources.AppName}"
         Height="300" Width="250">
-    
+
     <DockPanel>
         <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
             <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
@@ -21,13 +21,13 @@
                     <MenuItem Header="{x:Static prop:Resources.VerbAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
                 </MenuItem>
                 <MenuItem Header="{x:Static prop:Resources.SeeAll}" Command="{Binding SeeAllCommand}"/>
-                <MenuItem Header="Settings" Command="{Binding Source={x:Null}}"/>
-            </Menu> 
+                <MenuItem Header="{x:Static prop:Resources.SettingsHeader}" Command="{Binding OpenSettingsCommand}"/>
+            </Menu>
             <Menu ToolBar.OverflowMode="Always">
                 <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
             </Menu>
         </ToolBar>
-        
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*"/>
@@ -38,7 +38,11 @@
                      Grid.Row="0" SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding ElementaryRepresentation}"/>
+                        <TextBlock Text="{Binding ElementaryRepresentation}">
+                            <TextBlock.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ChooseCommand}" CommandParameter="{Binding .}"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -46,7 +50,7 @@
                      TextWrapping="Wrap" IsReadOnly="True"
                      HorizontalAlignment="Stretch" VerticalAlignment="Center"
                      Margin="10" Grid.Row="1"/>
-            <!--Grid.ColumnSpan="2"--> 
+            <!--Grid.ColumnSpan="2"-->
         </Grid>
     </DockPanel>
 </Window>

@@ -49,7 +49,6 @@ namespace FasType.ViewModels
         }
 
         bool CanCreateNew() => !(string.IsNullOrEmpty(ShortForm) || string.IsNullOrEmpty(FullForm));
-        
         public void CreateNew(Page p)
         {
             if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))

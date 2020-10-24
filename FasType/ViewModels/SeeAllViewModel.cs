@@ -19,20 +19,20 @@ namespace FasType.ViewModels
         string _queryString;
         FormOrderBy _sortBy;
         readonly IDataStorage _storage;
-        IList<IAbbreviation> _allAbbreviations;
+        IList<BaseAbbreviation> _allAbbreviations;
 
         public FormOrderBy OrderBy
         {
             get => _sortBy;
             set
             {
-                if (SetProperty(ref _sortBy, value))
-                    AllAbbreviations = (OrderBy switch
-                    {
-                        FormOrderBy.FullForm => AllAbbreviations.OrderBy(a => a.FullForm),
-                        FormOrderBy.ShortForm => AllAbbreviations.OrderBy(a => a.ShortForm),
-                        _ => throw new NotImplementedException()
-                    }).ToList();
+                SetProperty(ref _sortBy, value);
+                AllAbbreviations = (OrderBy switch
+                {
+                    FormOrderBy.FullForm => AllAbbreviations.OrderBy(a => a.FullForm),
+                    FormOrderBy.ShortForm => AllAbbreviations.OrderBy(a => a.ShortForm),
+                    _ => throw new NotImplementedException()
+                }).ToList();
             }
         }
 
@@ -52,7 +52,7 @@ namespace FasType.ViewModels
         }
 
         public int Count => AllAbbreviations.Count;
-        public IList<IAbbreviation> AllAbbreviations
+        public IList<BaseAbbreviation> AllAbbreviations
         {
             get => _allAbbreviations;
             private set
@@ -62,7 +62,7 @@ namespace FasType.ViewModels
             }
         }
 
-        public Command<IAbbreviation> RemoveCommand { get; }
+        public Command<BaseAbbreviation> RemoveCommand { get; }
 
         public SeeAllViewModel(IDataStorage storage)
         {
@@ -70,11 +70,12 @@ namespace FasType.ViewModels
 
             RemoveCommand = new(Remove, CanRemove);
             AllAbbreviations = _storage.ToList();
+            OrderBy = OrderBy;
             //AllAbbreviations = _storage.Take(2).ToList();
         }
 
         bool CanRemove() => true;
-        void Remove(IAbbreviation abbrev)
+        void Remove(BaseAbbreviation abbrev)
         {
             var message = string.Format(Resources.DeleteDialogFormat, Environment.NewLine, abbrev.ElementaryRepresentation);
             var res = MessageBox.Show(message, Resources.Delete, MessageBoxButton.OKCancel, MessageBoxImage.Question);

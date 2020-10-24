@@ -11,7 +11,9 @@
         xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
         WindowStyle="ToolWindow" ShowInTaskbar="False"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="{x:Static prop:Resources.AllAbbrevs}" Height="300" Width="300">
+        Title="{x:Static prop:Resources.AllAbbrevs}" 
+        SizeToContent="Width" Height="300">
+        <!-- Width="300"-->
 
     <Window.Resources>
 

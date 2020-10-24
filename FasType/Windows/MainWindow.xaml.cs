@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using FasType.ViewModels;
+using System.Windows.Input;
+using System.Windows.Ink;
 
 namespace FasType.Windows
 {
