@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using FasType.Models.Abbreviations;
 
 namespace FasType.Windows
 {
@@ -20,6 +21,7 @@ namespace FasType.Windows
     public partial class SeeAllWindow : Window
     {
         readonly SeeAllViewModel _vm;
+        CollectionView cv;
 
         public SeeAllWindow(SeeAllViewModel vm)
         {

@@ -21,6 +21,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using System.Windows.Data;
 
 namespace FasType
 {

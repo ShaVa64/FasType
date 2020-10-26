@@ -171,4 +171,10 @@
   <data name="SettingsHeader" xml:space="preserve">
     <value>_Préférences</value>
   </data>
+  <data name="AlreadyExistsErrorFormat" xml:space="preserve">
+    <value>L'abréviation que vous tentez d'ajouter existe déjà.{0}({1})</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Préférences</value>
+  </data>
 </root>

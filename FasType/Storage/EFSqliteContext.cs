@@ -66,8 +66,28 @@ namespace FasType.Storage
             //return true;
         }
 
-        public bool Clear() => throw new NotImplementedException();
-        public IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm) => throw new NotImplementedException();
+        public bool Contains(BaseAbbreviation abbrev)
+        {
+            var b = Abbreviations.Where(a => a.FullForm == abbrev.FullForm && a.ShortForm == abbrev.ShortForm).Count();
+            return b > 0;
+        }
+
+        public bool Clear()
+        {
+            throw new NotImplementedException();
+
+            //foreach (var abbrev in Abbreviations)
+            //    Abbreviations.Remove(abbrev);
+            //var r = SaveChanges();
+            //return r > 0;
+        }
+
+        public IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm)
+        {
+            var l = Abbreviations.AsEnumerable().Where(a =>  a.IsAbbreviation(shortForm)).ToList();
+            return l;
+        }
+
         public IEnumerator<BaseAbbreviation> GetEnumerator() => Abbreviations.AsEnumerable().GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => Abbreviations.AsEnumerable().GetEnumerator();
     }

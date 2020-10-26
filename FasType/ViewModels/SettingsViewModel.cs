@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Data;
 
 namespace FasType.ViewModels
 {
-    class SettingsViewModel
+    public class SettingsViewModel: BaseViewModel
     {
     }
 }

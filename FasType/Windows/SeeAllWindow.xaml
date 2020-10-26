@@ -57,6 +57,12 @@
                 <Separator Style="{StaticResource edgeSep}"/>
             </StackPanel>
         </DataTemplate>
+        
+        <CollectionViewSource x:Key="CVS" Source="{Binding AllAbbreviations}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="StringKey" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
     </Window.Resources>
 
 
@@ -81,13 +87,54 @@
         <Grid>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
                           VerticalScrollBarVisibility="Auto">
-                <ItemsControl x:Name="Control" ItemsSource="{Binding AllAbbreviations}" AlternationCount="{Binding Count}">
+                <ItemsControl x:Name="Control" ItemsSource="{Binding Source={StaticResource CVS}}">
+                    <!--
+                              AlternationCount="{Binding Count}"
                     <ItemsControl.ItemTemplateSelector>
                         <vm:SeeAllSelector First="{StaticResource FirstDisplayTemplate}"
                                            Default="{StaticResource DisplayTemplate}"
                                            Last="{StaticResource LastDisplayTemplate}"
                                            Only="{StaticResource OnlyDisplayTemplate}"/>
-                    </ItemsControl.ItemTemplateSelector>
+                    </ItemsControl.ItemTemplateSelector>-->
+
+                    <ItemsControl.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Margin" Value="0,0,0,5"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Expander IsExpanded="False" BorderBrush="SlateGray" BorderThickness="0,0,0,1">
+                                                    <Expander.Header>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding ItemCount, StringFormat='({0})'}" 
+                                                                        FontStyle="Italic" Margin="20, 0, 0, 0" />
+                                                            <ctrl:CharacterCasingTextBlock Grid.Column="1" CharacterCasing="Upper" TextAlignment="Center"
+                                                                                            Text="{Binding Name}" FontWeight="ExtraBold"
+                                                                                            HorizontalAlignment="Right" Margin="20, 0, 0, 0"/>
+                                                        </Grid>
+                                                    </Expander.Header>
+                                                    <Expander.Content>
+                                                        <ItemsControl ItemsSource="{Binding Items}" AlternationCount="{Binding Source=Items, Path=Count}">
+                                                            <ItemsControl.ItemTemplateSelector>
+                                                                <vm:SeeAllSelector First="{StaticResource FirstDisplayTemplate}" Default="{StaticResource DisplayTemplate}"
+                                                                                   Last="{StaticResource LastDisplayTemplate}" Only="{StaticResource OnlyDisplayTemplate}"/>
+                                                            </ItemsControl.ItemTemplateSelector>
+                                                        </ItemsControl>
+                                                    </Expander.Content>
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </ItemsControl.GroupStyle>
                 </ItemsControl>
             </ScrollViewer>
         </Grid>

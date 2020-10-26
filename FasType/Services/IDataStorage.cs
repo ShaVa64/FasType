@@ -15,7 +15,7 @@ namespace FasType.Services
 
         bool Add(BaseAbbreviation abbrev);
         //Task<bool> AddAsync(IAbbreviation abbrev);
-
+        bool Contains(BaseAbbreviation abbrev);
         bool Remove(BaseAbbreviation abbrev);
         bool Clear();
     }

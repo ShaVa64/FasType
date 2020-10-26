@@ -88,6 +88,15 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The abbreviation you are trying to create already exists.{0}({1}).
+        /// </summary>
+        public static string AlreadyExistsErrorFormat {
+            get {
+                return ResourceManager.GetString("AlreadyExistsErrorFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FasType.
         /// </summary>
         public static string AppName {
@@ -133,7 +142,7 @@ namespace FasType.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error has occured while trying to create the abbreviation.{0} ({1}).
+        ///   Looks up a localized string similar to An error has occured while trying to create the abbreviation.{0}({1}).
         /// </summary>
         public static string ErrorDialogFormat {
             get {
@@ -174,6 +183,15 @@ namespace FasType.Properties {
         public static string SeeAll {
             get {
                 return ResourceManager.GetString("SeeAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
         

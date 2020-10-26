@@ -13,7 +13,6 @@ namespace FasType.Models.Abbreviations
     [Table("SimpleAbbreviations")]
     public class SimpleAbbreviation : BaseAbbreviation
     {
-
         //string IAbbreviation.ShortForm => ShortForm;
         //string IAbbreviation.FullForm => FullForm;
 
@@ -21,7 +20,7 @@ namespace FasType.Models.Abbreviations
         //public string ComplexRepresentation => GetElementaryRepresentation();// GetComplexRepresentation();//$"{ShortForm} -> {FullForm}{Environment.NewLine}{ShortForm.FirstCharToUpper()} -> {FullForm.FirstCharToUpper()}";
 
         public SimpleAbbreviation(string shortForm, string fullForm)
-            : base(shortForm, fullForm) { }
+            : base(shortForm.ToLower(), fullForm.ToLower()) { }
 
         public override bool IsAbbreviation(string shortForm) => shortForm.ToLower() == ShortForm.ToLower();
 

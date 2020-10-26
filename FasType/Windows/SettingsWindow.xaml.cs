@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FasType.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,9 +18,12 @@ namespace FasType.Windows
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        public SettingsWindow()
+        readonly SettingsViewModel _vm;
+
+        public SettingsWindow(SettingsViewModel vm)
         {
             InitializeComponent();
+            DataContext = _vm = vm;
         }
     }
 }

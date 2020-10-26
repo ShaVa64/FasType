@@ -145,7 +145,7 @@
     <value>You can't create an empty abbreviation.</value>
   </data>
   <data name="ErrorDialogFormat" xml:space="preserve">
-    <value>An error has occured while trying to create the abbreviation.{0} ({1})</value>
+    <value>An error has occured while trying to create the abbreviation.{0}({1})</value>
   </data>
   <data name="DeleteDialogFormat" xml:space="preserve">
     <value>Are you sure to delete this abbreviation?{0}({1})</value>
@@ -175,5 +175,11 @@
   </data>
   <data name="SettingsHeader" xml:space="preserve">
     <value>_Settings</value>
+  </data>
+  <data name="AlreadyExistsErrorFormat" xml:space="preserve">
+    <value>The abbreviation you are trying to create already exists.{0}({1})</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>

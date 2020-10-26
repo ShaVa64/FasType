@@ -57,8 +57,13 @@ namespace FasType.ViewModels
                 return;
             }
 
-            bool b = _storage.Add(_currentAbbrev);
-            if (!b)
+            if (_storage.Contains(_currentAbbrev))
+            {
+                var message = string.Format(Resources.AlreadyExistsErrorFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                return;
+            }
+            if (!_storage.Add(_currentAbbrev))
             {
                 var message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
                 MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);

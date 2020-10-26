@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
 
 namespace FasType.Models.Abbreviations
@@ -12,6 +13,8 @@ namespace FasType.Models.Abbreviations
         [Key] public Guid Key { get; private set; }
         [Required] [Column(TypeName = "varchar(50)")] public string ShortForm { get; private set; }
         [Required] [Column(TypeName = "varchar(50)")] public string FullForm { get; private set; }
+
+        public string StringKey => string.Concat(ShortForm.Take(2));
 
         public BaseAbbreviation(string shortForm, string fullForm)
         {
