@@ -23,7 +23,15 @@ namespace FasType.Windows
         public SettingsWindow(SettingsViewModel vm)
         {
             InitializeComponent();
+
+            KeyDown += SeeAllWindow_KeyDown;
             DataContext = _vm = vm;
+        }
+
+        private void SeeAllWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                Close();
         }
     }
 }

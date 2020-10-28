@@ -114,12 +114,12 @@ namespace FasType
                 System.IO.File.Delete(path);
         }
 
-        public void UpdateStartupShortcut(bool create)
+        public void UpdateStartupShortcut(bool shouldCreate)
         {
             var startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
             var shortcutLinkFilePath = Path.Combine(startupFolderPath, FasType.Properties.Resources.AppName + ".lnk");
 
-            if (create)
+            if (shouldCreate)
                 CreateStartupShortcut(shortcutLinkFilePath);
             else
                 RemoveStartupShortcut(shortcutLinkFilePath);

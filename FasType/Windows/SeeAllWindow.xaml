@@ -11,14 +11,15 @@
         xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
         WindowStyle="ToolWindow" ShowInTaskbar="False"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="{x:Static prop:Resources.AllAbbrevs}" 
-        SizeToContent="Width" Height="300">
+        Title="{Binding Title}" 
+        Height="300" MinWidth="300" Width="300">
         <!-- Width="300"-->
 
     <Window.Resources>
 
         <cvt:TextToVisibilityConverter x:Key="TextToVisibilityConverter"/>
         <cvt:ResourcesToEnumConverter x:Key="ResourcesToEnumConverter"/>
+        <cvt:ExpanderWidthConverter x:Key="ExpanderWidthConverter"/>
 
         <Style TargetType="Separator" x:Key="edgeSep">
             <Setter Property="Margin" Value="0"/>
@@ -74,7 +75,7 @@
                 <ComboBoxItem Content="{x:Static prop:Resources.FullForm}"/>
             </ComboBox>
 
-            <Grid ToolBar.OverflowMode="Never" Width="125" Margin="5, 0">
+            <Grid ToolBar.OverflowMode="Never" Width="130" Margin="5, 0">
                 <!-- enter term here -->
                 <TextBox Name="TxtSearchBox" Background="White" Text="{Binding QueryString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <!-- overlay with hint text -->
@@ -84,10 +85,10 @@
             </Grid>
         </ToolBar>
 
-        <Grid>
+        <Grid Background="AliceBlue">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
                           VerticalScrollBarVisibility="Auto">
-                <ItemsControl x:Name="Control" ItemsSource="{Binding Source={StaticResource CVS}}">
+                <ItemsControl x:Name="Control" ItemsSource="{Binding Source={StaticResource CVS}}" Margin="0, 3, 0, 0">
                     <!--
                               AlternationCount="{Binding Count}"
                     <ItemsControl.ItemTemplateSelector>
@@ -105,18 +106,18 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate>
-                                                <Expander IsExpanded="False" BorderBrush="SlateGray" BorderThickness="0,0,0,1">
+                                                <Expander IsExpanded="True" BorderBrush="SlateGray" BorderThickness="1" Margin="2, 0" Background="White">
                                                     <Expander.Header>
-                                                        <Grid>
+                                                        <Grid Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth, 
+                                                            Converter={StaticResource ExpanderWidthConverter}, ConverterParameter=32}">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBlock Grid.Column="0" Text="{Binding ItemCount, StringFormat='({0})'}" 
-                                                                        FontStyle="Italic" Margin="20, 0, 0, 0" />
-                                                            <ctrl:CharacterCasingTextBlock Grid.Column="1" CharacterCasing="Upper" TextAlignment="Center"
-                                                                                            Text="{Binding Name}" FontWeight="ExtraBold"
-                                                                                            HorizontalAlignment="Right" Margin="20, 0, 0, 0"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding ItemCount, StringFormat='({0})'}" 
+                                                                        FontStyle="Italic"/>
+                                                            <ctrl:CharacterCasingTextBlock Grid.Column="0" CharacterCasing="Upper" FontSize="15" FontWeight="Bold"
+                                                                                           Text="{Binding Name}" TextAlignment="Center" />
                                                         </Grid>
                                                     </Expander.Header>
                                                     <Expander.Content>

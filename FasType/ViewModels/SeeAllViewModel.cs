@@ -22,6 +22,8 @@ namespace FasType.ViewModels
         readonly IDataStorage _storage;
         IList<BaseAbbreviation> _allAbbreviations;
 
+        public string Title => Resources.AllAbbrevs + $"  ({Count})";
+
         public FormOrderBy OrderBy
         {
             get => _sortBy;
@@ -60,6 +62,7 @@ namespace FasType.ViewModels
             {
                 SetProperty(ref _allAbbreviations, value);
                 OnPropertyChanged(nameof(Count));
+                OnPropertyChanged(nameof(Title));
             }
         }
 

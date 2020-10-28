@@ -4,9 +4,129 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prop="clr-namespace:FasType.Properties"
-        xmlns:local="clr-namespace:FasType.Windows"
-        mc:Ignorable="d" Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        xmlns:local="clr-namespace:FasType.Windows" ResizeMode="NoResize"
+        mc:Ignorable="d" Height="450" Topmost="True" MinWidth="150" WindowStartupLocation="CenterScreen"
         Title="{x:Static prop:Resources.Settings}" SizeToContent="WidthAndHeight">
-    <Grid>
-    </Grid>
+
+    <Window.Resources>
+        <Style x:Key="SettingTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="MaxLength" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    
+    <StackPanel Orientation="Vertical" Margin="0, 0, 0, 5">
+        <TextBlock Style="{StaticResource SettingTitleStyle}" Text="Plural"/>
+        <Separator/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5, 0" VerticalAlignment="Center">
+                
+                <CheckBox x:Name="PluralType1CB"/>
+                <TextBlock x:Name="PluralType1TB" Text="Type 1">
+                    <TextBlock.Style>
+                        <Style>
+                            <Setter Property="CheckBox.Opacity" Value="1"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=PluralType1CB}" Value="False">
+                                    <Setter Property="CheckBox.Opacity" Value="0.5"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+            <ToggleButton Grid.Column="1" IsChecked="True"  Margin="5, 0">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Content" Value="Postfix"/>
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=PluralType1CB}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Content" Value="Prefix"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+            <TextBox Grid.Column="2"  Margin="5, 0">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=PluralType1CB}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Margin="5, 0" VerticalAlignment="Center">
+
+                <CheckBox x:Name="PluralType2CB"/>
+                <TextBlock x:Name="PluralType2TB" Text="Type 2">
+                    <TextBlock.Style>
+                        <Style>
+                            <Setter Property="CheckBox.Opacity" Value="1"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=PluralType2CB}" Value="False">
+                                    <Setter Property="CheckBox.Opacity" Value="0.5"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+            <ToggleButton Grid.Column="1" Grid.Row="2" IsChecked="True"  Margin="5, 0">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Content" Value="Postfix"/>
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=PluralType2CB}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Content" Value="Prefix"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+            <TextBox Grid.Column="2" Grid.Row="2" Margin="5, 0">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=PluralType2CB}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </Grid>
+    </StackPanel>
 </Window>

@@ -23,6 +23,12 @@
   <ItemGroup>
     <Compile Remove="Storage\FileDataStorage.cs" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <None Remove="abbreviations++.json" />
+    <None Remove="abbreviations.json" />
+  </ItemGroup>
   
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary.dll">
@@ -75,9 +81,6 @@
   <ItemGroup>
     <None Update="abbreviation.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="abbreviations.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
