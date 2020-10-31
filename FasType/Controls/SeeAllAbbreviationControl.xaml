@@ -15,7 +15,43 @@
         <TextBlock Grid.Column="0" Text="{Binding ComplexRepresentation}" 
                    TextAlignment="Center" HorizontalAlignment="Left" Margin="10, 5, 2, 5"/>
         <Button Grid.Column="1" Content="X" Padding="5, 0" Margin="2, 5, 10, 5"
-                HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}"
-                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveCommand}"/>
+                HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveCommand}" Width="20" Height="20">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="1" CornerRadius="5">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#f75"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+            </Button.Style>
+        </Button>
+        <!--<Border Name="ClearButtonBorder" Grid.Column="1" CornerRadius="10" BorderThickness="1"
+                Padding="5, 0" Margin="2, 5, 10, 5" Height="20" Width="20">
+            <Border.Style>
+                <Style>
+                    <Setter Property="Border.Background" Value="Red"/>
+                    <Style.Triggers>
+                        <Trigger Property="Border.IsMouseOver" Value="True">
+                            <Setter Property="Border.Background" Value="Green" />
+                            <Setter Property="Border.BorderBrush" Value="LightGray" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="X"/>
+        </Border>-->
     </Grid>
 </UserControl>

@@ -29,13 +29,8 @@ namespace FasType.ViewModels
             get => _sortBy;
             set
             {
-                SetProperty(ref _sortBy, value);
-                AllAbbreviations = (OrderBy switch
-                {
-                    FormOrderBy.FullForm => AllAbbreviations.OrderBy(a => a.FullForm),
-                    FormOrderBy.ShortForm => AllAbbreviations.OrderBy(a => a.ShortForm),
-                    _ => throw new NotImplementedException()
-                }).ToList();
+                if (SetProperty(ref _sortBy, value))
+                    OrderAndFilterAbbreviations();
             }
         }
 
@@ -44,13 +39,8 @@ namespace FasType.ViewModels
             get => _queryString;
             set
             {
-                if (SetProperty(ref _queryString, value.TrimStart()))
-                    AllAbbreviations = (OrderBy switch
-                    {
-                        FormOrderBy.FullForm => _storage.Where(a => a.FullForm.StartsWith(QueryString)),
-                        FormOrderBy.ShortForm => _storage.Where(a => a.ShortForm.StartsWith(QueryString)),
-                        _ => throw new NotImplementedException()
-                    }).ToList();
+                if (SetProperty(ref _queryString, value))
+                    FilterAbbreviations();
             }
         }
 
@@ -73,12 +63,31 @@ namespace FasType.ViewModels
             _storage = storage;
 
             RemoveCommand = new(Remove, CanRemove);
-            AllAbbreviations = _storage.ToList();
-            OrderBy = OrderBy;
+            _queryString = "";
+            OrderAbbreviations();
             //AllAbbreviations = _storage.Take(2).ToList();
         }
 
-        bool CanRemove() => true;
+        void OrderAndFilterAbbreviations() => AllAbbreviations = (OrderBy switch
+        {
+            FormOrderBy.FullForm => _storage.Where(a => a.FullForm.Contains(QueryString)).OrderBy(a => a.FullForm),
+            FormOrderBy.ShortForm => _storage.Where(a => a.ShortForm.Contains(QueryString)).OrderBy(a => a.ShortForm),
+            _ => throw new NotImplementedException()
+        }).ToList();
+        void OrderAbbreviations() => AllAbbreviations = (OrderBy switch
+        {
+            FormOrderBy.FullForm => _storage.OrderBy(a => a.FullForm),
+            FormOrderBy.ShortForm => _storage.OrderBy(a => a.ShortForm),
+            _ => throw new NotImplementedException()
+        }).ToList();
+        void FilterAbbreviations() =>  AllAbbreviations = (OrderBy switch
+        {
+            FormOrderBy.FullForm => _storage.Where(a => a.FullForm.Contains(QueryString)),
+            FormOrderBy.ShortForm => _storage.Where(a => a.ShortForm.Contains(QueryString)),
+            _ => throw new NotImplementedException()
+        }).ToList();
+
+    bool CanRemove() => true;
         void Remove(BaseAbbreviation abbrev)
         {
             var message = string.Format(Resources.DeleteDialogFormat, Environment.NewLine, abbrev.ElementaryRepresentation);

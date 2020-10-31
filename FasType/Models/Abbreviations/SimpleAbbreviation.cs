@@ -9,8 +9,6 @@ using System.Text;
 
 namespace FasType.Models.Abbreviations
 {
-    [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
-    [Table("SimpleAbbreviations")]
     public class SimpleAbbreviation : BaseAbbreviation
     {
         //string IAbbreviation.ShortForm => ShortForm;

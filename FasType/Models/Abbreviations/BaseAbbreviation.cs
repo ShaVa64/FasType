@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace FasType.Models.Abbreviations
 {
     [Table("Abbreviations")]
+    [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public abstract class BaseAbbreviation
     {
         [Key] public Guid Key { get; private set; }

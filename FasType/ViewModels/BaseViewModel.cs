@@ -31,6 +31,6 @@ namespace FasType.ViewModels
         }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        protected void OnPropertiesChanged(params string[] propertiesName) => Array.ForEach(propertiesName, propertyName => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
+        protected void OnPropertiesChanged(params string[] propertiesName) => Array.ForEach(propertiesName, OnPropertyChanged);// propertyName => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
     }
 }

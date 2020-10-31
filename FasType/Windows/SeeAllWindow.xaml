@@ -12,7 +12,7 @@
         WindowStyle="ToolWindow" ShowInTaskbar="False"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="{Binding Title}" 
-        Height="300" MinWidth="300" Width="300">
+        MinHeight="300" Height="300" MinWidth="300" Width="300">
         <!-- Width="300"-->
 
     <Window.Resources>
@@ -71,8 +71,8 @@
         <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
             <ComboBox ToolBar.OverflowMode="Never" Padding="0, 0, 3, 0" SelectedItem="{Binding OrderBy, Mode=OneWayToSource, Converter={StaticResource ResourcesToEnumConverter}}"
                       behaviors:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True">
-                <ComboBoxItem Content="{x:Static prop:Resources.ShortForm}" IsSelected="True"/>
-                <ComboBoxItem Content="{x:Static prop:Resources.FullForm}"/>
+                <ComboBoxItem Content="{x:Static prop:Resources.FullForm}" IsSelected="True"/>
+                <ComboBoxItem Content="{x:Static prop:Resources.ShortForm}"/>
             </ComboBox>
 
             <Grid ToolBar.OverflowMode="Never" Width="130" Margin="5, 0">

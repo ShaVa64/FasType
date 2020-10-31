@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace FasType.Storage
@@ -17,8 +18,13 @@ namespace FasType.Storage
     {
         public int Count => Abbreviations.ToList().Count;
         public DbSet<BaseAbbreviation> Abbreviations { get; set; }
+
+        public Type ElementType => Abbreviations.AsQueryable().ElementType;
+        public Expression Expression => Abbreviations.AsQueryable().Expression;
+        public IQueryProvider Provider => Abbreviations.AsQueryable().Provider;
+
         //public DbSet<VerbAbbreviation> VerbAbbreviations { get; set; }
-        
+
         public EFSqliteContext(DbContextOptions<EFSqliteContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,6 +57,14 @@ namespace FasType.Storage
             var r = SaveChanges();
             return r > 0;
             //return true;
+        }
+
+        public bool AddRange(List<BaseAbbreviation> abbrevs)
+        {
+            Abbreviations.AddRange(abbrevs);
+
+            var r = SaveChanges();
+            return r > 0;
         }
 
         public bool Remove(BaseAbbreviation abbrev)

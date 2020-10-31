@@ -61,6 +61,7 @@ namespace FasType.ViewModels
 
         public MainWindowViewModel(IDataStorage storage)
         {
+            CurrentWord = string.Empty;
             _listener = new();
             _storage = storage;
             CurrentListenerState = ListenerStates.Inserting;
@@ -80,7 +81,7 @@ namespace FasType.ViewModels
             Continue();
         }
 
-        bool CanAddNew() => true;
+        bool CanAddNew(Type t) => t != null;
         void AddNew(Type t)
         {
             var tw = App.Current.ServiceProvider.GetRequiredService<AddAbbreviationWindow>();

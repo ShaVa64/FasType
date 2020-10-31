@@ -49,6 +49,8 @@ namespace FasType
             using var _context = ServiceProvider.GetRequiredService<IDataStorage>() as DbContext;
             _context.Database.Migrate();
             //_context.Database.EnsureCreated();
+
+            //T();
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -84,6 +86,31 @@ namespace FasType
         {
             MainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             MainWindow.Show();
+        }
+
+        void T()
+        {
+            string fp = @"D:\Visual Studio Projects\FasType\FasType\abréviations.txt";
+
+            using var stream = new FileStream(fp, FileMode.OpenOrCreate, FileAccess.Read);
+            using var reader = new StreamReader(stream);
+
+            using var _context = ServiceProvider.GetRequiredService<IDataStorage>();
+
+
+            var abbrevs = new List<Models.Abbreviations.BaseAbbreviation>();
+            string l;
+            while ((l = reader.ReadLine()) != null)
+            {
+                var sp = l.Replace("\"", string.Empty).Split(';');
+
+                string sf = sp[0];
+                string ff = sp[1];
+
+                abbrevs.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+                //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+            }
+            _context.AddRange(abbrevs);
         }
 
         protected override void OnExit(ExitEventArgs e)
