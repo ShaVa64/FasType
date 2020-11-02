@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace FasType.ViewModels
+namespace FasType.Models
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -30,7 +30,7 @@ namespace FasType.ViewModels
             return true;
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        protected void OnPropertiesChanged(params string[] propertiesName) => Array.ForEach(propertiesName, OnPropertyChanged);// propertyName => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "", object sender = null) => PropertyChanged?.Invoke(sender ?? this, new PropertyChangedEventArgs(propertyName));
+        protected void OnPropertiesChanged(object sender = null, params string[] propertiesName) => Array.ForEach(propertiesName, prop => OnPropertyChanged(prop, sender));// propertyName => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
     }
 }

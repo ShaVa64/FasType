@@ -20,8 +20,8 @@
                     <MenuItem Header="{x:Static prop:Resources.SimpleAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
                     <MenuItem Header="{x:Static prop:Resources.VerbAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
                 </MenuItem>
-                <MenuItem Header="{x:Static prop:Resources.SeeAll}" Command="{Binding SeeAllCommand}"/>
-                <MenuItem Header="{x:Static prop:Resources.SettingsHeader}" Command="{Binding OpenSettingsCommand}"/>
+                <MenuItem Header="{x:Static prop:Resources.SeeAllHeader}" Command="{Binding SeeAllCommand}"/>
+                <MenuItem Header="{x:Static prop:Resources.LinguisticsHeader}" Command="{Binding OpenLinguisticsCommand}"/>
             </Menu>
             <Menu ToolBar.OverflowMode="Always">
                 <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>

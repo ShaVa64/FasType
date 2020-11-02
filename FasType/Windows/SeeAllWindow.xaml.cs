@@ -21,7 +21,6 @@ namespace FasType.Windows
     public partial class SeeAllWindow : Window
     {
         readonly SeeAllViewModel _vm;
-        CollectionView cv;
 
         public SeeAllWindow(SeeAllViewModel vm)
         {

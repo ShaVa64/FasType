@@ -22,12 +22,12 @@ namespace FasType.Windows
 
             DataContext = _vm = vm;
 
-            var area = System.Windows.SystemParameters.WorkArea;
-            this.Left = area.Right - this.Width;
-            this.Top = area.Bottom - this.Height;
+            var area = SystemParameters.WorkArea;
+            Left = area.Right - Width;
+            Top = area.Bottom - Height;
 
-            this.Loaded += _vm.Load;
-            this.Closing += _vm.Close;
+            Loaded += _vm.Load;
+            Closing += _vm.Close;
         }
     }
 }

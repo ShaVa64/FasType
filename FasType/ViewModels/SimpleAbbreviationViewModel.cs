@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace FasType.ViewModels
 {
-    public class SimpleAbbreviationViewModel : BaseViewModel
+    public class SimpleAbbreviationViewModel : ObservableObject
     {
         readonly IDataStorage _storage;
         SimpleAbbreviation _currentAbbrev;

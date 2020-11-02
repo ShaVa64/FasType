@@ -5,6 +5,49 @@
              Startup="OnStartup">
     <!-- StartupUri="MainWindow.xaml"-->
     <Application.Resources>
-         
+        <GeometryGroup x:Key="CrossGeometry">
+            <LineGeometry StartPoint="0, 0" EndPoint="1, 1"  />
+            <LineGeometry StartPoint="0, 1" EndPoint="1, 0"/>
+        </GeometryGroup>
+        
+        <GeometryGroup x:Key="PlusGeometry">
+            <LineGeometry StartPoint="0, 0.5" EndPoint="1, 0.5" />
+            <LineGeometry StartPoint="0.5, 0" EndPoint="0.5, 1"/>
+        </GeometryGroup>
+
+        <Style TargetType="Button" x:Key="ButtonStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}" x:Key="RedButtonStyle">
+            <Setter Property="Background" Value="#f00"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="LightGray"/>
+                    <Setter Property="Background" Value="#f75"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}" x:Key="GreenButtonStyle">
+            <Setter Property="Background" Value="LawnGreen"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="LightGray"/>
+                    <Setter Property="Background" Value="LightGreen"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Application.Resources>
 </Application>

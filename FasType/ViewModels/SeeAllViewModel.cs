@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace FasType.ViewModels
 {
-    public class SeeAllViewModel : BaseViewModel
+    public class SeeAllViewModel : ObservableObject
     {
         string _queryString;
         FormOrderBy _sortBy;

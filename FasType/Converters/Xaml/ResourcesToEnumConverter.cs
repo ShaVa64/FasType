@@ -12,7 +12,20 @@ namespace FasType.Converters.Xaml
 {
     public class ResourcesToEnumConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is SeeAllViewModel.FormOrderBy orderBy)
+            {
+                return orderBy switch
+                {
+                    SeeAllViewModel.FormOrderBy.FullForm => Resources.FullForm,
+                    SeeAllViewModel.FormOrderBy.ShortForm => Resources.ShortForm,
+                    _ => throw new NotImplementedException(),
+                };
+            }
+
+            throw new NotImplementedException();
+        }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -26,7 +39,7 @@ namespace FasType.Converters.Xaml
                     return SeeAllViewModel.FormOrderBy.ShortForm;
             }
 
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

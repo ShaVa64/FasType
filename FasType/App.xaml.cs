@@ -78,8 +78,8 @@ namespace FasType
             services.AddTransient<SeeAllWindow>();
             services.AddTransient<SeeAllViewModel>();
 
-            services.AddTransient<SettingsWindow>();
-            services.AddTransient<SettingsViewModel>();
+            services.AddTransient<LinguisticsWindow>();
+            services.AddTransient<LinguisticsViewModel>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)

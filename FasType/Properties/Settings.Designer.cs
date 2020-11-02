@@ -34,41 +34,5 @@ namespace FasType.Properties {
                 this["OnStartUp"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool PT1 {
-            get {
-                return ((bool)(this["PT1"]));
-            }
-            set {
-                this["PT1"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool PT1P {
-            get {
-                return ((bool)(this["PT1P"]));
-            }
-            set {
-                this["PT1P"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PT1C {
-            get {
-                return ((string)(this["PT1C"]));
-            }
-            set {
-                this["PT1C"] = value;
-            }
-        }
     }
 }

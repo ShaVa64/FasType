@@ -132,7 +132,7 @@
     <value>_Verb Abbrev.</value>
     <comment>@MutedRule(PunctuationTail)</comment>
   </data>
-  <data name="SeeAll" xml:space="preserve">
+  <data name="SeeAllHeader" xml:space="preserve">
     <value>_See All</value>
   </data>
   <data name="AllAbbrevs" xml:space="preserve">
@@ -173,13 +173,19 @@
   <data name="Search" xml:space="preserve">
     <value>Search...</value>
   </data>
-  <data name="SettingsHeader" xml:space="preserve">
-    <value>_Settings</value>
+  <data name="LinguisticsHeader" xml:space="preserve">
+    <value>_Linguistics</value>
   </data>
   <data name="AlreadyExistsErrorFormat" xml:space="preserve">
     <value>The abbreviation you are trying to create already exists.{0}({1})</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Linguistics" xml:space="preserve">
+    <value>Linguistics</value>
+  </data>
+  <data name="Postfix" xml:space="preserve">
+    <value>Postfix</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Prefix</value>
   </data>
 </root>

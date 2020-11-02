@@ -160,6 +160,42 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linguistics.
+        /// </summary>
+        public static string Linguistics {
+            get {
+                return ResourceManager.GetString("Linguistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Linguistics.
+        /// </summary>
+        public static string LinguisticsHeader {
+            get {
+                return ResourceManager.GetString("LinguisticsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Postfix.
+        /// </summary>
+        public static string Postfix {
+            get {
+                return ResourceManager.GetString("Postfix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefix.
+        /// </summary>
+        public static string Prefix {
+            get {
+                return ResourceManager.GetString("Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run At Start Up.
         /// </summary>
         public static string RunAtStartUp {
@@ -180,27 +216,9 @@ namespace FasType.Properties {
         /// <summary>
         ///   Looks up a localized string similar to _See All.
         /// </summary>
-        public static string SeeAll {
+        public static string SeeAllHeader {
             get {
-                return ResourceManager.GetString("SeeAll", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        public static string Settings {
-            get {
-                return ResourceManager.GetString("Settings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Settings.
-        /// </summary>
-        public static string SettingsHeader {
-            get {
-                return ResourceManager.GetString("SettingsHeader", resourceCulture);
+                return ResourceManager.GetString("SeeAllHeader", resourceCulture);
             }
         }
         

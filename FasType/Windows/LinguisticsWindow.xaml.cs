@@ -14,21 +14,21 @@ using System.Windows.Shapes;
 namespace FasType.Windows
 {
     /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
+    /// Interaction logic for LinguisticsWindow.xaml
     /// </summary>
-    public partial class SettingsWindow : Window
+    public partial class LinguisticsWindow : Window
     {
-        readonly SettingsViewModel _vm;
+        readonly LinguisticsViewModel _vm;
 
-        public SettingsWindow(SettingsViewModel vm)
+        public LinguisticsWindow(LinguisticsViewModel vm)
         {
             InitializeComponent();
 
-            KeyDown += SeeAllWindow_KeyDown;
+            KeyDown += LinguisticsWindow_KeyDown;
             DataContext = _vm = vm;
         }
 
-        private void SeeAllWindow_KeyDown(object sender, KeyEventArgs e)
+        private void LinguisticsWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
                 Close();

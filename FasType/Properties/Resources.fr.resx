@@ -126,7 +126,7 @@
   <data name="SimpleAbbrevHeader" xml:space="preserve">
     <value>Abbrev. _Simple</value>
   </data>
-  <data name="SeeAll" xml:space="preserve">
+  <data name="SeeAllHeader" xml:space="preserve">
     <value>Voir _Tout</value>
   </data>
   <data name="VerbAbbrevHeader" xml:space="preserve">
@@ -168,13 +168,19 @@
   <data name="Search" xml:space="preserve">
     <value>Rechercher...</value>
   </data>
-  <data name="SettingsHeader" xml:space="preserve">
-    <value>_Préférences</value>
+  <data name="LinguisticsHeader" xml:space="preserve">
+    <value>_Linguistique</value>
   </data>
   <data name="AlreadyExistsErrorFormat" xml:space="preserve">
     <value>L'abréviation que vous tentez d'ajouter existe déjà.{0}({1})</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Préférences</value>
+  <data name="Linguistics" xml:space="preserve">
+    <value>Linguistique</value>
+  </data>
+  <data name="Postfix" xml:space="preserve">
+    <value>Suffixe</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Préfixe</value>
   </data>
 </root>

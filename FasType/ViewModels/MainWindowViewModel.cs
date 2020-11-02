@@ -18,7 +18,7 @@ using FasType.Models;
 
 namespace FasType.ViewModels
 {
-    public class MainWindowViewModel : BaseViewModel, IKeyboardListenerHandler
+    public class MainWindowViewModel : ObservableObject, IKeyboardListenerHandler
     {
         string _currentWord;
         readonly LowLevelKeyboardListener _listener;
@@ -57,7 +57,7 @@ namespace FasType.ViewModels
         public Command<Type> AddNewCommand { get; }
         public Command SeeAllCommand { get; }
         public Command<BaseAbbreviation> ChooseCommand { get; }
-        public Command OpenSettingsCommand { get; }
+        public Command OpenLinguisticsCommand { get; }
 
         public MainWindowViewModel(IDataStorage storage)
         {
@@ -68,13 +68,13 @@ namespace FasType.ViewModels
             AddNewCommand = new(AddNew, CanAddNew);
             SeeAllCommand = new(SeeAll, CanSeeAll);
             ChooseCommand = new(Choose, CanChoose);
-            OpenSettingsCommand = new(OpenSettings, CanOpenSettings);
+            OpenLinguisticsCommand = new(OpenLinguistics, CanOpenLinguistics);
         }
 
-        bool CanOpenSettings() => true;
-        void OpenSettings()
+        bool CanOpenLinguistics() => true;
+        void OpenLinguistics()
         {
-            var tw = App.Current.ServiceProvider.GetRequiredService<SettingsWindow>();
+            var tw = App.Current.ServiceProvider.GetRequiredService<LinguisticsWindow>();
 
             Pause();
             tw.ShowDialog();
