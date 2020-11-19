@@ -39,16 +39,16 @@ namespace FasType.Models.Abbreviations
             return true;
         }
 
-        string ElementaryCapitalize(string @in)
+        static string ElementaryCapitalize(string @in)
         {
             StringBuilder sb = new();
 
-            sb.Append("(");
+            sb.Append('(');
             sb.Append(char.ToUpper(@in[0]));
-            sb.Append("/");
+            sb.Append('/');
             sb.Append(@in[0]);
-            sb.Append(")");
-            sb.Append(@in.Substring(1));
+            sb.Append(')');
+            sb.Append(@in[1..]);
 
             return sb.ToString();
         }

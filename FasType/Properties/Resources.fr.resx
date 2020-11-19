@@ -183,4 +183,7 @@
   <data name="Prefix" xml:space="preserve">
     <value>Préfixe</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauver</value>
+  </data>
 </root>

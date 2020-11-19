@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:FasType.Controls"
              xmlns:prop="clr-namespace:FasType.Properties"
              xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
+             xmlns:models="clr-namespace:FasType.Models.Linguistics.Grammars"
+             d:DataContext="{d:DesignInstance models:GrammarType}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -34,13 +36,23 @@
                             <Setter Property="BorderBrush" Value="Red"/>
                         </Trigger>
                     </Style.Triggers>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TextBox">
+                                <Border BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" x:Name="border">
+                                    <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <StackPanel Grid.Column="2" Orientation="Horizontal">
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="10, 5">
             <TextBlock Text="{x:Static prop:Resources.Prefix}" Style="{StaticResource SharedStyle}" Margin="10, 5, 2, 5"
-                       TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ToggleButton IsChecked="{Binding Where, Mode=TwoWay, Converter={StaticResource BoolToEnum}}">
+                       TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonDown="Prefix_TextBlock_MouseLeftButtonDown">
+            </TextBlock>
+            <ToggleButton IsChecked="{Binding Position, Mode=TwoWay, Converter={StaticResource BoolToEnum}}">
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton" BasedOn="{StaticResource SharedStyle}">
                         <Setter Property="Margin" Value="2, 0"/>
@@ -88,11 +100,11 @@
                 </ToggleButton.Style>
             </ToggleButton>
             <TextBlock Text="{x:Static prop:Resources.Postfix}" Style="{StaticResource SharedStyle}" Margin="2, 5"
-                       TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                       TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonDown="Postfix_TextBlock_MouseLeftButtonDown"/>
         </StackPanel>
         <!--<ToggleButton Grid.Column="2" Content="{Binding Where, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="10, 5, 2, 5" CommandParameter="{Binding .}"
                       VerticalAlignment="Center" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.ChangePluralPositionCommand}"/>-->
-        <Button Grid.Column="4" Padding="5, 0" Margin="10, 5"
+        <!--<Button Grid.Column="4" Padding="5, 0" Margin="10, 5"
                 HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemovePluralCommand}" 
                 Width="20" Height="20" Style="{StaticResource RedButtonStyle}">
@@ -101,6 +113,6 @@
                       Stroke="Black" StrokeThickness="2" Margin="5"
                       StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
             </Button.Content>
-        </Button>
+        </Button>-->
     </Grid>
 </UserControl>
