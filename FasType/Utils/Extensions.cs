@@ -12,6 +12,7 @@ namespace FasType.Utils
     public static class KeyExtensions
     {
         public static bool IsAlpha(this Key k) => k is >= Key.A and <= Key.Z || (k is Key.D2 or Key.D7 or Key.D9 or Key.D0 or Key.Oem3 && !KeyboardStates.IsModified());
+        public static bool IsModifier(this Key k) => k is Key.LeftCtrl or Key.RightCtrl or Key.LeftShift or Key.RightShift or Key.LWin or Key.RWin or Key.CapsLock;
     }
 
     public static class StringExtensions

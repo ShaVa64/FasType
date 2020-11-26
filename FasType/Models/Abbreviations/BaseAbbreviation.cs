@@ -12,21 +12,27 @@ namespace FasType.Models.Abbreviations
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public abstract class BaseAbbreviation
     {
+        protected readonly static string Arrow = "\u2794";
+
         [Key] public Guid Key { get; private set; }
         [Required] [Column(TypeName = "varchar(50)")] public string ShortForm { get; private set; }
         [Required] [Column(TypeName = "varchar(50)")] public string FullForm { get; private set; }
+        [Required] public ulong Used { get; private set; }
 
         public string StringKey => string.Concat(ShortForm.Take(2));
 
-        public BaseAbbreviation(string shortForm, string fullForm)
+        public BaseAbbreviation(string shortForm, string fullForm, ulong used = 0)
         {
             Key = Guid.NewGuid();
             ShortForm = shortForm;
             FullForm = fullForm;
+            Used = used;
         }
 
         public string ElementaryRepresentation => GetElementaryRepresentation();
         public string ComplexRepresentation => GetComplexRepresentation();
+
+        public void UpdateUsed() => Used++;
 
         public abstract bool IsAbbreviation(string shortForm);
         public abstract string GetFullForm(string shortForm);

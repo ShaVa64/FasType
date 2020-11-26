@@ -14,7 +14,7 @@ namespace FasType.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9");
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("FasType.Models.Abbreviations.BaseAbbreviation", b =>
                 {
@@ -34,6 +34,9 @@ namespace FasType.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
+                    b.Property<ulong>("Used")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Key");
 
                     b.ToTable("Abbreviations");
@@ -45,7 +48,19 @@ namespace FasType.Migrations
                 {
                     b.HasBaseType("FasType.Models.Abbreviations.BaseAbbreviation");
 
-                    b.ToTable("SimpleAbbreviations");
+                    b.Property<string>("GenderForm")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("GenderPluralForm")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("PluralForm")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.ToTable("Abbreviations");
 
                     b.HasDiscriminator().HasValue("SimpleAbbreviation");
                 });

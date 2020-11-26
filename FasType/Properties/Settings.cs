@@ -27,7 +27,7 @@ namespace FasType.Properties {
         private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e)
         {
             if (e.SettingName == nameof(OnStartUp))
-                App.Current.UpdateStartupShortcut((bool)e.NewValue);
+                App.UpdateStartupShortcut((bool)e.NewValue);
         }
         
         private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {

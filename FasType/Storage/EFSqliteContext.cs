@@ -16,7 +16,7 @@ namespace FasType.Storage
 {
     public class EFSqliteContext : DbContext, IDataStorage
     {
-        public int Count => Abbreviations.ToList().Count;
+        public int Count => Abbreviations.Count();
         public DbSet<BaseAbbreviation> Abbreviations { get; set; }
 
         public Type ElementType => Abbreviations.AsQueryable().ElementType;
@@ -59,7 +59,7 @@ namespace FasType.Storage
             //return true;
         }
 
-        public bool AddRange(List<BaseAbbreviation> abbrevs)
+        public bool AddRange(IEnumerable<BaseAbbreviation> abbrevs)
         {
             Abbreviations.AddRange(abbrevs);
 

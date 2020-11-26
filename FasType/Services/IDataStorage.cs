@@ -15,7 +15,7 @@ namespace FasType.Services
         IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm);
 
         bool Add(BaseAbbreviation abbrev);
-        bool AddRange(List<BaseAbbreviation> abbrevs);
+        bool AddRange(IEnumerable<BaseAbbreviation> abbrevs);
         //Task<bool> AddAsync(IAbbreviation abbrev);
         bool Contains(BaseAbbreviation abbrev);
         bool Remove(BaseAbbreviation abbrev);

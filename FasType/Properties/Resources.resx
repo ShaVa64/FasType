@@ -191,4 +191,25 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="Plural" xml:space="preserve">
+    <value>Plural</value>
+  </data>
+  <data name="GenderForm" xml:space="preserve">
+    <value>Gendered Form</value>
+    <comment>@MutedRule(WhiteSpaceTail)</comment>
+  </data>
+  <data name="PluralForm" xml:space="preserve">
+    <value>Plural Form</value>
+    <comment>@MutedRule(WhiteSpaceTail)</comment>
+  </data>
+  <data name="GnP" xml:space="preserve">
+    <value>Gender &amp; Plural</value>
+  </data>
+  <data name="GnPForm" xml:space="preserve">
+    <value>G. &amp; P. Form</value>
+    <comment>@MutedRule(WhiteSpaceTail)@MutedRule(PunctuationTail)</comment>
+  </data>
 </root>

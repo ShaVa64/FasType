@@ -24,25 +24,32 @@ namespace FasType.ViewModels
         readonly LowLevelKeyboardListener _listener;
         ListenerStates _currentListenerState;
         readonly IDataStorage _storage;
-        BaseAbbreviation _choosedAbbrev;
-        List<BaseAbbreviation> _matchingAbbrevs;
-        int _abbrevIndex;
+        //BaseAbbreviation _choosedAbbrev;
+        //List<BaseAbbreviation> _matchingAbbrevs;
+        //int _abbrevIndex;
+        string _choosedFullForm;
+        List<string> _matchingFullForms;
+        int _fullFormIndex;
 
-        public int AbbrevIndex
-        {
-            get => _abbrevIndex;
-            set => SetProperty(ref _abbrevIndex, value);
-        }
-        public BaseAbbreviation ChoosedAbbrev
-        {
-            get => _choosedAbbrev;
-            set => SetProperty(ref _choosedAbbrev, value);
-        }
-        public List<BaseAbbreviation> MatchingAbbrevs
-        {
-            get => _matchingAbbrevs;
-            set => SetProperty(ref _matchingAbbrevs, value);
-        }
+        public string ChoosedFullForm { get => _choosedFullForm; set => SetProperty(ref _choosedFullForm, value); }
+        public List<string> MatchingFullForms { get => _matchingFullForms; set => SetProperty(ref _matchingFullForms, value); }
+        public int FullFormIndex { get => _fullFormIndex; set => SetProperty(ref _fullFormIndex, value); }
+
+        //public int AbbrevIndex
+        //{
+        //    get => _abbrevIndex;
+        //    set => SetProperty(ref _abbrevIndex, value);
+        //}
+        //public BaseAbbreviation ChoosedAbbrev
+        //{
+        //    get => _choosedAbbrev;
+        //    set => SetProperty(ref _choosedAbbrev, value);
+        //}
+        //public List<BaseAbbreviation> MatchingAbbrevs
+        //{
+        //    get => _matchingAbbrevs;
+        //    set => SetProperty(ref _matchingAbbrevs, value);
+        //}
         ListenerStates CurrentListenerState
         {
             get => _currentListenerState;
@@ -109,10 +116,12 @@ namespace FasType.ViewModels
         bool CanChoose() => CurrentListenerState == ListenerStates.Choosing;
         void Choose(BaseAbbreviation abbrev)
         {
-            TryWriteAbbreviation(abbrev, CurrentWord);
+            TryWriteAbbreviation(abbrev, CurrentWord, plusOne: true);
 
-            ChoosedAbbrev = null;
-            MatchingAbbrevs = null;
+            ChoosedFullForm = null;
+            MatchingFullForms = null;
+            //ChoosedAbbrev = null;
+            //MatchingAbbrevs = null;
             CurrentListenerState = ListenerStates.Inserting;
             CurrentWord = "";
         }
@@ -162,9 +171,11 @@ namespace FasType.ViewModels
                 //else if (abbrevs.Count > 1)
                 CurrentListenerState = ListenerStates.Choosing;
 
+                MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
+                ChoosedFullForm = MatchingFullForms[0];
+                //MatchingAbbrevs = abbrevs;
+                //ChoosedAbbrev = MatchingAbbrevs[0];
 
-                MatchingAbbrevs = abbrevs;
-                ChoosedAbbrev = MatchingAbbrevs[0];
                 //foreach (var abbrev in abbrevs)
                 //{
                 //    e.StopChain |= TryWriteAbbreviation(abbrev, shortForm);
@@ -174,28 +185,35 @@ namespace FasType.ViewModels
             }
             else if (e.KeyPressed.IsAlpha())
             {
-                string newChar = e.KeyPressed switch
+                string newChar = (e.Old?.KeyPressed, e.Old?.IsShifted, e.KeyPressed, e.IsShifted) switch
                 {
-                    Key.Oem3 => "ù",
-                    Key.D2 => "é",
-                    Key.D7 => "è",
-                    Key.D9 => "ç",
-                    Key.D0 => "à",
-                    _ => e.KeyPressed.ToString().ToLower()
+                    (Key.Oem6, false, Key.E   , false) => "ê",
+                    (Key.Oem6, true , Key.E   , false) => "ë",
+                    (Key.Oem6, false, Key.E   , true ) => "Ê",
+                    (Key.Oem6, true , Key.E   , true ) => "Ë",
+                    (Key.Oem6, false, Key.U   , _    ) => "û",
+                    (Key.Oem6, true , Key.U   , _    ) => "ü",
+                    (_       , _    , Key.Oem3, false) => "ù",
+                    (_       , _    , Key.D2  , false) => "é",
+                    (_       , _    , Key.D7  , false) => "è",
+                    (_       , _    , Key.D9  , false) => "ç",
+                    (_       , _    , Key.D0  , false) => "à",
+                    (_       , _    , _       , false) => e.New.KeyPressed.ToString().ToLower(),
+                    (_       , _    , _       , true ) => e.New.KeyPressed.ToString(),
                 };
 
-                newChar = KeyboardStates.IsShifted() ? newChar.ToUpper() : newChar.ToLower();
-
-                CurrentWord += newChar;
+                //newChar = e.IsShifted ? newChar.ToUpper() : newChar.ToLower();
+                CurrentWord += newChar.Single();
 
                 Log.Verbose("New Char Pressed: {pressedChar}, Current Word: {@currentWord}", newChar, CurrentWord);
             }
-            else if (e.KeyPressed == Key.Back && CurrentWord is not null && CurrentWord.Length > 0)
+            else if (e.KeyPressed == Key.Back && !string.IsNullOrEmpty(CurrentWord))
             {
                 CurrentWord = CurrentWord.Remove(CurrentWord.Length - 1);
                 Log.Verbose("Last char removed, Current Word: {@currentWord}", CurrentWord);
             }
-            else
+            else if (e.KeyPressed.IsModifier() || (e.KeyPressed == Key.Oem6 && e.Old.KeyPressed != Key.Oem6)) { }
+            else 
             {
                 CurrentWord = "";
                 Log.Verbose("Current Word Reset, Current Word: {@currentWord}", CurrentWord);
@@ -209,32 +227,44 @@ namespace FasType.ViewModels
             {
                 CurrentListenerState = ListenerStates.Inserting;
 
-                bool b = TryWriteAbbreviation(ChoosedAbbrev, CurrentWord, plusOne: true);
-                if (b)
-                {
-                    ChoosedAbbrev = null;
-                    MatchingAbbrevs = null;
-                    CurrentWord = "";
-                }
-                else
-                {
-                    CurrentListenerState = ListenerStates.Choosing;
-                }
+                string word = CurrentWord.IsFirstCharUpper() ? ChoosedFullForm.FirstCharToUpper() : ChoosedFullForm;
+                Input.Erase(CurrentWord.Length + 1);
+                Input.TextEntry(word + " ");
+                ChoosedFullForm = null;
+                MatchingFullForms = null;
+                CurrentWord = "";
+                //bool b = TryWriteAbbreviation(ChoosedAbbrev, CurrentWord, plusOne: true);
+                //if (b)
+                //{
+                //    ChoosedAbbrev = null;
+                //    MatchingAbbrevs = null;
+                //    CurrentWord = "";
+                //}
+                //else
+                //{
+                //    CurrentListenerState = ListenerStates.Choosing;
+                //}
             }
             else if (e.KeyPressed is Key.Down)
             {
-                if (AbbrevIndex < MatchingAbbrevs.Count - 1)
-                    AbbrevIndex++;
+                if (FullFormIndex < MatchingFullForms.Count - 1)
+                    FullFormIndex++;
+                //if (AbbrevIndex < MatchingAbbrevs.Count - 1)
+                //    AbbrevIndex++;
             }
             else if (e.KeyPressed is Key.Up)
             {
-                if (AbbrevIndex > 0)
-                    AbbrevIndex--;
+                if (FullFormIndex > 0)
+                    FullFormIndex--;
+                //if (AbbrevIndex > 0)
+                //    AbbrevIndex--;
             }
             else //if (e.KeyPressed is Key.Escape or Key.Space)
             {
-                ChoosedAbbrev = null;
-                MatchingAbbrevs = null;
+                ChoosedFullForm = null;
+                MatchingFullForms = null;
+                //ChoosedAbbrev = null;
+                //MatchingAbbrevs = null;
                 CurrentListenerState = ListenerStates.Inserting;
                 CurrentWord = "";
             }

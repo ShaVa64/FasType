@@ -1,6 +1,7 @@
 ﻿using FasType.Models;
 using FasType.Models.Linguistics.Grammars;
 using FasType.Properties;
+using FasType.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,30 +14,29 @@ namespace FasType.ViewModels
 {
     public class LinguisticsViewModel: ObservableObject
     {
-        private static GrammarTypeRecord genreRecord = new("Genre", "e", GrammarPosition.Prefix);
-        private static GrammarTypeRecord pluralRecord = new("Plural", "k", GrammarPosition.Postfix);
 
-        ObservableCollection<GrammarType> _plurals;
-
-        public Command<Window> SaveCommand { get; }
+        //ObservableCollection<GrammarType> _plurals;
         //public Command<GrammarType> RemovePluralCommand { get; }
         //public Command AddPluralCommand { get; }
         //public ObservableCollection<GrammarType> Plurals { get => _plurals; set => SetProperty(ref _plurals, value); }
-
+        
+        public Command<Window> SaveCommand { get; }
         public GrammarType PluralContext { get; }
-        public GrammarType GenreContext { get; }
+        public GrammarType GenderContext { get; }
+        public GrammarType PluralGenderContext { get; }
 
         public LinguisticsViewModel()
         {
-            Plurals = new();
-
-            SaveCommand = new(Save, CanSave);
+            //Plurals = new();
             //AddPluralCommand = new(AddPlural);
             //RemovePluralCommand = new(RemovePlural);
             //SettingsToProperties();
 
-            GenreContext = (GrammarType)genreRecord;
-            PluralContext = (GrammarType)pluralRecord;
+            SaveCommand = new(Save, CanSave);
+
+            GenderContext = (GrammarType)UserGrammar.GenderRecord;
+            PluralContext = (GrammarType)UserGrammar.PluralRecord;
+            PluralGenderContext = (GrammarType)UserGrammar.GenderPluralRecord;
         }
 
         //void RemovePlural(GrammarType gt)
@@ -47,7 +47,6 @@ namespace FasType.ViewModels
         //    while (i < Plurals.Count)
         //        Plurals[i].Name = $"Plural {++i}";
         //}
-
         //void AddPlural() => Plurals.Add(new($"Plural {Plurals.Count + 1}", "k", GrammarPosition.Prefix));
         //bool CanSavePlural()
         //{
@@ -65,49 +64,30 @@ namespace FasType.ViewModels
 
         //    return true;
         //}
-        bool CanSavePlural()
+
+        static bool CanSave(GrammarType context, GrammarTypeRecord record)
         {
-            bool emptyRepr = string.IsNullOrEmpty(PluralContext.Repr);
-            if (emptyRepr)
+            if (string.IsNullOrEmpty(context.Repr)) //Empty Repr
                 return false;
 
-            bool emptyName = string.IsNullOrEmpty(PluralContext.Name);
-            if (emptyName)
-                return false;
-
-            bool noChanges = pluralRecord == (GrammarTypeRecord)PluralContext;
-            if (noChanges)
-                return false;
-
-            //bool duplicateNames = Plurals.Select(gt => gt.Name).Distinct().Count() < Plurals.Count;
-            //if (duplicateNames)
+            //if (string.IsNullOrEmpty(context.Name)) //Empty Name
             //    return false;
 
-            return true;
-        }
-        bool CanSaveGenre()
-        {
-            bool emptyRepr = string.IsNullOrEmpty(GenreContext.Repr);
-            if (emptyRepr)
-                return false;
-
-            bool emptyName = string.IsNullOrEmpty(GenreContext.Name);
-            if (emptyName)
-                return false;
-
-            bool noChanges = genreRecord == (GrammarTypeRecord)GenreContext;
-            if (noChanges)
+            if (record == (GrammarTypeRecord)context) //No Changes
                 return false;
 
             return true;
         }
-        bool CanSave() => CanSavePlural() || CanSaveGenre();
-
+        bool CanSavePlural() => CanSave(PluralContext, UserGrammar.PluralRecord);
+        bool CanSaveGenre() => CanSave(GenderContext, UserGrammar.GenderRecord);
+        bool CanSaveGenrePlural() => CanSave(PluralGenderContext, UserGrammar.GenderPluralRecord);
+        bool CanSave() => CanSavePlural() || CanSaveGenre() || CanSaveGenrePlural();
         void Save(Window w)
         {
             //PropertiesToSettings();
-            pluralRecord = (GrammarTypeRecord)PluralContext;
-            genreRecord = (GrammarTypeRecord)GenreContext;
+            UserGrammar.PluralRecord = (GrammarTypeRecord)PluralContext;
+            UserGrammar.GenderRecord = (GrammarTypeRecord)GenderContext;
+            UserGrammar.GenderPluralRecord = (GrammarTypeRecord)PluralGenderContext;
             w.Close();
         }
     }

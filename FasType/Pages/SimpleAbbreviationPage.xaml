@@ -8,7 +8,7 @@
       xmlns:viewmodels="clr-namespace:FasType.ViewModels" 
       d:DataContext="{d:DesignInstance Type=viewmodels:SimpleAbbreviationViewModel}"
       mc:Ignorable="d"
-      WindowHeight="200" WindowWidth="250" WindowTitle="{x:Static prop:Resources.SimpleAbbrevTitle}"
+      WindowHeight="290" WindowWidth="250" WindowTitle="{x:Static prop:Resources.SimpleAbbrevTitle}"
       d:DesignHeight="200" d:DesignWidth="200"
       Title="SimpleAbbreviationPage" x:Name="Page">
 
@@ -24,6 +24,7 @@
 
         <Style TargetType="TextBox" BasedOn="{StaticResource Style.Base}">
             <Setter Property="Margin" Value="2, 0, 10, 0"/>
+            <Setter Property="Height" Value="18"/>
         </Style>
 
         <Style TargetType="Label" BasedOn="{StaticResource Style.Base}">
@@ -38,26 +39,51 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="4.5*" />
             <RowDefinition Height=".5*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0"
-               Content="{x:Static prop:Resources.ShortForm}" ContentStringFormat=" {0}:"/>
-        <TextBox Text="{Binding ShortForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="FirstTB"
-                 Grid.Row="0" Grid.Column="1"/>
-        <Label Grid.Row="1" Grid.Column="0"
-               Content="{x:Static prop:Resources.FullForm}" ContentStringFormat=" {0}:"/>
-        <TextBox Text="{Binding FullForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                 Grid.Row="1" Grid.Column="1"/>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0"
+                   Content="{x:Static prop:Resources.ShortForm}" ContentStringFormat="{}{0}:"/>
+            <TextBox Text="{Binding ShortForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="FirstTB"
+                     Grid.Row="0" Grid.Column="1"/>
+            <Label Grid.Row="1" Grid.Column="0"
+                   Content="{x:Static prop:Resources.FullForm}" ContentStringFormat="{}{0}:"/>
+            <TextBox Text="{Binding FullForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     Grid.Row="1" Grid.Column="1"/>
+            <Label Grid.Row="2" Grid.Column="0"
+                   Content="{x:Static prop:Resources.GenderForm}" ContentStringFormat="{}{0}:"/>
+            <TextBox Grid.Row="2" Grid.Column="1"
+                     Text="{Binding GenderForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <Label Grid.Row="3" Grid.Column="0"
+                   Content="{x:Static prop:Resources.PluralForm}" ContentStringFormat="{}{0}:"/>
+            <TextBox Grid.Row="3" Grid.Column="1"
+                     Text="{Binding PluralForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <Label Grid.Row="4" Grid.Column="0"
+                   Content="{x:Static prop:Resources.GnPForm}" ContentStringFormat="{}{0}:"/>
+            <TextBox Grid.Row="4" Grid.Column="1"
+                     Text="{Binding GenderPluralForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        </Grid>
 
-        <TextBlock Text="{Binding Preview, Mode=OneWay}" FontStyle="Italic" TextAlignment="Center"
-                   Grid.Row="3" Grid.ColumnSpan="2"/>
+        <TextBlock Text="{Binding Preview, Mode=OneWay}" 
+                   TextAlignment="Center" VerticalAlignment="Center"
+                   Grid.Row="2" Grid.ColumnSpan="2"/>
 
         <Button Command="{Binding CreateNewCommand}" CommandParameter="{x:Reference Page}"
-                Content="{x:Static prop:Resources.Add}" Grid.Row="4" Grid.ColumnSpan="2"/>
+                Content="{x:Static prop:Resources.Add}" Grid.Row="3" Grid.ColumnSpan="2"/>
     </Grid>
 </Page>

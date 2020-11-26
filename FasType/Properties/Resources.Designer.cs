@@ -160,6 +160,42 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gender.
+        /// </summary>
+        public static string Gender {
+            get {
+                return ResourceManager.GetString("Gender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gendered Form.
+        /// </summary>
+        public static string GenderForm {
+            get {
+                return ResourceManager.GetString("GenderForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gender &amp; Plural.
+        /// </summary>
+        public static string GnP {
+            get {
+                return ResourceManager.GetString("GnP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to G. &amp; P. Form.
+        /// </summary>
+        public static string GnPForm {
+            get {
+                return ResourceManager.GetString("GnPForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Linguistics.
         /// </summary>
         public static string Linguistics {
@@ -174,6 +210,24 @@ namespace FasType.Properties {
         public static string LinguisticsHeader {
             get {
                 return ResourceManager.GetString("LinguisticsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plural.
+        /// </summary>
+        public static string Plural {
+            get {
+                return ResourceManager.GetString("Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plural Form.
+        /// </summary>
+        public static string PluralForm {
+            get {
+                return ResourceManager.GetString("PluralForm", resourceCulture);
             }
         }
         

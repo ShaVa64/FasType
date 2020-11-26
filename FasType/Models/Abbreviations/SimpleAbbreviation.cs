@@ -1,4 +1,5 @@
-﻿using FasType.Utils;
+﻿using FasType.Storage;
+using FasType.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,15 +18,51 @@ namespace FasType.Models.Abbreviations
         //public string ElementaryRepresentation => GetElementaryRepresentation();//$"{ShortForm} -> {FullForm}";
         //public string ComplexRepresentation => GetElementaryRepresentation();// GetComplexRepresentation();//$"{ShortForm} -> {FullForm}{Environment.NewLine}{ShortForm.FirstCharToUpper()} -> {FullForm.FirstCharToUpper()}";
 
-        public SimpleAbbreviation(string shortForm, string fullForm)
-            : base(shortForm.ToLower(), fullForm.ToLower()) { }
+        public bool HasPlural => !string.IsNullOrEmpty(PluralForm);
+        public bool HasGender => !string.IsNullOrEmpty(GenderForm);
+        public bool HasGenderPlural => !string.IsNullOrEmpty(GenderPluralForm);
 
-        public override bool IsAbbreviation(string shortForm) => shortForm.ToLower() == ShortForm.ToLower();
+        [Required] [Column(TypeName = "varchar(50)")] public string GenderForm { get; private set; }
+        [Required] [Column(TypeName = "varchar(50)")] public string PluralForm { get; private set; }
+        [Required] [Column(TypeName = "varchar(50)")] public string GenderPluralForm { get; private set; }
+
+        public SimpleAbbreviation(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm)
+            : base(shortForm.ToLower(), fullForm.ToLower()) 
+        {
+            PluralForm = pluralForm;
+            GenderForm = genderForm;
+            GenderPluralForm = genderPluralForm;
+        }
+
+        public override bool IsAbbreviation(string shortForm)
+        {
+            string sf = shortForm.ToLower();
+
+            if (sf == ShortForm)
+                return true;
+            if (HasGender && sf == UserGrammar.GenderRecord.Grammarify(ShortForm))
+                return true;
+            if (HasPlural && sf == UserGrammar.PluralRecord.Grammarify(ShortForm))
+                return true;
+            if (HasGenderPlural && sf == UserGrammar.GenderPluralRecord.Grammarify(ShortForm))
+                return true;
+
+            return false;
+        }
 
         public override string GetFullForm(string shortForm)
         {
-            if (shortForm.ToLower() == ShortForm.ToLower())
+            string sf = shortForm.ToLower();
+
+            if (sf == ShortForm)
                 return FullForm;
+            if (HasGender && sf == UserGrammar.GenderRecord.Grammarify(ShortForm))
+                return GenderForm;
+            if (HasPlural && sf == UserGrammar.PluralRecord.Grammarify(ShortForm))
+                return PluralForm;
+            if (HasGenderPlural && sf == UserGrammar.GenderPluralRecord.Grammarify(ShortForm))
+                return GenderPluralForm;
+
             return null;
         }
 
@@ -43,12 +80,12 @@ namespace FasType.Models.Abbreviations
         {
             StringBuilder sb = new();
 
-            sb.Append('(');
-            sb.Append(char.ToUpper(@in[0]));
-            sb.Append('/');
-            sb.Append(@in[0]);
-            sb.Append(')');
-            sb.Append(@in[1..]);
+            sb.Append('(')
+                .Append(char.ToUpper(@in[0]))
+                .Append('/')
+                .Append(@in[0])
+                .Append(')')
+                .Append(@in[1..]);
 
             return sb.ToString();
         }
@@ -60,9 +97,9 @@ namespace FasType.Models.Abbreviations
             string sf = ElementaryCapitalize(ShortForm);
             string ff = ElementaryCapitalize(FullForm);
             
-            sb.Append(sf);
-            sb.Append(" -> ");
-            sb.Append(ff);
+            sb.Append(sf)
+                .Append($" {Arrow} ")
+                .Append(ff);
 
             return sb.ToString();
         }
@@ -71,13 +108,38 @@ namespace FasType.Models.Abbreviations
         {
             StringBuilder sb = new();
 
-            sb.Append(ShortForm);
-            sb.Append(" -> ");
-            sb.AppendLine(FullForm);
+            sb.Append(ShortForm)
+                .Append($" {Arrow} ")
+                .Append(FullForm);
 
-            sb.Append(ShortForm.FirstCharToUpper());
-            sb.Append(" -> ");
-            sb.Append(FullForm.FirstCharToUpper());
+            sb.AppendLine()
+                .Append(ShortForm.FirstCharToUpper())
+                .Append($" {Arrow} ")
+                .Append(FullForm.FirstCharToUpper());
+            
+            if (HasGender)
+            {
+                sb.AppendLine()
+                    .Append(UserGrammar.GenderRecord.Grammarify(ShortForm))
+                    .Append($" {Arrow} ")
+                    .Append(GenderForm);
+            }
+            
+            if (HasPlural)
+            {
+                sb.AppendLine()
+                    .Append(UserGrammar.PluralRecord.Grammarify(ShortForm))
+                    .Append($" {Arrow} ")
+                    .Append(PluralForm);
+            }
+
+            if (HasGenderPlural)
+            {
+                sb.AppendLine()
+                    .Append(UserGrammar.GenderPluralRecord.Grammarify(ShortForm))
+                    .Append($" {Arrow} ")
+                    .Append(GenderPluralForm);
+            }
 
             return sb.ToString();
         }

@@ -47,7 +47,7 @@ namespace FasType
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
             using var _context = ServiceProvider.GetRequiredService<IDataStorage>() as DbContext;
-            _context.Database.Migrate();
+            _context?.Database.Migrate();
             //_context.Database.EnsureCreated();
 
             //T();
@@ -107,7 +107,7 @@ namespace FasType
                 string sf = sp[0];
                 string ff = sp[1];
 
-                abbrevs.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+                abbrevs.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, "", "", ""));
                 //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
             }
             _context.AddRange(abbrevs);
@@ -119,7 +119,7 @@ namespace FasType
             base.OnExit(e);
         }
 
-        void CreateStartupShortcut(string path)
+        static void CreateStartupShortcut(string path)
         {
             var shell = new WshShellClass();
             var shortcut = (IWshShortcut)shell.CreateShortcut(path);
@@ -135,13 +135,13 @@ namespace FasType
             shortcut.Save();
         }
 
-        void RemoveStartupShortcut(string path)
+        static void RemoveStartupShortcut(string path)
         {
             if (System.IO.File.Exists(path))
                 System.IO.File.Delete(path);
         }
 
-        public void UpdateStartupShortcut(bool shouldCreate)
+        public static void UpdateStartupShortcut(bool shouldCreate)
         {
             var startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
             var shortcutLinkFilePath = Path.Combine(startupFolderPath, FasType.Properties.Resources.AppName + ".lnk");

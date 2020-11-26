@@ -16,20 +16,48 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Margin" Value="0, 10, 0, 0"/>
         </Style>
-        <Style TargetType="TextBox" x:Key="LetterTextBox">
+        <!--<Style TargetType="TextBox" x:Key="LetterTextBox">
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="MaxLength" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Width" Value="15"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>-->
+        <Style x:Key="RadioCheckBox" TargetType="CheckBox">
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="CornflowerBlue"/>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="{TemplateBinding Content}" Margin="2,0" Padding="0" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" 
+                                    Width="12" Height="12" CornerRadius="6" Margin="0">
+                                <Ellipse Height="6" Width="6" Fill="{TemplateBinding Background}"/>
+                            </Border>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
     <StackPanel Orientation="Vertical" Margin="0, 0, 0, 5">
-        <!--<TextBlock Style="{StaticResource SettingTitleStyle}" Text="Genre"/>-->
-        <!--<Separator/>-->
-        <ctrl:PluralControl DataContext="{Binding GenreContext}"/>
+        <TextBlock Style="{StaticResource SettingTitleStyle}" Text="Grammar" Margin="0"/>
         <Separator/>
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" DataContext="{Binding GenderContext}"/>
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Plural}" DataContext="{Binding PluralContext}"/>
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.GnP}" DataContext="{Binding PluralGenderContext}"/>
+        <!--<Separator/>-->
         <!--<ItemsControl ItemsSource="{Binding Plurals}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -50,24 +78,25 @@
         </Button>-->
         <!--<TextBlock Style="{StaticResource SettingTitleStyle}" Text="Plural"/>-->
         <!--<Separator/>-->
-        <ctrl:PluralControl DataContext="{Binding PluralContext}"/>
-        <!--<ItemsControl ItemsSource="{Binding Plurals}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <ctrl:PluralControl/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
-        <!--<Button HorizontalContentAlignment="Center" HorizontalAlignment="Right"
-                VerticalAlignment="Center" VerticalContentAlignment="Top"
-                Height="20" Width="20" Command="{Binding AddPluralCommand}"
-                Style="{StaticResource GreenButtonStyle}" Margin="5, 0">
-            <Button.Content>
-                <Path Data="{StaticResource PlusGeometry}" Stretch="Uniform" 
-                      Stroke="Black" StrokeThickness="2.1" Margin="3"
-                      StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-            </Button.Content>
-        </Button>-->
+        <Separator/>
+        <TextBlock Style="{StaticResource SettingTitleStyle}" Text="Syllable"/>
+        <Separator/>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Width="40" Height="18" Margin="5, 0, 0, 0"/>
+            <TextBox Grid.Column="1" Width="40" Height="18" Margin="5, 0, 0, 0"/>
+            <CheckBox Grid.Column="2" Content="Start" VerticalAlignment="Center" Style="{StaticResource RadioCheckBox}"/>
+            <CheckBox Grid.Column="3" Content="Middle" VerticalAlignment="Center" Style="{StaticResource RadioCheckBox}"/>
+            <CheckBox Grid.Column="4" Content="End" Style="{StaticResource RadioCheckBox}"/>
+        </Grid>
+        
         <Separator/>
 
         <Grid Margin="5, 20, 5, 0">

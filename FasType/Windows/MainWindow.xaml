@@ -34,14 +34,16 @@
                 <RowDefinition Height="5*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ListBox ItemsSource="{Binding MatchingAbbrevs}" IsEnabled="{Binding IsChoosing}"
-                     SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"
+            <ListBox IsEnabled="{Binding IsChoosing}"
+                     ItemsSource="{Binding MatchingFullForms}" SelectedItem="{Binding ChoosedFullForm}" SelectedIndex="{Binding FullFormIndex}"
                      Grid.Row="0" SelectionMode="Single">
+                     <!--ItemsSource="{Binding MatchingAbbrevs}" SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding ElementaryRepresentation}">
+                        <!--<TextBlock Text="{Binding ElementaryRepresentation}">-->
+                        <TextBlock Text="{Binding}">
                             <TextBlock.InputBindings>
-                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ChooseCommand}" CommandParameter="{Binding .}"/>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ChooseCommand}" CommandParameter="{Binding .}"/>
                             </TextBlock.InputBindings>
                         </TextBlock>
                     </DataTemplate>

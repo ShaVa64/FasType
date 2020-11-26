@@ -15,7 +15,7 @@ namespace FasType.ViewModels
     {
         readonly IDataStorage _storage;
         SimpleAbbreviation _currentAbbrev;
-        string _shortForm, _fullForm;
+        string _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
         string _preview;
 
         public string ShortForm
@@ -36,6 +36,33 @@ namespace FasType.ViewModels
                     SetPreview();
             }
         }
+        public string GenderForm
+        {
+            get => _genderForm;
+            set
+            {
+                if (SetProperty(ref _genderForm, value))
+                    SetPreview();
+            }
+        }
+        public string PluralForm
+        {
+            get => _pluralForm;
+            set
+            {
+                if (SetProperty(ref _pluralForm, value))
+                    SetPreview();
+            }
+        }
+        public string GenderPluralForm
+        {
+            get => _genderPluralForm;
+            set
+            {
+                if (SetProperty(ref _genderPluralForm, value))
+                    SetPreview();
+            }
+        }
         public string Preview { get => _preview; set => SetProperty(ref _preview, value); }
 
         public Command<Page> CreateNewCommand { get; set; }
@@ -45,10 +72,16 @@ namespace FasType.ViewModels
             _storage = storage;
             _currentAbbrev = null;
 
-            CreateNewCommand = new(CreateNew, CanCreateNew);            
+            CreateNewCommand = new(CreateNew, CanCreateNew);
+
+            ShortForm = "pss";
+            FullForm = "passé";
+            GenderForm = "passée";
+            PluralForm = "passés";
+            GenderPluralForm = "passées";
         }
 
-        bool CanCreateNew() => !(string.IsNullOrEmpty(ShortForm) || string.IsNullOrEmpty(FullForm));
+        bool CanCreateNew() => !string.IsNullOrEmpty(FullForm) && !string.IsNullOrEmpty(ShortForm);
         public void CreateNew(Page p)
         {
             if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
@@ -80,7 +113,7 @@ namespace FasType.ViewModels
             if (string.IsNullOrEmpty(ShortForm) || string.IsNullOrEmpty(FullForm))
                 return;
 
-            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm);
+            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, GenderForm, PluralForm, GenderPluralForm);
 
             Preview = _currentAbbrev.ComplexRepresentation;
         }

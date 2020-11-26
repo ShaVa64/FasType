@@ -186,4 +186,22 @@
   <data name="Save" xml:space="preserve">
     <value>Sauver</value>
   </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="Plural" xml:space="preserve">
+    <value>Pluriel</value>
+  </data>
+  <data name="GenderForm" xml:space="preserve">
+    <value>Forme Genrée </value>
+  </data>
+  <data name="PluralForm" xml:space="preserve">
+    <value>Forme Nombrée </value>
+  </data>
+  <data name="GnP" xml:space="preserve">
+    <value>Genre &amp; Pluriel</value>
+  </data>
+  <data name="GnPForm" xml:space="preserve">
+    <value>Forme G. &amp; N. </value>
+  </data>
 </root>

@@ -7,12 +7,12 @@
     <Application.Resources>
         <GeometryGroup x:Key="CrossGeometry">
             <LineGeometry StartPoint="0, 0" EndPoint="1, 1"  />
-            <LineGeometry StartPoint="0, 1" EndPoint="1, 0"/>
+            <LineGeometry StartPoint="0, 1" EndPoint="1, 0" />
         </GeometryGroup>
         
         <GeometryGroup x:Key="PlusGeometry">
             <LineGeometry StartPoint="0, 0.5" EndPoint="1, 0.5" />
-            <LineGeometry StartPoint="0.5, 0" EndPoint="0.5, 1"/>
+            <LineGeometry StartPoint="0.5, 0" EndPoint="0.5, 1" />
         </GeometryGroup>
 
         <Style TargetType="Button" x:Key="ButtonStyle">

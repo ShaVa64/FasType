@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using FasType.Utils;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +25,7 @@ namespace FasType.LLKeyboardListener
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
 
@@ -32,12 +33,17 @@ namespace FasType.LLKeyboardListener
 
         public event EventHandler<KeyPressedEventArgs> OnKeyPressed;
 
+        KeyPressedEventArgs.UniqueKeyPressed oldKey, newKey;
+
         private readonly LowLevelKeyboardProc _proc;
         private IntPtr _hookID = IntPtr.Zero;
 
         public LowLevelKeyboardListener()
         {
             _proc = HookCallback;
+
+            oldKey = null;
+            newKey = null;
         }
 
         public void HookKeyboard()
@@ -67,7 +73,7 @@ namespace FasType.LLKeyboardListener
             }
         }
 
-        private IntPtr SetHook(LowLevelKeyboardProc proc)
+        private static IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using Process curProcess = Process.GetCurrentProcess();
             using ProcessModule curModule = curProcess.MainModule;
@@ -81,10 +87,11 @@ namespace FasType.LLKeyboardListener
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Key key = KeyInterop.KeyFromVirtualKey(vkCode);
-
-                eventArgs = new (key, vkCode, false);
+                newKey = new(key, vkCode);
+                eventArgs = new (oldKey, newKey);
                 OnKeyPressed(this, eventArgs);
             }
+            oldKey = newKey;
 
             IntPtr r = CallNextHookEx(_hookID, nCode, wParam, lParam);
             return eventArgs?.StopChain == true ? (IntPtr)1 : r;
@@ -93,17 +100,33 @@ namespace FasType.LLKeyboardListener
 
     public class KeyPressedEventArgs : EventArgs
     {
-        public int VkCode { get; private set; }
-        public Key KeyPressed { get; private set; }
-        public bool IsSystemKey { get; private set; }
         public bool StopChain { get; set; }
+        public UniqueKeyPressed Old { get; }
+        public UniqueKeyPressed New { get; }
+        public Key KeyPressed => New.KeyPressed;
+        public bool IsShifted => New.IsShifted;
 
-        public KeyPressedEventArgs(Key key, int vkCode, bool isSystemKey)
+        public KeyPressedEventArgs(UniqueKeyPressed old, UniqueKeyPressed @new)
         {
-            KeyPressed = key;
-            VkCode = vkCode;
-            IsSystemKey = isSystemKey;
             StopChain = false;
+            Old = old;
+            New = @new;
+        }
+
+        public class UniqueKeyPressed
+        {
+            public int VkCode { get; private set; }
+            public Key KeyPressed { get; private set; }
+            public bool IsShifted { get; private set; }
+            //public bool IsSystemKey { get; private set; }
+
+            public UniqueKeyPressed(Key key, int vkCode/*, bool isSystemKey*/)
+            {
+                KeyPressed = key;
+                VkCode = vkCode;
+                IsShifted = KeyboardStates.IsShifted();
+                //IsSystemKey = isSystemKey;
+            }
         }
     }
 }
