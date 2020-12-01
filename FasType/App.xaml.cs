@@ -22,6 +22,7 @@ using System.Windows.Markup;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Data;
+using FasType.Models.Linguistics;
 
 namespace FasType
 {
@@ -53,6 +54,7 @@ namespace FasType
             //_context.Database.EnsureCreated();
 
             //T();
+            //F();
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -117,6 +119,42 @@ namespace FasType
                 //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
             }
             _context.AddRange(abbrevs);
+        }
+
+        void F()
+        {
+            string fp = @"D:\Visual Studio Projects\FasType\Docs\méthode abréviation.txt";
+
+            using var stream = new FileStream(fp, FileMode.Open, FileAccess.Read);
+            using var reader = new StreamReader(stream);
+
+            using var _context = ServiceProvider.GetRequiredService<ILinguisticsStorage>();
+
+
+            var methods = new List<Models.Linguistics.SyllableAbbreviation>();
+            string l = reader.ReadLine();
+            while ((l = reader.ReadLine()) != null)
+            {
+                var sp = l.Replace("\"", string.Empty).Split(';');
+
+                string ff = sp[0];
+                string sf = sp[1];
+                Models.Linguistics.SyllablePosition p = Models.Linguistics.SyllablePosition.None;
+                if (sp[2] == "1")
+                    p |= Models.Linguistics.SyllablePosition.Before;
+                if (sp[3] == "1")
+                    p |= Models.Linguistics.SyllablePosition.In;
+                if (sp[4] == "1")
+                    p |= Models.Linguistics.SyllablePosition.After;
+
+                methods.Add(new Models.Linguistics.SyllableAbbreviation(Guid.NewGuid(), sf, ff, p));
+                //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+            }
+            _context.AbbreviationMethods = methods;
+
+            var x = System.Text.Json.JsonSerializer.Serialize(_context);
+            var xx = System.Text.Json.JsonSerializer.Deserialize<LinguisticsDTO>(x);
+            //var x = System.Text.Json.JsonSerializer.Serialize(methods);
         }
 
         protected override void OnExit(ExitEventArgs e)

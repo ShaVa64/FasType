@@ -8,7 +8,7 @@ using FasType.Models.Linguistics.Grammars;
 
 namespace FasType.Services
 {
-    public interface ILinguisticsStorage
+    public interface ILinguisticsStorage : IDisposable
     {
         //IEnumerable<GrammarType> GrammarTypes { get; set; }
         GrammarType GenderType { get; set; }

@@ -31,7 +31,7 @@
         <Separator/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" DataContext="{Binding GenderContext}"/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Plural}" DataContext="{Binding PluralContext}"/>
-        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.GnP}" DataContext="{Binding PluralGenderContext}"/>
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.GnP}" DataContext="{Binding GenderPluralContext}"/>
         <!--<Separator/>-->
         <!--<ItemsControl ItemsSource="{Binding Plurals}">
             <ItemsControl.ItemTemplate>
@@ -81,7 +81,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Reset"/>
+            <Button Grid.Column="0" Content="Reset" Command="{Binding ResetCommand}"/>
             <Button Grid.Column="2" Content="{x:Static prop:Resources.Save}" Command="{Binding SaveCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
         </Grid>

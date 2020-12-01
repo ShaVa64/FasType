@@ -12,6 +12,7 @@ namespace FasType.Models.Abbreviations
 {
     public class SimpleAbbreviation : BaseAbbreviation
     {
+
         //string IAbbreviation.ShortForm => ShortForm;
         //string IAbbreviation.FullForm => FullForm;
 
@@ -40,11 +41,11 @@ namespace FasType.Models.Abbreviations
 
             if (sf == ShortForm)
                 return true;
-            if (HasGender && sf == UserGrammar.GenderRecord.Grammarify(ShortForm))
+            if (HasGender && sf == _linguistics.GenderType.Grammarify(ShortForm))
                 return true;
-            if (HasPlural && sf == UserGrammar.PluralRecord.Grammarify(ShortForm))
+            if (HasPlural && sf == _linguistics.PluralType.Grammarify(ShortForm))
                 return true;
-            if (HasGenderPlural && sf == UserGrammar.GenderPluralRecord.Grammarify(ShortForm))
+            if (HasGenderPlural && sf == _linguistics.GenderPluralType.Grammarify(ShortForm))
                 return true;
 
             return false;
@@ -56,11 +57,11 @@ namespace FasType.Models.Abbreviations
 
             if (sf == ShortForm)
                 return FullForm;
-            if (HasGender && sf == UserGrammar.GenderRecord.Grammarify(ShortForm))
+            if (HasGender && sf == _linguistics.GenderType.Grammarify(ShortForm))
                 return GenderForm;
-            if (HasPlural && sf == UserGrammar.PluralRecord.Grammarify(ShortForm))
+            if (HasPlural && sf == _linguistics.PluralType.Grammarify(ShortForm))
                 return PluralForm;
-            if (HasGenderPlural && sf == UserGrammar.GenderPluralRecord.Grammarify(ShortForm))
+            if (HasGenderPlural && sf == _linguistics.GenderPluralType.Grammarify(ShortForm))
                 return GenderPluralForm;
 
             return null;
@@ -120,7 +121,7 @@ namespace FasType.Models.Abbreviations
             if (HasGender)
             {
                 sb.AppendLine()
-                    .Append(UserGrammar.GenderRecord.Grammarify(ShortForm))
+                    .Append(_linguistics.GenderType.Grammarify(ShortForm))
                     .Append(SpacedArrow)
                     .Append(GenderForm);
             }
@@ -128,7 +129,7 @@ namespace FasType.Models.Abbreviations
             if (HasPlural)
             {
                 sb.AppendLine()
-                    .Append(UserGrammar.PluralRecord.Grammarify(ShortForm))
+                    .Append(_linguistics.PluralType.Grammarify(ShortForm))
                     .Append(SpacedArrow)
                     .Append(PluralForm);
             }
@@ -136,7 +137,7 @@ namespace FasType.Models.Abbreviations
             if (HasGenderPlural)
             {
                 sb.AppendLine()
-                    .Append(UserGrammar.GenderPluralRecord.Grammarify(ShortForm))
+                    .Append(_linguistics.GenderPluralType.Grammarify(ShortForm))
                     .Append(SpacedArrow)
                     .Append(GenderPluralForm);
             }

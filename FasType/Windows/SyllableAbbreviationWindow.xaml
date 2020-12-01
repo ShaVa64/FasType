@@ -9,70 +9,74 @@
         Title="Abbreviation Method" MaxHeight="400" MinWidth="250" Topmost="True"
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <StackPanel Orientation="Vertical" Margin="0, 0, 0, 5">
-            <ItemsControl HorizontalContentAlignment="Stretch" ItemsSource="{Binding Syllables}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <ctrl:SyllableAbbreviationControl Grid.Column="0"/>
-                            <Button Grid.Column="4" Padding="5, 0" Margin="10, 5"
-                                    HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveSyllableCommand}" 
-                                    Width="20" Height="20" Style="{StaticResource RedButtonStyle}">
-                                <Button.Content>
-                                    <Path Data="{StaticResource CrossGeometry}" Stretch="Uniform"
-                                          Stroke="Black" StrokeThickness="2" Margin="5" 
-                                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-                                </Button.Content>
-                            </Button>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.Style>
-                    <Style TargetType="ItemsControl">
-                        <Style.Triggers>
-                            <Trigger Property="HasItems" Value="false">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <TextBlock Margin="5" TextAlignment="Center" HorizontalAlignment="Center"
-                                                       Text="You don't have any &#x0a;Abbreviation Methods registered" />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ItemsControl.Style>
-            </ItemsControl>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="400"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Disabled"  VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical" Margin="0, 0, 0, 5">
+                <ItemsControl HorizontalContentAlignment="Stretch" ItemsSource="{Binding Syllables}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ctrl:SyllableAbbreviationControl Grid.Column="0"/>
+                                <Button Grid.Column="4" Padding="5, 0" Margin="10, 5"
+                                        HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+                                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveSyllableCommand}" 
+                                        Width="20" Height="20" Style="{StaticResource RedButtonStyle}">
+                                    <Button.Content>
+                                        <Path Data="{StaticResource CrossGeometry}" Stretch="Uniform"
+                                              Stroke="Black" StrokeThickness="2" Margin="5" 
+                                              StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                                    </Button.Content>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.Style>
+                        <Style TargetType="ItemsControl">
+                            <Style.Triggers>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBlock Margin="5" TextAlignment="Center" HorizontalAlignment="Center"
+                                                           Text="You don't have any &#x0a;Abbreviation Methods registered" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ItemsControl.Style>
+                </ItemsControl>
+
+                <Button Grid.Column="4" Padding="5, 0" Margin="10, 5"
+                        HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.AddSyllableCommand}" 
+                        Width="20" Height="20" Style="{StaticResource GreenButtonStyle}">
+                    <Button.Content>
+                        <Path Data="{StaticResource PlusGeometry}" Stretch="Uniform"
+                                Stroke="Black" StrokeThickness="2" Margin="5" 
+                                StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
         
-            <Button Grid.Column="4" Padding="5, 0" Margin="10, 5"
-                    HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.AddSyllableCommand}" 
-                    Width="20" Height="20" Style="{StaticResource GreenButtonStyle}">
-                <Button.Content>
-                    <Path Data="{StaticResource PlusGeometry}" Stretch="Uniform"
-                            Stroke="Black" StrokeThickness="2" Margin="5" 
-                            StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-                </Button.Content>
-            </Button>
-
-            <Grid Margin="5, 20, 5, 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="10"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!--<Button Grid.Column="0" Content="Reset" IsEnabled="False"/>-->
-                <Button Grid.Column="2" Content="{x:Static prop:Resources.Save}" Command="{Binding SaveCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
-            </Grid>
-        </StackPanel>
-    </ScrollViewer>
+        <!--<Button Grid.Column="0" Content="Reset" IsEnabled="False"/>-->
+        <Button Grid.Row="1" Grid.Column="2" Content="{x:Static prop:Resources.Save}" Command="{Binding SaveCommand}" Margin="5"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+    </Grid>
 </Window>

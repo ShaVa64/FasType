@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FasType.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,6 +14,7 @@ namespace FasType.Models.Abbreviations
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public abstract class BaseAbbreviation
     {
+        protected readonly static ILinguisticsStorage _linguistics = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
         protected readonly static string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
 
         [Key] public Guid Key { get; private set; }

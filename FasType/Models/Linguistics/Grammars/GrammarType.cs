@@ -33,12 +33,25 @@ namespace FasType.Models.Linguistics.Grammars
         public string Repr { get => _repr; set => SetProperty(ref _repr, value); }
         public GrammarPosition Position { get => _position; set => SetProperty(ref _position,value); }
 
-        public GrammarType(string name, string repr, GrammarPosition grammarPosition)
+        public GrammarType(string name, string repr, GrammarPosition position)
         {
             Name = name;
             Repr = repr;
-            Position = grammarPosition;
+            Position = position;
         }
+
+        public string Grammarify(string form) => Position switch
+        {
+            GrammarPosition.Prefix => Repr + form,
+            GrammarPosition.Postfix => form + Repr,
+            _ => throw new NotImplementedException()
+        };
+        public bool SuitsGrammar(string form) => Position switch
+        {
+            GrammarPosition.Prefix => form.StartsWith(Repr),
+            GrammarPosition.Postfix => form.EndsWith(Repr),
+            _ => throw new NotImplementedException()
+        };
 
         public override string ToString() => Position == GrammarPosition.Prefix ? $"{Repr}*" : $"*{Repr}";
 

@@ -12,7 +12,7 @@ namespace FasType.Models.Linguistics
         public bool IsIn => Position.HasFlag(SyllablePosition.In);
         public bool IsAfter => Position.HasFlag(SyllablePosition.After);
 
-        public override string ToString() => $"{ShortForm}{Utils.Unicodes.Arrow}{FullForm}";
+        public override string ToString() => $"{ShortForm} {Utils.Unicodes.Arrow} {FullForm} ({Position})";
     }
 
     public class SyllableAbbreviation : ObservableObject
@@ -54,22 +54,20 @@ namespace FasType.Models.Linguistics
 
         public SyllablePosition Position => (SyllablePosition)((IsBefore ? 1 : 0) + (IsIn ? 2 : 0) + (IsAfter ? 4 : 0));
 
-        public SyllableAbbreviation(Guid key, string shortForm, string fullForm, SyllablePosition position) 
-            : this(key, shortForm, fullForm, position.HasFlag(SyllablePosition.Before), position.HasFlag(SyllablePosition.In), position.HasFlag(SyllablePosition.After)) { }
-        public SyllableAbbreviation(Guid key, string shortForm, string fullForm, bool isBefore, bool isIn, bool isAfter)
+        public SyllableAbbreviation(Guid key, string shortForm, string fullForm, SyllablePosition position)
         {
             Key = key;
             ShortForm = shortForm;
             FullForm = fullForm;
-            IsBefore = isBefore;
-            IsIn = isIn;
-            IsAfter = isAfter;
+            IsBefore = position.HasFlag(SyllablePosition.Before);
+            IsIn = position.HasFlag(SyllablePosition.In);
+            IsAfter = position.HasFlag(SyllablePosition.After);
         }
 
-        public override string ToString() => $"{ShortForm}{Utils.Unicodes.Arrow}{FullForm}";
+        public override string ToString() => $"{ShortForm} {Utils.Unicodes.Arrow} {FullForm} ({Position})";
 
         public static explicit operator SyllableAbbreviationRecord(SyllableAbbreviation sa) => new(sa.Key, sa.ShortForm, sa.FullForm, sa.Position);
-        public static explicit operator SyllableAbbreviation(SyllableAbbreviationRecord sar) => new(sar.Key, sar.ShortForm, sar.FullForm, sar.IsBefore, sar.IsIn, sar.IsAfter);
+        public static explicit operator SyllableAbbreviation(SyllableAbbreviationRecord sar) => new(sar.Key, sar.ShortForm, sar.FullForm, sar.Position);
     }
 
     [Flags] public enum SyllablePosition
