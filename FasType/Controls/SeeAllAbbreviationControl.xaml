@@ -14,9 +14,14 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0" Text="{Binding ComplexRepresentation}" 
                    TextAlignment="Center" HorizontalAlignment="Left" Margin="10, 5, 2, 5"/>
-        <Button Grid.Column="1" Content="X" Padding="5, 0" Margin="2, 5, 10, 5"
-                HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveCommand}"
-                Width="20" Height="20" Style="{StaticResource RedButtonStyle}"/>
+        <Button Grid.Column="1" Width="20" Height="20" Style="{StaticResource RedButtonStyle}" Padding="5, 0" Margin="2, 5, 10, 5"
+                HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveCommand}" CommandParameter="{Binding .}">
+            <Button.Content>
+                <Path Data="{StaticResource CrossGeometry}" Stretch="Uniform"
+                                          Stroke="Black" StrokeThickness="2" Margin="5" 
+                                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+            </Button.Content>
+        </Button>
     </Grid>
 </UserControl>

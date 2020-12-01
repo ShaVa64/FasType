@@ -41,7 +41,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TextBox">
-                                <Border BorderThickness="1.2" BorderBrush="{TemplateBinding BorderBrush}" x:Name="border" Padding="2,1">
+                                <Border BorderThickness="1.2" BorderBrush="{TemplateBinding BorderBrush}" x:Name="border" Padding="1">
                                     <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
                                 </Border>
                             </ControlTemplate>

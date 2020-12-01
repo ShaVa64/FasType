@@ -19,7 +19,7 @@ namespace FasType.ViewModels
     {
         string _queryString;
         FormOrderBy _sortBy;
-        readonly IDataStorage _storage;
+        readonly IAbbreviationStorage _storage;
         IList<BaseAbbreviation> _allAbbreviations;
 
         public string Title => Resources.AllAbbrevs + $"  ({Count})";
@@ -58,7 +58,7 @@ namespace FasType.ViewModels
 
         public Command<BaseAbbreviation> RemoveCommand { get; }
 
-        public SeeAllViewModel(IDataStorage storage)
+        public SeeAllViewModel(IAbbreviationStorage storage)
         {
             _storage = storage;
 

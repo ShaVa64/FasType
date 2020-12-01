@@ -14,7 +14,7 @@ using System.Text;
 
 namespace FasType.Storage
 {
-    public class EFSqliteContext : DbContext, IDataStorage
+    public class EFSqliteAbbreviationContext : DbContext, IAbbreviationStorage
     {
         public int Count => Abbreviations.Count();
         public DbSet<BaseAbbreviation> Abbreviations { get; set; }
@@ -25,7 +25,7 @@ namespace FasType.Storage
 
         //public DbSet<VerbAbbreviation> VerbAbbreviations { get; set; }
 
-        public EFSqliteContext(DbContextOptions<EFSqliteContext> options) : base(options) { }
+        public EFSqliteAbbreviationContext(DbContextOptions<EFSqliteAbbreviationContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -96,9 +96,20 @@ namespace FasType.Storage
             //return r > 0;
         }
 
+        public bool UpdateUsed(BaseAbbreviation abbrev)
+        {
+            if (!Contains(abbrev))
+                return false;
+            abbrev.UpdateUsed();
+            Abbreviations.Update(abbrev);
+
+            var r = SaveChanges();
+            return r > 0;
+        }
+
         public IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm)
         {
-            var l = Abbreviations.AsEnumerable().Where(a =>  a.IsAbbreviation(shortForm)).ToList();
+            var l = Abbreviations.AsEnumerable().Where(a =>  a.IsAbbreviation(shortForm)).OrderByDescending(a => a.Used).ToList();
             return l;
         }
 
@@ -106,14 +117,14 @@ namespace FasType.Storage
         IEnumerator IEnumerable.GetEnumerator() => Abbreviations.AsEnumerable().GetEnumerator();
     }
 
-    class EFSqliteContextFactory : IDesignTimeDbContextFactory<EFSqliteContext>
+    class EFSqliteAbbreviationContextFactory : IDesignTimeDbContextFactory<EFSqliteAbbreviationContext>
     {
-        public EFSqliteContext CreateDbContext(string[] args)
+        public EFSqliteAbbreviationContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<EFSqliteContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<EFSqliteAbbreviationContext>();
             optionsBuilder.UseSqlite("Data Source=abbreviation.db"); 
 
-            return new EFSqliteContext(optionsBuilder.Options);
+            return new EFSqliteAbbreviationContext(optionsBuilder.Options);
         }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FasType.Migrations
 {
-    [DbContext(typeof(EFSqliteContext))]
+    [DbContext(typeof(EFSqliteAbbreviationContext))]
     [Migration("20201024180051_BaseAbbreviation")]
     partial class BaseAbbreviation
     {

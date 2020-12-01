@@ -46,8 +46,10 @@ namespace FasType
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            using var _context = ServiceProvider.GetRequiredService<IDataStorage>() as DbContext;
-            _context?.Database.Migrate();
+            using var _abbrevContext = ServiceProvider.GetRequiredService<IAbbreviationStorage>() as DbContext;
+            _abbrevContext?.Database.Migrate();
+            using var _lingContext = ServiceProvider.GetRequiredService<ILinguisticsStorage>() as DbContext;
+            _lingContext?.Database.Migrate();
             //_context.Database.EnsureCreated();
 
             //T();
@@ -61,7 +63,8 @@ namespace FasType
                 .WriteTo.Debug()
                 .CreateLogger();
 
-            services.AddDbContext<IDataStorage, EFSqliteContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFSqlite")), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             //services.AddTransient<IDataStorage, EFSqliteStorage>();
 
             services.AddSingleton(Configuration);
@@ -80,6 +83,9 @@ namespace FasType
 
             services.AddTransient<LinguisticsWindow>();
             services.AddTransient<LinguisticsViewModel>();
+
+            services.AddTransient<SyllableAbbreviationWindow>();
+            services.AddTransient<SyllableAbbreviationViewModel>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)
@@ -95,7 +101,7 @@ namespace FasType
             using var stream = new FileStream(fp, FileMode.OpenOrCreate, FileAccess.Read);
             using var reader = new StreamReader(stream);
 
-            using var _context = ServiceProvider.GetRequiredService<IDataStorage>();
+            using var _context = ServiceProvider.GetRequiredService<IAbbreviationStorage>();
 
 
             var abbrevs = new List<Models.Abbreviations.BaseAbbreviation>();
@@ -107,7 +113,7 @@ namespace FasType
                 string sf = sp[0];
                 string ff = sp[1];
 
-                abbrevs.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, "", "", ""));
+                abbrevs.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, 0, "", "", ""));
                 //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
             }
             _context.AddRange(abbrevs);

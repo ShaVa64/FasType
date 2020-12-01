@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace FasType.Services
 {
-    public interface IDataStorage : IQueryable<BaseAbbreviation>, IEnumerable<BaseAbbreviation>, IDisposable
+    public interface IAbbreviationStorage : IQueryable<BaseAbbreviation>, IEnumerable<BaseAbbreviation>, IDisposable
     {
         int Count { get; }
 
         IEnumerable<BaseAbbreviation> this[string shortForm] => GetAbbreviations(shortForm);
         IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm);
 
+        bool UpdateUsed(BaseAbbreviation abbrev);
         bool Add(BaseAbbreviation abbrev);
         bool AddRange(IEnumerable<BaseAbbreviation> abbrevs);
         //Task<bool> AddAsync(IAbbreviation abbrev);

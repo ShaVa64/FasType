@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FasType.Migrations
 {
-    [DbContext(typeof(EFSqliteContext))]
+    [DbContext(typeof(EFSqliteAbbreviationContext))]
     [Migration("20201126173038_AddGenderPlural")]
     partial class AddGenderPlural
     {

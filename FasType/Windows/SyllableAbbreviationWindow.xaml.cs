@@ -1,7 +1,9 @@
 ﻿using FasType.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,13 +16,13 @@ using System.Windows.Shapes;
 namespace FasType.Windows
 {
     /// <summary>
-    /// Interaction logic for LinguisticsWindow.xaml
+    /// Interaction logic for SyllableAbbreviationWindow.xaml
     /// </summary>
-    public partial class LinguisticsWindow : Window
+    public partial class SyllableAbbreviationWindow : Window
     {
-        //readonly LinguisticsViewModel _vm;
+        //readonly SyllableAbbreviationViewModel _vm;
 
-        public LinguisticsWindow(LinguisticsViewModel vm)
+        public SyllableAbbreviationWindow(SyllableAbbreviationViewModel vm)
         {
             InitializeComponent();
 

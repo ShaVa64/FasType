@@ -12,7 +12,7 @@ namespace FasType.Models.Abbreviations
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public abstract class BaseAbbreviation
     {
-        protected readonly static string Arrow = "\u2794";
+        protected readonly static string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
 
         [Key] public Guid Key { get; private set; }
         [Required] [Column(TypeName = "varchar(50)")] public string ShortForm { get; private set; }
@@ -21,7 +21,7 @@ namespace FasType.Models.Abbreviations
 
         public string StringKey => string.Concat(ShortForm.Take(2));
 
-        public BaseAbbreviation(string shortForm, string fullForm, ulong used = 0)
+        public BaseAbbreviation(string shortForm, string fullForm, ulong used)
         {
             Key = Guid.NewGuid();
             ShortForm = shortForm;

@@ -26,8 +26,8 @@ namespace FasType.Models.Abbreviations
         [Required] [Column(TypeName = "varchar(50)")] public string PluralForm { get; private set; }
         [Required] [Column(TypeName = "varchar(50)")] public string GenderPluralForm { get; private set; }
 
-        public SimpleAbbreviation(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm)
-            : base(shortForm.ToLower(), fullForm.ToLower()) 
+        public SimpleAbbreviation(string shortForm, string fullForm, ulong used, string genderForm, string pluralForm, string genderPluralForm)
+            : base(shortForm.ToLower(), fullForm.ToLower(), used) 
         {
             PluralForm = pluralForm;
             GenderForm = genderForm;
@@ -94,11 +94,11 @@ namespace FasType.Models.Abbreviations
         {
             StringBuilder sb = new();
 
-            string sf = ElementaryCapitalize(ShortForm);
-            string ff = ElementaryCapitalize(FullForm);
+            string sf = ShortForm;//ElementaryCapitalize(ShortForm);
+            string ff = FullForm ;//ElementaryCapitalize(FullForm);
             
             sb.Append(sf)
-                .Append($" {Arrow} ")
+                .Append(SpacedArrow)
                 .Append(ff);
 
             return sb.ToString();
@@ -109,19 +109,19 @@ namespace FasType.Models.Abbreviations
             StringBuilder sb = new();
 
             sb.Append(ShortForm)
-                .Append($" {Arrow} ")
+                .Append(SpacedArrow)
                 .Append(FullForm);
 
             sb.AppendLine()
                 .Append(ShortForm.FirstCharToUpper())
-                .Append($" {Arrow} ")
+                .Append(SpacedArrow)
                 .Append(FullForm.FirstCharToUpper());
             
             if (HasGender)
             {
                 sb.AppendLine()
                     .Append(UserGrammar.GenderRecord.Grammarify(ShortForm))
-                    .Append($" {Arrow} ")
+                    .Append(SpacedArrow)
                     .Append(GenderForm);
             }
             
@@ -129,7 +129,7 @@ namespace FasType.Models.Abbreviations
             {
                 sb.AppendLine()
                     .Append(UserGrammar.PluralRecord.Grammarify(ShortForm))
-                    .Append($" {Arrow} ")
+                    .Append(SpacedArrow)
                     .Append(PluralForm);
             }
 
@@ -137,7 +137,7 @@ namespace FasType.Models.Abbreviations
             {
                 sb.AppendLine()
                     .Append(UserGrammar.GenderPluralRecord.Grammarify(ShortForm))
-                    .Append($" {Arrow} ")
+                    .Append(SpacedArrow)
                     .Append(GenderPluralForm);
             }
 

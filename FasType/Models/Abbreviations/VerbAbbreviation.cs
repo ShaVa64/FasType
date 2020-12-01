@@ -9,7 +9,7 @@ namespace FasType.Models.Abbreviations
     public class VerbAbbreviation : BaseAbbreviation
     {
         public VerbAbbreviation() 
-            : base(null, null) { }
+            : base(null, null, 0) { }
 
         public override string GetFullForm(string shortForm) => throw new NotImplementedException();
         public override bool IsAbbreviation(string shortForm) => throw new NotImplementedException();

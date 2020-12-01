@@ -13,7 +13,7 @@ namespace FasType.ViewModels
 {
     public class SimpleAbbreviationViewModel : ObservableObject
     {
-        readonly IDataStorage _storage;
+        readonly IAbbreviationStorage _storage;
         SimpleAbbreviation _currentAbbrev;
         string _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
         string _preview;
@@ -67,7 +67,7 @@ namespace FasType.ViewModels
 
         public Command<Page> CreateNewCommand { get; set; }
 
-        public SimpleAbbreviationViewModel(IDataStorage storage)
+        public SimpleAbbreviationViewModel(IAbbreviationStorage storage)
         {
             _storage = storage;
             _currentAbbrev = null;
@@ -113,7 +113,7 @@ namespace FasType.ViewModels
             if (string.IsNullOrEmpty(ShortForm) || string.IsNullOrEmpty(FullForm))
                 return;
 
-            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, GenderForm, PluralForm, GenderPluralForm);
+            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, 0, GenderForm, PluralForm, GenderPluralForm);
 
             Preview = _currentAbbrev.ComplexRepresentation;
         }

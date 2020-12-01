@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using FasType.Models.Linguistics;
+using FasType.Models.Linguistics.Grammars;
 
 namespace FasType.Utils
 {
@@ -28,8 +30,17 @@ namespace FasType.Utils
         {
              null => throw new ArgumentNullException(nameof(input)),
              "" => "",// throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
-             _ => input.First().ToString().ToUpper() + input.Substring(1)
+             _ => input.First().ToString().ToUpper() + input[1..]
         };
+    }
+
+    public static class LinqExtensions
+    {
+        public static IEnumerable<T> Cast<T>(this IEnumerable<SyllableAbbreviationRecord> enumerable) where T : SyllableAbbreviation => enumerable.Select(sar => (T)sar);
+        public static IEnumerable<T> Cast<T>(this IEnumerable<SyllableAbbreviation> enumerable) where T : SyllableAbbreviationRecord => enumerable.Select(sa => (T)sa);
+
+        public static IEnumerable<T> Cast<T>(this IEnumerable<GrammarTypeRecord> enumerable) where T : GrammarType => enumerable.Select(gtr => (T)gtr);
+        public static IEnumerable<T> Cast<T>(this IEnumerable<GrammarType> enumerable) where T : GrammarTypeRecord => enumerable.Select(gt => (T)gt);
     }
 
     public static class ComboBoxExtensions

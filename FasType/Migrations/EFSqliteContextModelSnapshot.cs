@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FasType.Migrations
 {
-    [DbContext(typeof(EFSqliteContext))]
+    [DbContext(typeof(EFSqliteAbbreviationContext))]
     partial class EFSqliteContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

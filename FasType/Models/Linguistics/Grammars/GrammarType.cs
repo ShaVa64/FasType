@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FasType.Models.Linguistics.Grammars
 {
-    public record GrammarTypeRecord(string Repr, GrammarPosition Position)
+    public record GrammarTypeRecord(string Name, string Repr, GrammarPosition Position)
     {
         public string Grammarify(string form) => Position switch
         {
@@ -29,19 +29,21 @@ namespace FasType.Models.Linguistics.Grammars
         string _repr;
         GrammarPosition _position;
 
+        public string Name { get; }
         public string Repr { get => _repr; set => SetProperty(ref _repr, value); }
         public GrammarPosition Position { get => _position; set => SetProperty(ref _position,value); }
 
-        public GrammarType(string repr, GrammarPosition grammarPosition)
+        public GrammarType(string name, string repr, GrammarPosition grammarPosition)
         {
+            Name = name;
             Repr = repr;
             Position = grammarPosition;
         }
 
         public override string ToString() => Position == GrammarPosition.Prefix ? $"{Repr}*" : $"*{Repr}";
 
-        public static explicit operator GrammarTypeRecord(GrammarType gt) => new(gt.Repr, gt.Position);
-        public static explicit operator GrammarType(GrammarTypeRecord gtr) => new(gtr.Repr, gtr.Position);
+        public static explicit operator GrammarTypeRecord(GrammarType gt) => new(gt.Name, gt.Repr, gt.Position);
+        public static explicit operator GrammarType(GrammarTypeRecord gtr) => new(gtr.Name, gtr.Repr, gtr.Position);
     }
 
     public enum GrammarPosition

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FasType.Windows" xmlns:ctrl="clr-namespace:FasType.Controls"
+        xmlns:utils="clr-namespace:FasType.Utils"
         xmlns:prop="clr-namespace:FasType.Properties" xmlns:viewmodels="clr-namespace:FasType.ViewModels" 
         d:DataContext="{d:DesignInstance Type=viewmodels:LinguisticsViewModel}" ResizeMode="NoResize"
         mc:Ignorable="d" Topmost="True" MinWidth="200" WindowStartupLocation="CenterScreen"
@@ -23,32 +24,6 @@
             <Setter Property="Width" Value="15"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>-->
-        <Style x:Key="RadioCheckBox" TargetType="CheckBox">
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="Black"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="CornflowerBlue"/>
-                </Trigger>
-            </Style.Triggers>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <StackPanel Orientation="Vertical">
-                            <Label Content="{TemplateBinding Content}" Margin="2,0" Padding="0" 
-                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" 
-                                    Width="12" Height="12" CornerRadius="6" Margin="0">
-                                <Ellipse Height="6" Width="6" Fill="{TemplateBinding Background}"/>
-                            </Border>
-                        </StackPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
 
     <StackPanel Orientation="Vertical" Margin="0, 0, 0, 5">
@@ -79,24 +54,24 @@
         <!--<TextBlock Style="{StaticResource SettingTitleStyle}" Text="Plural"/>-->
         <!--<Separator/>-->
         <Separator/>
-        <TextBlock Style="{StaticResource SettingTitleStyle}" Text="Syllable"/>
-        <Separator/>
-        
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Width="40" Height="18" Margin="5, 0, 0, 0"/>
-            <TextBox Grid.Column="1" Width="40" Height="18" Margin="5, 0, 0, 0"/>
-            <CheckBox Grid.Column="2" Content="Start" VerticalAlignment="Center" Style="{StaticResource RadioCheckBox}"/>
-            <CheckBox Grid.Column="3" Content="Middle" VerticalAlignment="Center" Style="{StaticResource RadioCheckBox}"/>
-            <CheckBox Grid.Column="4" Content="End" Style="{StaticResource RadioCheckBox}"/>
+
+            <TextBlock Grid.Column="0" Style="{StaticResource SettingTitleStyle}" HorizontalAlignment="Left" Margin="5" Text="Abbreviation Method"/>
+            <Button Grid.Column="1" Content="Open" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    BorderThickness="1.5" Margin="5" Padding="4, 2"
+                    Command="{Binding OpenSyllableCommand}">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+
         </Grid>
-        
         <Separator/>
 
         <Grid Margin="5, 20, 5, 0">
@@ -106,7 +81,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!--<Button Grid.Column="0" Content="Reset" IsEnabled="False"/>-->
+            <Button Grid.Column="0" Content="Reset"/>
             <Button Grid.Column="2" Content="{x:Static prop:Resources.Save}" Command="{Binding SaveCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
         </Grid>
