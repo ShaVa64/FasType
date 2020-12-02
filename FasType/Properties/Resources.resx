@@ -212,4 +212,34 @@
     <value>G. &amp; P. Form</value>
     <comment>@MutedRule(WhiteSpaceTail)@MutedRule(PunctuationTail)</comment>
   </data>
+  <data name="Grammar" xml:space="preserve">
+    <value>Grammar</value>
+  </data>
+  <data name="AbbreviationMethod" xml:space="preserve">
+    <value>Abbreviation Method</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="EmptyAbbrevMethodList1" xml:space="preserve">
+    <value>You don't have any</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Middle" xml:space="preserve">
+    <value>Middle</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="EmptyAbbrevMethodList2" xml:space="preserve">
+    <value>Abbreviation Methods registered</value>
+  </data>
+  <data name="DeleteMethodDialog" xml:space="preserve">
+    <value>Are you sure to delete this abbreviation method ?</value>
+  </data>
 </root>

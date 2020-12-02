@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FasType.Controls"
+             xmlns:local="clr-namespace:FasType.Controls" xmlns:mdl="clr-namespace:FasType.Models.Abbreviations"
+             d:DataContext="{d:DesignInstance mdl:BaseAbbreviation}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -12,8 +13,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" Text="{Binding ComplexRepresentation}" 
-                   TextAlignment="Center" HorizontalAlignment="Left" Margin="10, 5, 2, 5"/>
+        <TextBlock Grid.Column="0" Text="{Binding ComplexRepresentation}" Margin="10, 5, 2, 5"
+                   VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Left"/>
         <Button Grid.Column="1" Width="20" Height="20" Style="{StaticResource RedButtonStyle}" Padding="5, 0" Margin="2, 5, 10, 5"
                 HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveCommand}" CommandParameter="{Binding .}">

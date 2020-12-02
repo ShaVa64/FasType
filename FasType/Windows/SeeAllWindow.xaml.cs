@@ -27,8 +27,18 @@ namespace FasType.Windows
             InitializeComponent();
             Owner = App.Current.MainWindow;
 
+            this.ContentRendered += SeeAllWindow_ContentRendered;
+            Loaded += SeeAllWindow_Loaded;
             KeyDown += SeeAllWindow_KeyDown;
             DataContext = _vm = vm;
+        }
+
+        private void SeeAllWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void SeeAllWindow_ContentRendered(object sender, EventArgs e)
+        {
         }
 
         private void SeeAllWindow_KeyDown(object sender, KeyEventArgs e)

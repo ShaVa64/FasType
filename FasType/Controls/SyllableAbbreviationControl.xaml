@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FasType.Controls" xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
              xmlns:utils="clr-namespace:FasType.Utils" xmlns:models="clr-namespace:FasType.Models.Linguistics"
+             xmlns:prop="clr-namespace:FasType.Properties"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance models:SyllableAbbreviation}"
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -66,16 +67,20 @@
         <TextBox Grid.Column="0" Style="{StaticResource EmptyTextBox}" 
                  Text="{Binding ShortForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Width="40" Height="18" Margin="5, 0, 0, 0"/>
-        <TextBlock Grid.Column="1" Text="{x:Static utils:Unicodes.Arrow}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Text="{x:Static utils:Unicodes.Arrow}" 
+                   Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TextBox Grid.Column="2" Style="{StaticResource EmptyTextBox}"
                  Text="{Binding FullForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Width="40" Height="18" Margin="0"/>
 
-        <CheckBox Grid.Column="3" Content="Start" IsChecked="{Binding IsBefore}" BorderBrush="{Binding Position, Converter={StaticResource EnumToColor}}"
+        <CheckBox Grid.Column="3" Content="{x:Static prop:Resources.Start}" IsChecked="{Binding IsBefore}" 
+                  BorderBrush="{Binding Position, Converter={StaticResource EnumToColor}}" Margin="10, 0, 0, 0"
                   VerticalAlignment="Center" Style="{StaticResource RadioCheckBox}"/>
-        <CheckBox Grid.Column="4" Content="Middle" IsChecked="{Binding IsIn}" BorderBrush="{Binding Position, Converter={StaticResource EnumToColor}}"
+        <CheckBox Grid.Column="4" Content="{x:Static prop:Resources.Middle}" IsChecked="{Binding IsIn}"
+                  BorderBrush="{Binding Position, Converter={StaticResource EnumToColor}}"
                   VerticalAlignment="Center" Style="{StaticResource RadioCheckBox}"/>
-        <CheckBox Grid.Column="5" Content="End" IsChecked="{Binding IsAfter}" BorderBrush="{Binding Position, Converter={StaticResource EnumToColor}}"
+        <CheckBox Grid.Column="5" Content="{x:Static prop:Resources.End}" IsChecked="{Binding IsAfter}"
+                  BorderBrush="{Binding Position, Converter={StaticResource EnumToColor}}"
                   VerticalAlignment="Center" Style="{StaticResource RadioCheckBox}"/>
     </Grid>
 </UserControl>

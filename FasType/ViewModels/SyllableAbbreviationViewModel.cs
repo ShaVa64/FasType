@@ -19,7 +19,8 @@ namespace FasType.ViewModels
         readonly ILinguisticsStorage _storage;
         readonly SyllableAbbreviationRecord[] _arr;
         ObservableCollection<SyllableAbbreviation> _syllables;
-        
+
+        public string Title => Resources.AbbreviationMethod + $"  ({Syllables.Count})";
         public Command<Window> SaveCommand { get; }
         public Command<SyllableAbbreviation> RemoveSyllableCommand { get; }
         public Command AddSyllableCommand { get; }
@@ -36,13 +37,21 @@ namespace FasType.ViewModels
             SaveCommand = new(Save, CanSave);
         }
 
-        void AddSyllable() => Syllables.Add(new(Guid.NewGuid(), string.Empty, string.Empty, SyllablePosition.None));//Syllables.Add(new(Guid.NewGuid(), "a", "a", SyllablePosition.In));
+        void AddSyllable()
+        {
+            Syllables.Add(new(Guid.NewGuid(), string.Empty, string.Empty, SyllablePosition.None));//Syllables.Add(new(Guid.NewGuid(), "a", "a", SyllablePosition.In));
+            OnPropertyChanged(nameof(Title));
+        }
+
         void RemoveSyllable(SyllableAbbreviation sa)
         {
-            var r = MessageBox.Show("Are you sure to delete this abbreviation method ?", Resources.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+            var r = MessageBox.Show(Resources.DeleteMethodDialog, Resources.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
     
             if (r == MessageBoxResult.Yes)
+            {
                 Syllables.Remove(sa);
+                OnPropertyChanged(nameof(Title));
+            }
         }
 
         bool CanSaveSyllable(SyllableAbbreviation sa) => !string.IsNullOrEmpty(sa.ShortForm) && !string.IsNullOrEmpty(sa.FullForm) && sa.Position != SyllablePosition.None;

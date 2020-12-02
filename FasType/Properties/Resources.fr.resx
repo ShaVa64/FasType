@@ -124,13 +124,10 @@
     <value>_Ajouter...</value>
   </data>
   <data name="SimpleAbbrevHeader" xml:space="preserve">
-    <value>Abbrev. _Simple</value>
+    <value>Abrev. _Simple</value>
   </data>
   <data name="SeeAllHeader" xml:space="preserve">
     <value>Voir _Tout</value>
-  </data>
-  <data name="VerbAbbrevHeader" xml:space="preserve">
-    <value>Abbrev. de _Verbe</value>
   </data>
   <data name="AllAbbrevs" xml:space="preserve">
     <value>Toutes les Abbreviations</value>
@@ -203,5 +200,38 @@
   </data>
   <data name="GnPForm" xml:space="preserve">
     <value>Forme G. &amp; N. </value>
+  </data>
+  <data name="Grammar" xml:space="preserve">
+    <value>Grammaire</value>
+  </data>
+  <data name="AbbreviationMethod" xml:space="preserve">
+    <value>Méthode abréviative</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Réinitialiser</value>
+  </data>
+  <data name="EmptyAbbrevMethodList1" xml:space="preserve">
+    <value>Vous n'avez aucune</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Début</value>
+  </data>
+  <data name="Middle" xml:space="preserve">
+    <value>Milieu</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>Fin</value>
+  </data>
+  <data name="EmptyAbbrevMethodList2" xml:space="preserve">
+    <value>Méthode Abrévative d'enregistrée</value>
+  </data>
+  <data name="DeleteMethodDialog" xml:space="preserve">
+    <value>Êtes-vous vraiment sûr de vouloir supprimer cette méthode abréviative ?</value>
+  </data>
+  <data name="VerbAbbrevHeader" xml:space="preserve">
+    <value>Abrev. de _Verbe</value>
   </data>
 </root>

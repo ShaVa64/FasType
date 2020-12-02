@@ -3,12 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FasType.Windows"
-        xmlns:prop="clr-namespace:FasType.Properties"
-        xmlns:vm="clr-namespace:FasType.ViewModels"
-        xmlns:ctrl="clr-namespace:FasType.Controls"
-        xmlns:behaviors="clr-namespace:FasType.Behaviors"
-        xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
+        xmlns:local="clr-namespace:FasType.Windows" xmlns:prop="clr-namespace:FasType.Properties"
+        xmlns:vm="clr-namespace:FasType.ViewModels" xmlns:ctrl="clr-namespace:FasType.Controls" 
+        xmlns:behaviors="clr-namespace:FasType.Behaviors" xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
+        d:DataContext="{d:DesignInstance vm:SeeAllViewModel}"
         WindowStyle="ToolWindow" ShowInTaskbar="False"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="{Binding Title}" 
@@ -69,7 +67,8 @@
 
     <DockPanel>
         <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
-            <ComboBox ToolBar.OverflowMode="Never" Padding="0, 0, 3, 0" SelectedItem="{Binding OrderBy, Mode=OneWayToSource, Converter={StaticResource ResourcesToEnumConverter}}"
+            <ComboBox ToolBar.OverflowMode="Never" Padding="0, 0, 3, 0" 
+                      SelectedItem="{Binding OrderBy, Mode=OneWayToSource, Converter={StaticResource ResourcesToEnumConverter}}"
                       behaviors:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True">
                 <ComboBoxItem Content="{x:Static prop:Resources.FullForm}" IsSelected="True"/>
                 <ComboBoxItem Content="{x:Static prop:Resources.ShortForm}"/>
@@ -88,10 +87,10 @@
         <Grid Background="AliceBlue">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
                           VerticalScrollBarVisibility="Auto">
-                <ItemsControl x:Name="Control" ItemsSource="{Binding Source={StaticResource CVS}}" Margin="0, 3, 0, 0">
-                    <!--
-                              AlternationCount="{Binding Count}"
-                    <ItemsControl.ItemTemplateSelector>
+                <ItemsControl x:Name="Control" Margin="0, 3, 0, 0"
+                              ItemsSource="{Binding Source={StaticResource CVS}}">
+                              <!--AlternationCount="{Binding Count}"-->
+                    <!--<ItemsControl.ItemTemplateSelector>
                         <vm:SeeAllSelector First="{StaticResource FirstDisplayTemplate}"
                                            Default="{StaticResource DisplayTemplate}"
                                            Last="{StaticResource LastDisplayTemplate}"
@@ -106,7 +105,7 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate>
-                                                <Expander IsExpanded="True" BorderBrush="SlateGray" BorderThickness="1" Margin="2, 0" Background="White">
+                                                <Expander IsExpanded="False" BorderBrush="SlateGray" BorderThickness="1" Margin="2, 0" Background="White">
                                                     <Expander.Header>
                                                         <Grid Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth, 
                                                             Converter={StaticResource ExpanderWidthConverter}, ConverterParameter=32}">
@@ -115,13 +114,13 @@
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
                                                             <TextBlock Grid.Column="1" Text="{Binding ItemCount, StringFormat='({0})'}" 
-                                                                        FontStyle="Italic"/>
+                                                                       FontStyle="Italic"/>
                                                             <ctrl:CharacterCasingTextBlock Grid.Column="0" CharacterCasing="Upper" FontSize="15" FontWeight="Bold"
                                                                                            Text="{Binding Name}" TextAlignment="Center" />
                                                         </Grid>
                                                     </Expander.Header>
                                                     <Expander.Content>
-                                                        <ItemsControl ItemsSource="{Binding Items}" AlternationCount="{Binding Source=Items, Path=Count}">
+                                                        <ItemsControl ItemsSource="{Binding Items}" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=ItemsSource.Count}">
                                                             <ItemsControl.ItemTemplateSelector>
                                                                 <vm:SeeAllSelector First="{StaticResource FirstDisplayTemplate}" Default="{StaticResource DisplayTemplate}"
                                                                                    Last="{StaticResource LastDisplayTemplate}" Only="{StaticResource OnlyDisplayTemplate}"/>

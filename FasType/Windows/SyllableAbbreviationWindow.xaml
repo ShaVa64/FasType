@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FasType.Windows" xmlns:vm="clr-namespace:FasType.ViewModels"
         xmlns:ctrl="clr-namespace:FasType.Controls" xmlns:prop="clr-namespace:FasType.Properties"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:SyllableAbbreviationViewModel}"
-        Title="Abbreviation Method" MaxHeight="400" MinWidth="250" Topmost="True"
+        Title="{Binding Title}" MaxHeight="400" MinWidth="250" Topmost="True"
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -31,14 +31,13 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <ctrl:SyllableAbbreviationControl Grid.Column="0"/>
-                                <Button Grid.Column="4" Padding="5, 0" Margin="10, 5"
+                                <Button Grid.Column="1" Padding="5, 0" Margin="10, 5" Width="20" Height="20" Style="{StaticResource RedButtonStyle}"
                                         HorizontalAlignment="Right" VerticalAlignment="Center" CommandParameter="{Binding .}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveSyllableCommand}" 
-                                        Width="20" Height="20" Style="{StaticResource RedButtonStyle}">
+                                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveSyllableCommand}" >
                                     <Button.Content>
-                                        <Path Data="{StaticResource CrossGeometry}" Stretch="Uniform"
-                                              Stroke="Black" StrokeThickness="2" Margin="5" 
-                                              StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                                        <Path Stretch="Uniform" Stroke="Black"
+                                              Data="{StaticResource CrossGeometry}" StrokeThickness="2" 
+                                              Margin="5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
                                     </Button.Content>
                                 </Button>
                             </Grid>
@@ -51,8 +50,11 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate>
-                                                <TextBlock Margin="5" TextAlignment="Center" HorizontalAlignment="Center"
-                                                           Text="You don't have any &#x0a;Abbreviation Methods registered" />
+                                                <TextBlock Margin="5" TextAlignment="Center" HorizontalAlignment="Center">
+                                                    <Run Text="{x:Static prop:Resources.EmptyAbbrevMethodList1}"/>
+                                                    <LineBreak/>
+                                                    <Run Text="{x:Static prop:Resources.EmptyAbbrevMethodList2}"/>
+                                                </TextBlock>
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -67,11 +69,12 @@
                         Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.AddSyllableCommand}" 
                         Width="20" Height="20" Style="{StaticResource GreenButtonStyle}">
                     <Button.Content>
-                        <Path Data="{StaticResource PlusGeometry}" Stretch="Uniform"
-                                Stroke="Black" StrokeThickness="2" Margin="5" 
-                                StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                        <Path Stretch="Uniform" Stroke="Black" 
+                              Data="{StaticResource PlusGeometry}" StrokeThickness="2" 
+                              Margin="5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
                     </Button.Content>
                 </Button>
+
             </StackPanel>
         </ScrollViewer>
         

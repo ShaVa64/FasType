@@ -27,7 +27,7 @@
     </Window.Resources>
 
     <StackPanel Orientation="Vertical" Margin="0, 0, 0, 5">
-        <TextBlock Style="{StaticResource SettingTitleStyle}" Text="Grammar" Margin="0"/>
+        <TextBlock Style="{StaticResource SettingTitleStyle}" Text="{x:Static prop:Resources.Grammar}" Margin="0"/>
         <Separator/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" DataContext="{Binding GenderContext}"/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Plural}" DataContext="{Binding PluralContext}"/>
@@ -60,10 +60,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Style="{StaticResource SettingTitleStyle}" HorizontalAlignment="Left" Margin="5" Text="Abbreviation Method"/>
-            <Button Grid.Column="1" Content="Open" HorizontalAlignment="Right" VerticalAlignment="Center"
-                    BorderThickness="1.5" Margin="5" Padding="4, 2"
-                    Command="{Binding OpenSyllableCommand}">
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="5" 
+                       Style="{StaticResource SettingTitleStyle}" Text="{x:Static prop:Resources.AbbreviationMethod}"/>
+            <Button Grid.Column="1" Content="{x:Static prop:Resources.Open}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    BorderThickness="1.5" Margin="5" Padding="4, 2" Command="{Binding OpenSyllableCommand}">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
@@ -81,7 +81,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Reset" Command="{Binding ResetCommand}"/>
+            <Button Grid.Column="0" Content="{x:Static prop:Resources.Reset}" Command="{Binding ResetCommand}"/>
             <Button Grid.Column="2" Content="{x:Static prop:Resources.Save}" Command="{Binding SaveCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
         </Grid>

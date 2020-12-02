@@ -14,7 +14,9 @@ namespace FasType.Models.Abbreviations
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public abstract class BaseAbbreviation
     {
-        protected readonly static ILinguisticsStorage _linguistics = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
+        protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
+
+        protected readonly static int _stringKeyLength = 2;
         protected readonly static string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
 
         [Key] public Guid Key { get; private set; }
@@ -22,7 +24,8 @@ namespace FasType.Models.Abbreviations
         [Required] [Column(TypeName = "varchar(50)")] public string FullForm { get; private set; }
         [Required] public ulong Used { get; private set; }
 
-        public string StringKey => string.Concat(ShortForm.Take(2));
+
+        public string StringKey => string.Concat(ShortForm.Take(_stringKeyLength));
 
         public BaseAbbreviation(string shortForm, string fullForm, ulong used)
         {

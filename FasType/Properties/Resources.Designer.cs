@@ -61,6 +61,15 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abbreviation Method.
+        /// </summary>
+        public static string AbbreviationMethod {
+            get {
+                return ResourceManager.GetString("AbbreviationMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -124,11 +133,47 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete this abbreviation method ?.
+        /// </summary>
+        public static string DeleteMethodDialog {
+            get {
+                return ResourceManager.GetString("DeleteMethodDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can&apos;t create an empty abbreviation..
         /// </summary>
         public static string EmptyAbbrevDialog {
             get {
                 return ResourceManager.GetString("EmptyAbbrevDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have any.
+        /// </summary>
+        public static string EmptyAbbrevMethodList1 {
+            get {
+                return ResourceManager.GetString("EmptyAbbrevMethodList1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abbreviation Methods registered.
+        /// </summary>
+        public static string EmptyAbbrevMethodList2 {
+            get {
+                return ResourceManager.GetString("EmptyAbbrevMethodList2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End.
+        /// </summary>
+        public static string End {
+            get {
+                return ResourceManager.GetString("End", resourceCulture);
             }
         }
         
@@ -196,6 +241,15 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grammar.
+        /// </summary>
+        public static string Grammar {
+            get {
+                return ResourceManager.GetString("Grammar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Linguistics.
         /// </summary>
         public static string Linguistics {
@@ -210,6 +264,24 @@ namespace FasType.Properties {
         public static string LinguisticsHeader {
             get {
                 return ResourceManager.GetString("LinguisticsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Middle.
+        /// </summary>
+        public static string Middle {
+            get {
+                return ResourceManager.GetString("Middle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
             }
         }
         
@@ -246,6 +318,15 @@ namespace FasType.Properties {
         public static string Prefix {
             get {
                 return ResourceManager.GetString("Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
             }
         }
         
@@ -309,6 +390,15 @@ namespace FasType.Properties {
         public static string SimpleAbbrevTitle {
             get {
                 return ResourceManager.GetString("SimpleAbbrevTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
             }
         }
         

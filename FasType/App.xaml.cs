@@ -98,27 +98,56 @@ namespace FasType
 
         void T()
         {
-            string fp = @"D:\Visual Studio Projects\FasType\FasType\abréviations.txt";
+            string fp = @"D:\Visual Studio Projects\FasType\Docs\abréviations.txt";
+            string tb = @"D:\Visual Studio Projects\FasType\Docs\table_mère avec toutes les formes.txt";
 
-            using var stream = new FileStream(fp, FileMode.OpenOrCreate, FileAccess.Read);
-            using var reader = new StreamReader(stream);
+            using var stream1 = new FileStream(fp, FileMode.Open, FileAccess.Read);
+            using var reader1 = new StreamReader(stream1); 
+            
+            using var stream2 = new FileStream(tb, FileMode.Open, FileAccess.Read);
+            using var reader2 = new StreamReader(stream2);
 
             using var _context = ServiceProvider.GetRequiredService<IAbbreviationStorage>();
 
 
-            var abbrevs = new List<Models.Abbreviations.BaseAbbreviation>();
+            var abbrevs = new List<(string, string)>();
             string l;
-            while ((l = reader.ReadLine()) != null)
+            while ((l = reader1.ReadLine()) != null)
             {
                 var sp = l.Replace("\"", string.Empty).Split(';');
 
                 string sf = sp[0];
                 string ff = sp[1];
 
-                abbrevs.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, 0, "", "", ""));
+                abbrevs.Add((sf, ff));
                 //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
             }
-            _context.AddRange(abbrevs);
+
+            var simples = new List<Models.Abbreviations.BaseAbbreviation>();
+            l = reader2.ReadLine();
+            while ((l = reader2.ReadLine()) != null)
+            {
+                var sp = l.Replace("\"", string.Empty).Split(';');
+
+                string ff = sp[1];
+                string gf = sp[2];
+                string gpf = sp[3];
+                string pf = sp[4];
+
+                string sf;
+                var sfs = abbrevs.Where(t => t.Item2 == ff).ToArray();
+
+                if (sfs.Length == 1)
+                    sf = sfs.Single().Item1;
+                else
+                {
+                    continue;
+                }
+
+                simples.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, 0, gf, pf, gpf));
+                //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+            }
+            _context.AddRange(simples);
         }
 
         void F()
@@ -131,7 +160,7 @@ namespace FasType
             using var _context = ServiceProvider.GetRequiredService<ILinguisticsStorage>();
 
 
-            var methods = new List<Models.Linguistics.SyllableAbbreviation>();
+            var methods = new List<SyllableAbbreviation>();
             string l = reader.ReadLine();
             while ((l = reader.ReadLine()) != null)
             {
@@ -139,15 +168,15 @@ namespace FasType
 
                 string ff = sp[0];
                 string sf = sp[1];
-                Models.Linguistics.SyllablePosition p = Models.Linguistics.SyllablePosition.None;
+                SyllablePosition p = SyllablePosition.None;
                 if (sp[2] == "1")
-                    p |= Models.Linguistics.SyllablePosition.Before;
+                    p |= SyllablePosition.Before;
                 if (sp[3] == "1")
-                    p |= Models.Linguistics.SyllablePosition.In;
+                    p |= SyllablePosition.In;
                 if (sp[4] == "1")
-                    p |= Models.Linguistics.SyllablePosition.After;
+                    p |= SyllablePosition.After;
 
-                methods.Add(new Models.Linguistics.SyllableAbbreviation(Guid.NewGuid(), sf, ff, p));
+                methods.Add(new SyllableAbbreviation(Guid.NewGuid(), sf, ff, p));
                 //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
             }
             _context.AbbreviationMethods = methods;
