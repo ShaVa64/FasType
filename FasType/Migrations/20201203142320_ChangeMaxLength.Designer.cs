@@ -3,14 +3,16 @@ using System;
 using FasType.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FasType.Migrations
 {
     [DbContext(typeof(EFSqliteAbbreviationContext))]
-    partial class EFSqliteContextModelSnapshot : ModelSnapshot
+    [Migration("20201203142320_ChangeMaxLength")]
+    partial class ChangeMaxLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,26 +53,17 @@ namespace FasType.Migrations
                     b.HasBaseType("FasType.Models.Abbreviations.BaseAbbreviation");
 
                     b.Property<string>("GenderForm")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("GenderPluralForm")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PluralForm")
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ShortGenderForm")
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ShortGenderPluralForm")
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ShortPluralForm")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 

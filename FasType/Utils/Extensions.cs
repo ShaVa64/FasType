@@ -34,6 +34,17 @@ namespace FasType.Utils
         };
     }
 
+    public static class BoolExtensions
+    {
+        public static void IfTrue(this bool b, Action trueAction)
+        {
+            if (b)
+            {
+                trueAction();
+            }
+        }
+    }
+
     public static class LinqExtensions
     {
         public static IEnumerable<T> Cast<T>(this IEnumerable<SyllableAbbreviationRecord> enumerable) where T : SyllableAbbreviation => enumerable.Select(sar => (T)sar);

@@ -8,7 +8,7 @@
       xmlns:viewmodels="clr-namespace:FasType.ViewModels" 
       d:DataContext="{d:DesignInstance Type=viewmodels:SimpleAbbreviationViewModel}"
       mc:Ignorable="d"
-      WindowHeight="290" WindowWidth="250" WindowTitle="{x:Static prop:Resources.SimpleAbbrevTitle}"
+      WindowHeight="310" WindowWidth="270" WindowTitle="{x:Static prop:Resources.SimpleAbbrevTitle}"
       d:DesignHeight="200" d:DesignWidth="200"
       Title="SimpleAbbreviationPage" x:Name="Page">
 
@@ -27,25 +27,32 @@
             <Setter Property="Height" Value="18"/>
         </Style>
 
+        <Style x:Key="EmptyTB" TargetType="TextBox" BasedOn="{StaticResource EmptyTextBox}">
+            <Setter Property="Margin" Value="2, 0, 10, 0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="18"/>
+        </Style>
+
+        <Style x:Key="EmptyTBAndDup" TargetType="TextBox" BasedOn="{StaticResource EmptyTextBox}">
+            <Setter Property="Margin" Value="2, 0, 10, 0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="18"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding BorderBrush}" Value="DarkOrange">
+                    <Setter Property="BorderBrush" Value="DarkOrange"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <Style TargetType="Label" BasedOn="{StaticResource Style.Base}">
             <Setter Property="Margin" Value="5, 0, 2, 0"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
         </Style>
     </Page.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="4.5*" />
-            <RowDefinition Height=".5*" />
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+    <DockPanel Margin="5" LastChildFill="True">
+        
+        <Grid Grid.Row="0" DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -60,11 +67,13 @@
             <Label Grid.Row="0" Grid.Column="0"
                    Content="{x:Static prop:Resources.ShortForm}" ContentStringFormat="{}{0}:"/>
             <TextBox Text="{Binding ShortForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="FirstTB"
-                     Grid.Row="0" Grid.Column="1"/>
+                     Grid.Row="0" Grid.Column="1" Style="{StaticResource EmptyTB}"
+                     ToolTip="{Binding SFToolTip}"/>
             <Label Grid.Row="1" Grid.Column="0"
                    Content="{x:Static prop:Resources.FullForm}" ContentStringFormat="{}{0}:"/>
             <TextBox Text="{Binding FullForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                     Grid.Row="1" Grid.Column="1"/>
+                     Grid.Row="1" Grid.Column="1" Style="{StaticResource EmptyTBAndDup}"
+                     ToolTip="{Binding FFToolTip}"/>
             <Label Grid.Row="2" Grid.Column="0"
                    Content="{x:Static prop:Resources.GenderForm}" ContentStringFormat="{}{0}:"/>
             <TextBox Grid.Row="2" Grid.Column="1"
@@ -79,11 +88,12 @@
                      Text="{Binding GenderPluralForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         </Grid>
 
-        <TextBlock Text="{Binding Preview, Mode=OneWay}" 
-                   TextAlignment="Center" VerticalAlignment="Center"
-                   Grid.Row="2" Grid.ColumnSpan="2"/>
-
         <Button Command="{Binding CreateNewCommand}" CommandParameter="{x:Reference Page}"
-                Content="{x:Static prop:Resources.Add}" Grid.Row="3" Grid.ColumnSpan="2"/>
-    </Grid>
+                Content="{x:Static prop:Resources.Add}" 
+                DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        
+        <TextBlock Text="{Binding Preview, Mode=OneWay}"
+                   TextAlignment="Center" VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+    </DockPanel>
 </Page>

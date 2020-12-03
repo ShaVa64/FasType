@@ -23,7 +23,7 @@ namespace FasType.ViewModels
         string _currentWord;
         readonly LowLevelKeyboardListener _listener;
         ListenerStates _currentListenerState;
-        readonly IAbbreviationStorage _storage;
+        static IAbbreviationStorage _storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
         BaseAbbreviation _choosedAbbrev;
         List<BaseAbbreviation> _matchingAbbrevs;
         int _abbrevIndex;
@@ -34,6 +34,10 @@ namespace FasType.ViewModels
         //public string ChoosedFullForm { get => _choosedFullForm; set => SetProperty(ref _choosedFullForm, value); }
         //public List<string> MatchingFullForms { get => _matchingFullForms; set => SetProperty(ref _matchingFullForms, value); }
         //public int FullFormIndex { get => _fullFormIndex; set => SetProperty(ref _fullFormIndex, value); }
+        
+        public static bool IsLinguisticsWindowOpen { get; private set; }
+        public static bool IsSeeAllWindowOpen { get; private set; }
+        public static bool IsAddNewWindowOpen { get; private set; }
 
         public int AbbrevIndex { get => _abbrevIndex; set => SetProperty(ref _abbrevIndex, value); }
         public BaseAbbreviation ChoosedAbbrev { get => _choosedAbbrev; set => SetProperty(ref _choosedAbbrev, value); }
@@ -54,53 +58,80 @@ namespace FasType.ViewModels
         public Command<BaseAbbreviation> ChooseCommand { get; }
         public Command OpenLinguisticsCommand { get; }
 
-        public MainWindowViewModel(IAbbreviationStorage storage)
+        public MainWindowViewModel()
         {
             CurrentWord = string.Empty;
             _listener = new();
-            _storage = storage;
             CurrentListenerState = ListenerStates.Inserting;
+            IsLinguisticsWindowOpen = false;
+            IsSeeAllWindowOpen = false;
+            IsAddNewWindowOpen = false;
+
             AddNewCommand = new(AddNew, CanAddNew);
             SeeAllCommand = new(SeeAll, CanSeeAll);
             ChooseCommand = new(Choose, CanChoose);
             OpenLinguisticsCommand = new(OpenLinguistics, CanOpenLinguistics);
         }
 
-        bool CanOpenLinguistics() => true;
+        bool CanOpenLinguistics() => !IsLinguisticsWindowOpen;
         void OpenLinguistics()
         {
-            var tw = App.Current.ServiceProvider.GetRequiredService<LinguisticsWindow>();
+            var lw = App.Current.ServiceProvider.GetRequiredService<LinguisticsWindow>();
 
+            lw.Closed += delegate
+            {
+                IsLinguisticsWindowOpen = false;
+                Continue();
+            };
             Pause();
-            tw.ShowDialog();
-            Continue();
+            IsLinguisticsWindowOpen = true;
+            lw.Show();
+
+            //Pause();
+            //tw.ShowDialog();
+            //Continue();
         }
 
-        bool CanAddNew(Type t) => t != null;
+        bool CanAddNew(Type t) => t != null && t.IsSubclassOf(typeof(Page)) && !IsAddNewWindowOpen;
         void AddNew(Type t)
         {
-            var tw = App.Current.ServiceProvider.GetRequiredService<AddAbbreviationWindow>();
+            var aaw = App.Current.ServiceProvider.GetRequiredService<AddAbbreviationWindow>();
             var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;// Activator.CreateInstance(t) as Page;//new Pages.SimpleAbbreviationPage();
 
-            tw.Content = p;
+            aaw.Content = p;
 
+            aaw.Closed += delegate
+            {
+                IsAddNewWindowOpen = false;
+                Continue();
+            };
+            IsAddNewWindowOpen = true;
             Pause();
-            tw.ShowDialog();
-            Continue();
+            aaw.Show();
+            //Pause();
+            //aaw.ShowDialog();
+            //Continue();
         }
 
-        bool CanSeeAll() => _storage.Count > 0;
+        bool CanSeeAll() => _storage.Count > 0 && !IsSeeAllWindowOpen;
         public void SeeAll()
         {
             var saw = App.Current.ServiceProvider.GetRequiredService<SeeAllWindow>();
 
+            saw.Closed += delegate
+            {
+                IsSeeAllWindowOpen = false;
+                Continue();
+            };
+            IsSeeAllWindowOpen = true;
             Pause();
-            saw.ShowDialog();
-            Continue();
+            saw.Show();
+            //Pause();
+            //saw.ShowDialog();
+            //Continue();
         }
 
         #region IKeyboardListenerHandler
-
         bool CanChoose() => CurrentListenerState == ListenerStates.Choosing;
         void Choose(BaseAbbreviation abbrev)
         {

@@ -3,14 +3,16 @@ using System;
 using FasType.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FasType.Migrations
 {
     [DbContext(typeof(EFSqliteAbbreviationContext))]
-    partial class EFSqliteContextModelSnapshot : ModelSnapshot
+    [Migration("20201203154216_AddOtherShortForms")]
+    partial class AddOtherShortForms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

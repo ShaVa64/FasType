@@ -22,10 +22,10 @@ namespace FasType.Windows
             InitializeComponent();
             Owner = App.Current.MainWindow;
 
-            KeyDown += ToolWindow_KeyDown;
+            //KeyDown += AddAbbreviationWindow_KeyDown;
         }
 
-        private void ToolWindow_KeyDown(object sender, KeyEventArgs e)
+        private void AddAbbreviationWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
                 Close();

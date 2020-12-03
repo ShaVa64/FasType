@@ -242,4 +242,7 @@
   <data name="DeleteMethodDialog" xml:space="preserve">
     <value>Are you sure to delete this abbreviation method ?</value>
   </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Settings</value>
+  </data>
 </root>

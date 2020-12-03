@@ -28,27 +28,11 @@
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="NameTextBlock" Grid.Column="0" Style="{StaticResource SharedStyle}"
                    TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBox Grid.Column="1" Text="{Binding Repr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="1" Width="18"
-                 TextAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" VerticalAlignment="Center">
-            <TextBox.Style>
-                <Style TargetType="TextBox" BasedOn="{StaticResource SharedStyle}">
-                    <Style.Triggers>
-                        <Trigger Property="Text" Value="">
-                            <Setter Property="BorderBrush" Value="Red"/>
-                        </Trigger>
-                    </Style.Triggers>
-                    <Setter Property="BorderBrush" Value="#aaa"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="TextBox">
-                                <Border BorderThickness="1.2" BorderBrush="{TemplateBinding BorderBrush}" x:Name="border" Padding="1">
-                                    <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TextBox.Style>
+        <TextBox Grid.Column="1" MaxLength="1" Width="18" Padding="1"
+                 Text="{Binding Repr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 TextAlignment="Center" VerticalContentAlignment="Center"
+                 HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                 Style="{StaticResource EmptyTextBox}">
         </TextBox>
         <StackPanel Grid.Column="2" Orientation="Horizontal" Style="{StaticResource SharedStyle}">
             <TextBlock Text="{x:Static prop:Resources.Prefix}" Margin="2, 5"

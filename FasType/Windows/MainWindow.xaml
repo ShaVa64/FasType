@@ -3,34 +3,36 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:prop="clr-namespace:FasType.Properties"
-        xmlns:local="clr-namespace:FasType"
-        xmlns:page="clr-namespace:FasType.Pages"
-        xmlns:vm="clr-namespace:FasType.ViewModels" 
-        xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
-        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
-        mc:Ignorable="d" ResizeMode="CanMinimize"
-        Topmost="True" WindowStartupLocation="Manual"
-        Title="{x:Static prop:Resources.AppName}"
-        Height="300" Width="250">
+        xmlns:prop="clr-namespace:FasType.Properties" xmlns:local="clr-namespace:FasType"
+        xmlns:page="clr-namespace:FasType.Pages" xmlns:vm="clr-namespace:FasType.ViewModels" 
+        xmlns:cvt="clr-namespace:FasType.Converters.Xaml"  d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
+        mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True" WindowStartupLocation="Manual"
+        Title="{x:Static prop:Resources.AppName}" Height="300" Width="250">
 
     <Window.Resources>
-        <cvt:AbbreviationToFormConverter x:Key="AbbreviationToForm"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Dictionaries\MenuItemDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <cvt:AbbreviationToFormConverter x:Key="AbbreviationToForm"/>
+        </ResourceDictionary>
     </Window.Resources>
 
     <DockPanel>
         <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
-            <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
+            <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={ex:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
             <Menu>
-                <MenuItem Header="{x:Static prop:Resources.AddNewHeader}">
+                <MenuItem Header="{x:Static prop:Resources.AddNewHeader}" >
                     <MenuItem Header="{x:Static prop:Resources.SimpleAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
                     <MenuItem Header="{x:Static prop:Resources.VerbAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Null}"/>
                 </MenuItem>
                 <MenuItem Header="{x:Static prop:Resources.SeeAllHeader}" Command="{Binding SeeAllCommand}"/>
-                <MenuItem Header="{x:Static prop:Resources.LinguisticsHeader}" Command="{Binding OpenLinguisticsCommand}"/>
-            </Menu>
-            <Menu ToolBar.OverflowMode="Always">
-                <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
+                <MenuItem Header="{x:Static prop:Resources.SettingsHeader}">
+                    <MenuItem Header="{x:Static prop:Resources.LinguisticsHeader}" Command="{Binding OpenLinguisticsCommand}"/>
+                    <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" Style="{StaticResource ClearCheckMenuItem}"
+                              IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
+                </MenuItem>
             </Menu>
         </ToolBar>
 

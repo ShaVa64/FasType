@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore.Design;
 using FasType.Utils;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
+using FasType.Models.Abbreviations;
 
 namespace FasType.Storage
 {
@@ -61,10 +63,33 @@ namespace FasType.Storage
         void SetGrammarType(GrammarTypeRecord gtr)
         {
             GrammarTypeRecord record = GrammarTypes.Find(gtr.Name);
+            if (gtr == record)
+                return;
             if (record is not null)
                 GrammarTypes.Remove(record);
             GrammarTypes.Add(gtr);
 
+            using var _context = App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>() as EFSqliteAbbreviationContext;
+
+            var l = _context.Abbreviations.OfType<SimpleAbbreviation>().ToList();
+            l.ForEach(sa =>
+            {
+                if (gtr.Name == nameof(GenderType))
+                {
+                    sa.ShortGenderForm = gtr.Grammarify(sa.ShortForm);
+                }
+                if (gtr.Name == nameof(PluralType))
+                {
+                    sa.ShortPluralForm = gtr.Grammarify(sa.ShortForm);
+                }
+                if (gtr.Name == nameof(GenderPluralType))
+                {
+                    sa.ShortGenderPluralForm = gtr.Grammarify(sa.ShortForm);
+                }
+            });
+
+            _context.UpdateRange(l);
+            _context.SaveChanges();
             SaveChanges();
         }
 

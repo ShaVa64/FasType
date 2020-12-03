@@ -20,6 +20,17 @@ namespace FasType.Models
             return true;
         }
 
+        protected bool SetProperty<T>(ref T backingStore, T value, Action ifTrue, [CallerMemberName] string propertyName = "")
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            OnPropertyChanged(propertyName);
+            ifTrue();
+            return true;
+        }
+
         protected bool SetProperty<T>(ref T backingStore, T value, bool checkEquals, [CallerMemberName] string propertyName = "")
         {
             if (checkEquals && EqualityComparer<T>.Default.Equals(backingStore, value))

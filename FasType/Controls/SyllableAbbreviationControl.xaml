@@ -35,23 +35,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="EmptyTextBox" TargetType="TextBox">
-            <Style.Triggers>
-                <Trigger Property="Text" Value="">
-                    <Setter Property="BorderBrush" Value="Red"/>
-                </Trigger>
-            </Style.Triggers>
-            <Setter Property="BorderBrush" Value="#aaa"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border BorderThickness="1.2" BorderBrush="{TemplateBinding BorderBrush}" x:Name="border">
-                            <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <cvt:EnumToColorConverter x:Key="EnumToColor"/>
     </UserControl.Resources>
 

@@ -4,6 +4,7 @@ using FasType.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace FasType.Storage
 {
     public class EFSqliteAbbreviationContext : DbContext, IAbbreviationStorage
     {
+        protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
         public int Count => Abbreviations.Count();
         public DbSet<BaseAbbreviation> Abbreviations { get; set; }
 
@@ -82,7 +84,7 @@ namespace FasType.Storage
 
         public bool Contains(BaseAbbreviation abbrev)
         {
-            var b = Abbreviations.Where(a => a.FullForm == abbrev.FullForm && a.ShortForm == abbrev.ShortForm).Count();
+            var b = Abbreviations.Where(a => a.FullForm == abbrev.FullForm /*&& a.ShortForm == abbrev.ShortForm*/).Count();
             return b > 0;
         }
 
@@ -109,7 +111,10 @@ namespace FasType.Storage
 
         public IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm)
         {
-            var l = Abbreviations.AsEnumerable().Where(a =>  a.IsAbbreviation(shortForm)).OrderByDescending(a => a.Used).ToList();
+            var l = Abbreviations.OfType<SimpleAbbreviation>().Where(a => shortForm == a.ShortForm
+                                                                          || shortForm == a.ShortGenderForm
+                                                                          || shortForm == a.ShortPluralForm
+                                                                          || shortForm == a.ShortGenderPluralForm)/*.OrderByDescending(a => a.Used)*/.ToList();
             return l;
         }
 

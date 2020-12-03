@@ -26,7 +26,7 @@
         </Style>-->
     </Window.Resources>
 
-    <StackPanel Orientation="Vertical" Margin="0, 0, 0, 5">
+    <StackPanel Orientation="Vertical" Margin="5">
         <TextBlock Style="{StaticResource SettingTitleStyle}" Text="{x:Static prop:Resources.Grammar}" Margin="0"/>
         <Separator/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" DataContext="{Binding GenderContext}"/>
@@ -74,7 +74,7 @@
         </Grid>
         <Separator/>
 
-        <Grid Margin="5, 20, 5, 0">
+        <Grid Margin="5, 20, 5, 5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>

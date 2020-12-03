@@ -1,2 +1,11 @@
+TODOS:
+- !!!! Faster abbrevation searching !!!!
+- Duplicate abbrevs on FullForm
+- Multiple Window appearence
+- myinputbox ?
+- Other forms auto-completion
+
+
+
+QUESTIONS:
 - #used by abbreviation or form ?
-- 

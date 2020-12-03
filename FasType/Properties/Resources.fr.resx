@@ -234,4 +234,7 @@
   <data name="VerbAbbrevHeader" xml:space="preserve">
     <value>Abrev. de _Verbe</value>
   </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Préférences</value>
+  </data>
 </root>

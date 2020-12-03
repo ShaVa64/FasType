@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Disabled"  VerticalScrollBarVisibility="Auto">
-            <StackPanel Orientation="Vertical" Margin="0, 0, 0, 5">
+            <StackPanel Orientation="Vertical" Margin="5">
                 <ItemsControl HorizontalContentAlignment="Stretch" ItemsSource="{Binding Syllables}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -79,7 +79,7 @@
         </ScrollViewer>
         
         <!--<Button Grid.Column="0" Content="Reset" IsEnabled="False"/>-->
-        <Button Grid.Row="1" Grid.Column="2" Content="{x:Static prop:Resources.Save}" Command="{Binding SaveCommand}" Margin="5"
+        <Button Grid.Row="1" Grid.Column="2" Content="{x:Static prop:Resources.Save}" Command="{Binding SaveCommand}" Margin="8"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
     </Grid>
 </Window>

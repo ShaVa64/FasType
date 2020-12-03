@@ -367,6 +367,15 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Settings.
+        /// </summary>
+        public static string SettingsHeader {
+            get {
+                return ResourceManager.GetString("SettingsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Short Form.
         /// </summary>
         public static string ShortForm {

@@ -20,8 +20,8 @@ namespace FasType.Models.Abbreviations
         protected readonly static string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
 
         [Key] public Guid Key { get; private set; }
-        [Required] [Column(TypeName = "varchar(50)")] public string ShortForm { get; private set; }
-        [Required] [Column(TypeName = "varchar(50)")] public string FullForm { get; private set; }
+        [Required, MaxLength(50)] public string ShortForm { get; private set; }
+        [Required, MaxLength(50)] public string FullForm { get; private set; }
         [Required] public ulong Used { get; private set; }
 
 

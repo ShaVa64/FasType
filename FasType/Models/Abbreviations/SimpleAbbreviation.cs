@@ -12,7 +12,6 @@ namespace FasType.Models.Abbreviations
 {
     public class SimpleAbbreviation : BaseAbbreviation
     {
-
         //string IAbbreviation.ShortForm => ShortForm;
         //string IAbbreviation.FullForm => FullForm;
 
@@ -23,9 +22,13 @@ namespace FasType.Models.Abbreviations
         public bool HasGender => !string.IsNullOrEmpty(GenderForm);
         public bool HasGenderPlural => !string.IsNullOrEmpty(GenderPluralForm);
 
-        [Required] [Column(TypeName = "varchar(50)")] public string GenderForm { get; private set; }
-        [Required] [Column(TypeName = "varchar(50)")] public string PluralForm { get; private set; }
-        [Required] [Column(TypeName = "varchar(50)")] public string GenderPluralForm { get; private set; }
+        [MaxLength(50)] public string ShortGenderForm { get; internal set; }
+        [MaxLength(50)] public string ShortPluralForm { get; internal set; }
+        [MaxLength(50)] public string ShortGenderPluralForm { get; internal set; }
+
+        [MaxLength(50)] public string GenderForm { get; private set; }
+        [MaxLength(50)] public string PluralForm { get; private set; }
+        [MaxLength(50)] public string GenderPluralForm { get; private set; }
 
         public SimpleAbbreviation(string shortForm, string fullForm, ulong used, string genderForm, string pluralForm, string genderPluralForm)
             : base(shortForm.ToLower(), fullForm.ToLower(), used) 
@@ -33,6 +36,10 @@ namespace FasType.Models.Abbreviations
             PluralForm = pluralForm;
             GenderForm = genderForm;
             GenderPluralForm = genderPluralForm;
+
+            ShortGenderForm = Linguistics.GenderType.Grammarify(ShortForm);
+            ShortPluralForm = Linguistics.PluralType.Grammarify(ShortForm);
+            ShortGenderPluralForm = Linguistics.GenderPluralType.Grammarify(ShortForm);
         }
 
         public override bool IsAbbreviation(string shortForm)
@@ -41,11 +48,11 @@ namespace FasType.Models.Abbreviations
 
             if (sf == ShortForm)
                 return true;
-            if (HasGender && sf == Linguistics.GenderType.Grammarify(ShortForm))
+            if (HasGender && sf == ShortGenderForm)
                 return true;
-            if (HasPlural && sf == Linguistics.PluralType.Grammarify(ShortForm))
+            if (HasPlural && sf == ShortPluralForm)
                 return true;
-            if (HasGenderPlural && sf == Linguistics.GenderPluralType.Grammarify(ShortForm))
+            if (HasGenderPlural && sf == ShortGenderPluralForm)
                 return true;
 
             return false;
@@ -57,11 +64,11 @@ namespace FasType.Models.Abbreviations
 
             if (sf == ShortForm)
                 return FullForm;
-            if (HasGender && sf == Linguistics.GenderType.Grammarify(ShortForm))
+            if (HasGender && sf == ShortGenderForm)
                 return GenderForm;
-            if (HasPlural && sf == Linguistics.PluralType.Grammarify(ShortForm))
+            if (HasPlural && sf == ShortPluralForm)
                 return PluralForm;
-            if (HasGenderPlural && sf == Linguistics.GenderPluralType.Grammarify(ShortForm))
+            if (HasGenderPlural && sf == ShortGenderPluralForm)
                 return GenderPluralForm;
 
             return null;

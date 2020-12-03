@@ -26,6 +26,7 @@ namespace FasType.ViewModels
         readonly ILinguisticsStorage _storage;
         readonly IConfiguration _config;
 
+        public static bool IsMethodWindowOpen { get; private set; }
         public Command<Window> SaveCommand { get; }
         public Command OpenSyllableCommand { get; }
         public Command ResetCommand { get; }
@@ -41,10 +42,11 @@ namespace FasType.ViewModels
             //SettingsToProperties();
             _storage = storage;
             _config = configuration;
+            IsMethodWindowOpen = false;
 
             SaveCommand = new(Save, CanSave);
-            OpenSyllableCommand = new(OpenSyllable);
-            ResetCommand = new(Reset);
+            OpenSyllableCommand = new(OpenSyllable, CanOpenSyllable);
+            ResetCommand = new(Reset, CanReset);
 
             GenderContext       = storage.GenderType;      //(GrammarType)UserGrammar.GenderRecord;
             PluralContext       = storage.PluralType;      //(GrammarType)UserGrammar.PluralRecord;
@@ -77,6 +79,7 @@ namespace FasType.ViewModels
         //    return true;
         //}
 
+        bool CanReset() => !IsMethodWindowOpen;
         void Reset()
         {
             string path = _config.GetSection("Paths")["DefaultLinguistics"];
@@ -92,10 +95,17 @@ namespace FasType.ViewModels
             OnPropertyChanged(string.Empty);
         }
 
+        bool CanOpenSyllable() => !IsMethodWindowOpen;
         void OpenSyllable()
         {
             var w = App.Current.ServiceProvider.GetRequiredService<SyllableAbbreviationWindow>();
-            w.ShowDialog();
+
+            w.Closed += delegate
+            {
+                IsMethodWindowOpen = false;
+            };
+            IsMethodWindowOpen = true;
+            w.Show();
         }
 
         static bool CanSave(GrammarType context, GrammarTypeRecord record)

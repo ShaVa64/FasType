@@ -24,7 +24,7 @@ namespace FasType.Windows
         {
             InitializeComponent();
 
-            KeyDown += LinguisticsWindow_KeyDown;
+            //KeyDown += LinguisticsWindow_KeyDown;
             DataContext /*= _vm */= vm;
         }
 
