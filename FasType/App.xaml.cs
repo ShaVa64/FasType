@@ -72,9 +72,6 @@ namespace FasType
             services.AddSingleton(Configuration);
             services.AddSingleton<MainWindow>();
             services.AddTransient<MainWindowViewModel>();
-
-            //services.AddSingleton<IDataStorage, FileDataStorage>();
-            //services.AddTransient<IKeyboardListenerHandler, KeyboardListenerHandler>();
             
             services.AddTransient<AddAbbreviationWindow>();
             services.AddTransient<SimpleAbbreviationPage>();
@@ -150,41 +147,41 @@ namespace FasType
             _context.AddRange(simples);
         }
 
-        void F()
-        {
-            string fp = @"D:\Visual Studio Projects\FasType\Docs\méthode abréviation.txt";
+        //void F()
+        //{
+        //    string fp = @"D:\Visual Studio Projects\FasType\Docs\méthode abréviation.txt";
 
-            using var stream = new FileStream(fp, FileMode.Open, FileAccess.Read);
-            using var reader = new StreamReader(stream);
+        //    using var stream = new FileStream(fp, FileMode.Open, FileAccess.Read);
+        //    using var reader = new StreamReader(stream);
 
-            using var _context = ServiceProvider.GetRequiredService<ILinguisticsStorage>();
+        //    using var _context = ServiceProvider.GetRequiredService<ILinguisticsStorage>();
 
 
-            var methods = new List<SyllableAbbreviation>();
-            string l = reader.ReadLine();
-            while ((l = reader.ReadLine()) != null)
-            {
-                var sp = l.Replace("\"", string.Empty).Split(';');
+        //    var methods = new List<SyllableAbbreviation>();
+        //    string l = reader.ReadLine();
+        //    while ((l = reader.ReadLine()) != null)
+        //    {
+        //        var sp = l.Replace("\"", string.Empty).Split(';');
 
-                string ff = sp[0];
-                string sf = sp[1];
-                SyllablePosition p = SyllablePosition.None;
-                if (sp[2] == "1")
-                    p |= SyllablePosition.Before;
-                if (sp[3] == "1")
-                    p |= SyllablePosition.In;
-                if (sp[4] == "1")
-                    p |= SyllablePosition.After;
+        //        string ff = sp[0];
+        //        string sf = sp[1];
+        //        SyllablePosition p = SyllablePosition.None;
+        //        if (sp[2] == "1")
+        //            p |= SyllablePosition.Before;
+        //        if (sp[3] == "1")
+        //            p |= SyllablePosition.In;
+        //        if (sp[4] == "1")
+        //            p |= SyllablePosition.After;
 
-                methods.Add(new SyllableAbbreviation(Guid.NewGuid(), sf, ff, p));
-                //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
-            }
-            _context.AbbreviationMethods = methods;
+        //        methods.Add(new SyllableAbbreviation(Guid.NewGuid(), sf, ff, p));
+        //        //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+        //    }
+        //    _context.AbbreviationMethods = methods;
 
-            var x = System.Text.Json.JsonSerializer.Serialize(_context);
-            var xx = System.Text.Json.JsonSerializer.Deserialize<LinguisticsDTO>(x);
-            //var x = System.Text.Json.JsonSerializer.Serialize(methods);
-        }
+        //    var x = System.Text.Json.JsonSerializer.Serialize(_context);
+        //    var xx = System.Text.Json.JsonSerializer.Deserialize<LinguisticsDTO>(x);
+        //    //var x = System.Text.Json.JsonSerializer.Serialize(methods);
+        //}
 
         protected override void OnExit(ExitEventArgs e)
         {

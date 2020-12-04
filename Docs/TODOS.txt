@@ -1,9 +1,8 @@
 TODOS:
-- !!!! Faster abbrevation searching !!!!
+- Other forms auto-completion
 - Duplicate abbrevs on FullForm
 - Multiple Window appearence
 - myinputbox ?
-- Other forms auto-completion
 
 
 

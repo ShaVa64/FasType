@@ -23,7 +23,7 @@ namespace FasType.ViewModels
         string _currentWord;
         readonly LowLevelKeyboardListener _listener;
         ListenerStates _currentListenerState;
-        static IAbbreviationStorage _storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
+        readonly IAbbreviationStorage _storage;
         BaseAbbreviation _choosedAbbrev;
         List<BaseAbbreviation> _matchingAbbrevs;
         int _abbrevIndex;
@@ -58,11 +58,13 @@ namespace FasType.ViewModels
         public Command<BaseAbbreviation> ChooseCommand { get; }
         public Command OpenLinguisticsCommand { get; }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IAbbreviationStorage storage)
         {
             CurrentWord = string.Empty;
             _listener = new();
+            _storage = storage;
             CurrentListenerState = ListenerStates.Inserting;
+            
             IsLinguisticsWindowOpen = false;
             IsSeeAllWindowOpen = false;
             IsAddNewWindowOpen = false;

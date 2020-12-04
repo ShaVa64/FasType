@@ -22,10 +22,6 @@ namespace FasType.Models.Abbreviations
         public bool HasGender => !string.IsNullOrEmpty(GenderForm);
         public bool HasGenderPlural => !string.IsNullOrEmpty(GenderPluralForm);
 
-        [MaxLength(50)] public string ShortGenderForm { get; internal set; }
-        [MaxLength(50)] public string ShortPluralForm { get; internal set; }
-        [MaxLength(50)] public string ShortGenderPluralForm { get; internal set; }
-
         [MaxLength(50)] public string GenderForm { get; private set; }
         [MaxLength(50)] public string PluralForm { get; private set; }
         [MaxLength(50)] public string GenderPluralForm { get; private set; }
@@ -36,10 +32,6 @@ namespace FasType.Models.Abbreviations
             PluralForm = pluralForm;
             GenderForm = genderForm;
             GenderPluralForm = genderPluralForm;
-
-            ShortGenderForm = Linguistics.GenderType.Grammarify(ShortForm);
-            ShortPluralForm = Linguistics.PluralType.Grammarify(ShortForm);
-            ShortGenderPluralForm = Linguistics.GenderPluralType.Grammarify(ShortForm);
         }
 
         public override bool IsAbbreviation(string shortForm)
@@ -48,11 +40,11 @@ namespace FasType.Models.Abbreviations
 
             if (sf == ShortForm)
                 return true;
-            if (HasGender && sf == ShortGenderForm)
+            if (HasGender && sf == Linguistics.GenderType.Grammarify(ShortForm))
                 return true;
-            if (HasPlural && sf == ShortPluralForm)
+            if (HasPlural && sf == Linguistics.PluralType.Grammarify(ShortForm))
                 return true;
-            if (HasGenderPlural && sf == ShortGenderPluralForm)
+            if (HasGenderPlural && sf == Linguistics.GenderPluralType.Grammarify(ShortForm))
                 return true;
 
             return false;
@@ -64,11 +56,11 @@ namespace FasType.Models.Abbreviations
 
             if (sf == ShortForm)
                 return FullForm;
-            if (HasGender && sf == ShortGenderForm)
+            if (HasGender && sf == Linguistics.GenderType.Grammarify(ShortForm))
                 return GenderForm;
-            if (HasPlural && sf == ShortPluralForm)
+            if (HasPlural && sf == Linguistics.PluralType.Grammarify(ShortForm))
                 return PluralForm;
-            if (HasGenderPlural && sf == ShortGenderPluralForm)
+            if (HasGenderPlural && sf == Linguistics.GenderPluralType.Grammarify(ShortForm))
                 return GenderPluralForm;
 
             return null;

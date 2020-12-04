@@ -12,10 +12,13 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0" Text="{Binding ComplexRepresentation}" Margin="10, 5, 2, 5"
                    VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Left"/>
-        <Button Grid.Column="1" Width="20" Height="20" Style="{StaticResource RedButtonStyle}" Padding="5, 0" Margin="2, 5, 10, 5"
+        <TextBlock Grid.Column="1" Text="{Binding Used, StringFormat='({0})'}" Margin="5" FontStyle="Italic"
+                   VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Right"/>
+        <Button Grid.Column="2" Width="20" Height="20" Style="{StaticResource RedButtonStyle}" Padding="5, 0" Margin="2, 5, 10, 5"
                 HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveCommand}" CommandParameter="{Binding .}">
             <Button.Content>

@@ -111,10 +111,15 @@ namespace FasType.Storage
 
         public IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm)
         {
-            var l = Abbreviations.OfType<SimpleAbbreviation>().Where(a => shortForm == a.ShortForm
-                                                                          || shortForm == a.ShortGenderForm
-                                                                          || shortForm == a.ShortPluralForm
-                                                                          || shortForm == a.ShortGenderPluralForm)/*.OrderByDescending(a => a.Used)*/.ToList();
+            var forms = new List<string>() { shortForm };
+            if (Linguistics.GenderType.Ungrammarify(shortForm, out string form))
+                forms.Add(form);
+            if (Linguistics.PluralType.Ungrammarify(shortForm, out form))
+                forms.Add(form);
+            if (Linguistics.GenderPluralType.Ungrammarify(shortForm, out form))
+                forms.Add(form);
+
+            var l = Abbreviations.Where(a => forms.Contains(a.ShortForm))/*.OrderByDescending(a => a.Used)*/.ToList();
             return l;
         }
 
