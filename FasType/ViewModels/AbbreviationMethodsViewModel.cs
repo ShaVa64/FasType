@@ -14,22 +14,22 @@ using FasType.Services;
 
 namespace FasType.ViewModels
 {
-    public class SyllableAbbreviationViewModel : ObservableObject
+    public class AbbreviationMethodsViewModel : ObservableObject
     {
         readonly ILinguisticsStorage _storage;
-        readonly SyllableAbbreviationRecord[] _arr;
-        ObservableCollection<SyllableAbbreviation> _syllables;
+        readonly AbbreviationMethodRecord[] _arr;
+        ObservableCollection<AbbreviationMethod> _syllables;
 
         public string Title => Resources.AbbreviationMethod + $"  ({Syllables.Count})";
         public Command<Window> SaveCommand { get; }
-        public Command<SyllableAbbreviation> RemoveSyllableCommand { get; }
+        public Command<AbbreviationMethod> RemoveSyllableCommand { get; }
         public Command AddSyllableCommand { get; }
-        public ObservableCollection<SyllableAbbreviation> Syllables { get => _syllables; set => SetProperty(ref _syllables, value); }
+        public ObservableCollection<AbbreviationMethod> Syllables { get => _syllables; set => SetProperty(ref _syllables, value); }
 
-        public SyllableAbbreviationViewModel(ILinguisticsStorage storage)
+        public AbbreviationMethodsViewModel(ILinguisticsStorage storage)
         {
             _storage = storage;
-            _arr = _storage.AbbreviationMethods.Cast<SyllableAbbreviationRecord>().ToArray();
+            _arr = _storage.AbbreviationMethods.Cast<AbbreviationMethodRecord>().ToArray();
             Syllables = new(_storage.AbbreviationMethods);//new(UserGrammar.SyllabesAbbreviations.Cast<SyllableAbbreviation>());
 
             AddSyllableCommand = new(AddSyllable);
@@ -43,7 +43,7 @@ namespace FasType.ViewModels
             OnPropertyChanged(nameof(Title));
         }
 
-        void RemoveSyllable(SyllableAbbreviation sa)
+        void RemoveSyllable(AbbreviationMethod sa)
         {
             var r = MessageBox.Show(Resources.DeleteMethodDialog, Resources.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
     
@@ -54,7 +54,7 @@ namespace FasType.ViewModels
             }
         }
 
-        bool CanSaveSyllable(SyllableAbbreviation sa) => !string.IsNullOrEmpty(sa.ShortForm) && !string.IsNullOrEmpty(sa.FullForm) && sa.Position != SyllablePosition.None;
+        bool CanSaveSyllable(AbbreviationMethod sa) => !string.IsNullOrEmpty(sa.ShortForm) && !string.IsNullOrEmpty(sa.FullForm) && sa.Position != SyllablePosition.None;
         bool CanSave()
         {
             if (!Syllables.All(CanSaveSyllable))
@@ -63,7 +63,7 @@ namespace FasType.ViewModels
             if (Syllables.Count != _arr.Length)
                 return true;
 
-            if (Syllables.Any(sa => !_arr.Contains((SyllableAbbreviationRecord)sa)))
+            if (Syllables.Any(sa => !_arr.Contains((AbbreviationMethodRecord)sa)))
                 return true;
 
             return false;

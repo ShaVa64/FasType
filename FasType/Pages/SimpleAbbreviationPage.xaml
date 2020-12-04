@@ -3,13 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:FasType.Pages"
-      xmlns:prop="clr-namespace:FasType.Properties" 
-      xmlns:viewmodels="clr-namespace:FasType.ViewModels" 
-      d:DataContext="{d:DesignInstance Type=viewmodels:SimpleAbbreviationViewModel}"
-      mc:Ignorable="d"
-      WindowHeight="310" WindowWidth="270" WindowTitle="{x:Static prop:Resources.SimpleAbbrevTitle}"
-      d:DesignHeight="200" d:DesignWidth="200"
+      xmlns:local="clr-namespace:FasType.Pages" xmlns:prop="clr-namespace:FasType.Properties" 
+      xmlns:vm="clr-namespace:FasType.ViewModels" 
+      d:DataContext="{d:DesignInstance Type=vm:SimpleAbbreviationViewModel}"
+      mc:Ignorable="d" WindowTitle="{x:Static prop:Resources.SimpleAbbrevTitle}"
+      WindowHeight="310" WindowWidth="270" d:DesignHeight="310" d:DesignWidth="270"
       Title="SimpleAbbreviationPage" x:Name="Page">
 
     <Page.Resources>
@@ -63,6 +61,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0"
                    Content="{x:Static prop:Resources.ShortForm}" ContentStringFormat="{}{0}:"/>
@@ -86,14 +85,21 @@
                    Content="{x:Static prop:Resources.GnPForm}" ContentStringFormat="{}{0}:"/>
             <TextBox Grid.Row="4" Grid.Column="1"
                      Text="{Binding GenderPluralForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <StackPanel Grid.Row="5" Grid.Column="1">
+                <CheckBox Margin="0, 5" IsChecked="{Binding AutoComplete}"
+                          Content="Auto-complete" HorizontalAlignment="Right"/>
+                <Button Content="{x:Static prop:Resources.Linguistics}" Command="{Binding OpenLinguisticsCommand}"/>
+            </StackPanel>
         </Grid>
 
         <Button Command="{Binding CreateNewCommand}" CommandParameter="{x:Reference Page}"
                 Content="{x:Static prop:Resources.Add}" 
                 DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        
-        <TextBlock Text="{Binding Preview, Mode=OneWay}"
-                   TextAlignment="Center" VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
+
+        <Border MinHeight="100">
+            <TextBlock Text="{Binding Preview, Mode=OneWay}"
+                       TextAlignment="Center" VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+        </Border>
     </DockPanel>
 </Page>

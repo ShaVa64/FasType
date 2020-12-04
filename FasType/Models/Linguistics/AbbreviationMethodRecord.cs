@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FasType.Models.Linguistics
 {
-    public record SyllableAbbreviationRecord(Guid Key, string ShortForm, string FullForm, SyllablePosition Position)
+    public record AbbreviationMethodRecord(Guid Key, string ShortForm, string FullForm, SyllablePosition Position)
     {
         public bool IsBefore => Position.HasFlag(SyllablePosition.Before);
         public bool IsIn => Position.HasFlag(SyllablePosition.In);
@@ -15,7 +15,7 @@ namespace FasType.Models.Linguistics
         public override string ToString() => $"{ShortForm} {Utils.Unicodes.Arrow} {FullForm} ({Position})";
     }
 
-    public class SyllableAbbreviation : ObservableObject
+    public class AbbreviationMethod : ObservableObject
     {
         string _shortForm, _fullForm;
         bool _isBefore, _isIn, _isAfter;
@@ -54,7 +54,7 @@ namespace FasType.Models.Linguistics
 
         public SyllablePosition Position => (SyllablePosition)((IsBefore ? 1 : 0) + (IsIn ? 2 : 0) + (IsAfter ? 4 : 0));
 
-        public SyllableAbbreviation(Guid key, string shortForm, string fullForm, SyllablePosition position)
+        public AbbreviationMethod(Guid key, string shortForm, string fullForm, SyllablePosition position)
         {
             Key = key;
             ShortForm = shortForm;
@@ -66,8 +66,8 @@ namespace FasType.Models.Linguistics
 
         public override string ToString() => $"{ShortForm} {Utils.Unicodes.Arrow} {FullForm} ({Position})";
 
-        public static explicit operator SyllableAbbreviationRecord(SyllableAbbreviation sa) => new(sa.Key, sa.ShortForm, sa.FullForm, sa.Position);
-        public static explicit operator SyllableAbbreviation(SyllableAbbreviationRecord sar) => new(sar.Key, sar.ShortForm, sar.FullForm, sar.Position);
+        public static explicit operator AbbreviationMethodRecord(AbbreviationMethod sa) => new(sa.Key, sa.ShortForm, sa.FullForm, sa.Position);
+        public static explicit operator AbbreviationMethod(AbbreviationMethodRecord sar) => new(sar.Key, sar.ShortForm, sar.FullForm, sar.Position);
     }
 
     [Flags] public enum SyllablePosition

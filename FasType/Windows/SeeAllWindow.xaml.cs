@@ -20,15 +20,18 @@ namespace FasType.Windows
     /// </summary>
     public partial class SeeAllWindow : Window
     {
-        readonly SeeAllViewModel _vm;
+        public static bool IsOpen { get; private set; }
 
+        static SeeAllWindow() => IsOpen = false;
         public SeeAllWindow(SeeAllViewModel vm)
         {
             InitializeComponent();
             Owner = App.Current.MainWindow;
 
-            //KeyDown += SeeAllWindow_KeyDown;
-            DataContext = _vm = vm;
+            IsOpen = true;
+            Closed += delegate { IsOpen = false; };
+
+            DataContext = vm;
         }
 
         private void SeeAllWindow_KeyDown(object sender, KeyEventArgs e)

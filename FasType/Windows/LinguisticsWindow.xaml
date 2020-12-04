@@ -29,9 +29,15 @@
     <StackPanel Orientation="Vertical" Margin="5">
         <TextBlock Style="{StaticResource SettingTitleStyle}" Text="{x:Static prop:Resources.Grammar}" Margin="0"/>
         <Separator/>
-        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" DataContext="{Binding GenderContext}"/>
-        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Plural}" DataContext="{Binding PluralContext}"/>
-        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.GnP}" DataContext="{Binding GenderPluralContext}"/>
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" 
+                                 DataContext="{Binding GenderTypeContext}"
+                                 MaxLength="1" TextBoxWidth="18"/>
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Plural}" 
+                                 DataContext="{Binding PluralTypeContext}"
+                                 MaxLength="1" TextBoxWidth="18" />
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.GnP}" 
+                                 DataContext="{Binding GenderPluralTypeContext}"
+                                 MaxLength="1" TextBoxWidth="18" />
         <!--<Separator/>-->
         <!--<ItemsControl ItemsSource="{Binding Plurals}">
             <ItemsControl.ItemTemplate>
@@ -60,7 +66,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="5" 
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"
                        Style="{StaticResource SettingTitleStyle}" Text="{x:Static prop:Resources.AbbreviationMethod}"/>
             <Button Grid.Column="1" Content="{x:Static prop:Resources.Open}" HorizontalAlignment="Right" VerticalAlignment="Center"
                     BorderThickness="1.5" Margin="5" Padding="4, 2" Command="{Binding OpenSyllableCommand}">
@@ -72,6 +78,18 @@
             </Button>
 
         </Grid>
+        <Separator/>
+        <TextBlock Text="Default Completion" Style="{StaticResource SettingTitleStyle}"/>
+        <Separator/>
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" 
+                                 DataContext="{Binding GenderCompletionContext}" 
+                                 TextBoxWidth="30" MaxLength="2" />
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Plural}"
+                                 DataContext="{Binding PluralCompletionContext}"
+                                 TextBoxWidth="30" MaxLength="2" />
+        <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.GnP}"
+                                 DataContext="{Binding GenderPluralCompletionContext}"
+                                 TextBoxWidth="30" MaxLength="2" />
         <Separator/>
 
         <Grid Margin="5, 20, 5, 5">

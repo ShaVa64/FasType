@@ -18,14 +18,18 @@ namespace FasType.Windows
     /// </summary>
     public partial class LinguisticsWindow : Window
     {
-        //readonly LinguisticsViewModel _vm;
+        public static bool IsOpen { get; private set; }
 
+        static LinguisticsWindow() => IsOpen = false;
         public LinguisticsWindow(LinguisticsViewModel vm)
         {
             InitializeComponent();
+            IsOpen = true;
+
+            Closed += delegate { IsOpen = false; };
 
             //KeyDown += LinguisticsWindow_KeyDown;
-            DataContext /*= _vm */= vm;
+            DataContext = vm;
         }
 
         private void LinguisticsWindow_KeyDown(object sender, KeyEventArgs e)

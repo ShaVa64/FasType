@@ -10,24 +10,31 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Extensions.DependencyInjection;
+using FasType.Windows;
 
 namespace FasType.ViewModels
 {
     public class SimpleAbbreviationViewModel : ObservableObject
     {
-        readonly IAbbreviationStorage _storage;
+        static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
+        static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
+
         static readonly Brush _defaultBorderBrush = new SolidColorBrush(Color.FromRgb(170, 170, 170));
         static readonly Brush _duplicateBorderBrush = Brushes.DarkOrange;
         SimpleAbbreviation _currentAbbrev;
         string _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
         string _sfToolTip, _ffToolTip, _preview;
         Brush _borderBrush;
+        bool _autoComplete;
 
-        public string ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value, SetPreview); }
-        public string FullForm { get => _fullForm; set => SetProperty(ref _fullForm, value, SetPreview); }
-        public string GenderForm { get => _genderForm; set => SetProperty(ref _genderForm, value, SetPreview); }
-        public string PluralForm { get => _pluralForm; set => SetProperty(ref _pluralForm, value, SetPreview); }
-        public string GenderPluralForm { get => _genderPluralForm; set => SetProperty(ref _genderPluralForm, value, SetPreview); }
+        public bool AutoComplete { get => _autoComplete; set => SetProperty(ref _autoComplete, value); }
+
+        public string ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value/*, SetPreview*/); }
+        public string FullForm { get => _fullForm; set => SetProperty(ref _fullForm, value/*, SetPreview*/); }
+        public string GenderForm { get => _genderForm; set => SetProperty(ref _genderForm, value/*, SetPreview*/); }
+        public string PluralForm { get => _pluralForm; set => SetProperty(ref _pluralForm, value/*, SetPreview*/); }
+        public string GenderPluralForm { get => _genderPluralForm; set => SetProperty(ref _genderPluralForm, value/*, SetPreview*/); }
         
         public string SFToolTip { get => _sfToolTip; set => SetProperty(ref _sfToolTip, value); }
         public string FFToolTip { get => _ffToolTip; set => SetProperty(ref _ffToolTip, value); }
@@ -37,24 +44,45 @@ namespace FasType.ViewModels
         public string Preview { get => _preview; set => SetProperty(ref _preview, value); }
 
         public Command<Page> CreateNewCommand { get; set; }
+        public Command OpenLinguisticsCommand { get; set; }
 
-        public SimpleAbbreviationViewModel(IAbbreviationStorage storage)
+        public SimpleAbbreviationViewModel()
         {
-            _storage = storage;
             _currentAbbrev = null;
 
             CreateNewCommand = new(CreateNew, CanCreateNew);
+            OpenLinguisticsCommand = new(OpenLinguistics, CanOpenLinguistics);
 
             ShortForm = FullForm = GenderForm = PluralForm = GenderPluralForm = string.Empty;
             SFToolTip = FFToolTip = null;
             BorderBrush = _defaultBorderBrush;
+            AutoComplete = false;
+
+            this.PropertyChanged += SimpleAbbreviationViewModel_PropertyChanged;
 #if DEBUG
+            AutoComplete = true;
             ShortForm = "pss";
-            FullForm = "passé";
+            //FullForm = "passé";
             //GenderForm = "passée";
             //PluralForm = "passés";
             //GenderPluralForm = "passées";
 #endif
+        }
+
+        private void SimpleAbbreviationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.EndsWith("Form"))
+                SetPreview();
+            if (AutoComplete && (e.PropertyName == nameof(FullForm) || e.PropertyName == nameof(AutoComplete)))
+                ComputeAutoComplete();
+        }
+
+        bool CanOpenLinguistics() => !LinguisticsWindow.IsOpen;
+        void OpenLinguistics()
+        {
+            var lw = App.Current.ServiceProvider.GetRequiredService<LinguisticsWindow>();
+
+            lw.Show();
         }
 
         bool CanCreateNew() => !string.IsNullOrEmpty(FullForm) && !string.IsNullOrEmpty(ShortForm);
@@ -66,13 +94,13 @@ namespace FasType.ViewModels
                 return;
             }
 
-            if (_storage.Contains(_currentAbbrev))
+            if (Storage.Contains(_currentAbbrev))
             {
                 var message = string.Format(Resources.AlreadyExistsErrorFormat, Environment.NewLine, FullForm);
                 MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
-            if (!_storage.Add(_currentAbbrev))
+            if (!Storage.Add(_currentAbbrev))
             {
                 var message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
                 MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
@@ -80,6 +108,18 @@ namespace FasType.ViewModels
             }
 
             (p.Parent as Window).Close();
+        }
+
+        void ComputeAutoComplete()
+        {
+            if (string.IsNullOrEmpty(FullForm))
+            {
+                GenderForm = PluralForm = GenderPluralForm = "";
+                return;
+            }
+            GenderForm = Linguistics.GenderCompletion.Grammarify(FullForm);// + "e";
+            PluralForm = Linguistics.PluralCompletion.Grammarify(FullForm);// + "s";
+            GenderPluralForm = Linguistics.GenderPluralCompletion.Grammarify(FullForm);// + "es";
         }
 
         void SetPreview()
@@ -100,7 +140,7 @@ namespace FasType.ViewModels
             }
 
             _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, 0, GenderForm, PluralForm, GenderPluralForm);
-            if (_storage.Contains(_currentAbbrev))
+            if (Storage.Contains(_currentAbbrev))
             {
                 BorderBrush = _duplicateBorderBrush;
                 FFToolTip = "Such abbreviation already exists.";

@@ -18,14 +18,17 @@ namespace FasType.Windows
     /// <summary>
     /// Interaction logic for SyllableAbbreviationWindow.xaml
     /// </summary>
-    public partial class SyllableAbbreviationWindow : Window
+    public partial class AbbreviationMethodsWindow : Window
     {
-        //readonly SyllableAbbreviationViewModel _vm;
+        public static bool IsOpen { get; private set; }
 
-        public SyllableAbbreviationWindow(SyllableAbbreviationViewModel vm)
+        static AbbreviationMethodsWindow() => IsOpen = false;
+        public AbbreviationMethodsWindow(AbbreviationMethodsViewModel vm)
         {
             InitializeComponent();
+            IsOpen = true;
 
+            Closed += delegate { IsOpen = false; };
             //KeyDown += LinguisticsWindow_KeyDown;
             DataContext /*= _vm */= vm;
         }

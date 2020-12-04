@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <None Remove="abbreviation++.db" />
+    <None Remove="abbreviation+.db" />
     <None Remove="abbreviations++.json" />
     <None Remove="abbreviations.json" />
     <None Remove="abréviations.txt" />

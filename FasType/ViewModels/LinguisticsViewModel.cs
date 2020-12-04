@@ -26,13 +26,17 @@ namespace FasType.ViewModels
         readonly ILinguisticsStorage _storage;
         readonly IConfiguration _config;
 
-        public static bool IsMethodWindowOpen { get; private set; }
         public Command<Window> SaveCommand { get; }
         public Command OpenSyllableCommand { get; }
         public Command ResetCommand { get; }
-        public GrammarType PluralContext { get; private set; }
-        public GrammarType GenderContext { get; private set; }
-        public GrammarType GenderPluralContext { get; private set; }
+
+        public GrammarType GenderTypeContext { get; private set; }
+        public GrammarType PluralTypeContext { get; private set; }
+        public GrammarType GenderPluralTypeContext { get; private set; }
+
+        public GrammarType GenderCompletionContext { get; private set; }
+        public GrammarType PluralCompletionContext { get; private set; }
+        public GrammarType GenderPluralCompletionContext { get; private set; }
 
         public LinguisticsViewModel(IConfiguration configuration, ILinguisticsStorage storage)
         {
@@ -42,15 +46,18 @@ namespace FasType.ViewModels
             //SettingsToProperties();
             _storage = storage;
             _config = configuration;
-            IsMethodWindowOpen = false;
 
             SaveCommand = new(Save, CanSave);
             OpenSyllableCommand = new(OpenSyllable, CanOpenSyllable);
             ResetCommand = new(Reset, CanReset);
 
-            GenderContext       = storage.GenderType;      //(GrammarType)UserGrammar.GenderRecord;
-            PluralContext       = storage.PluralType;      //(GrammarType)UserGrammar.PluralRecord;
-            GenderPluralContext = storage.GenderPluralType;//(GrammarType)UserGrammar.GenderPluralRecord;
+            GenderTypeContext       = storage.GenderType;      //(GrammarType)UserGrammar.GenderRecord;
+            PluralTypeContext       = storage.PluralType;      //(GrammarType)UserGrammar.PluralRecord;
+            GenderPluralTypeContext = storage.GenderPluralType;//(GrammarType)UserGrammar.GenderPluralRecord;
+
+            GenderCompletionContext = storage.GenderCompletion;
+            PluralCompletionContext = storage.PluralCompletion;
+            GenderPluralCompletionContext = storage.GenderPluralCompletion;
         }
 
         //void RemovePlural(GrammarType gt)
@@ -79,7 +86,7 @@ namespace FasType.ViewModels
         //    return true;
         //}
 
-        bool CanReset() => !IsMethodWindowOpen;
+        bool CanReset() => !AbbreviationMethodsWindow.IsOpen;
         void Reset()
         {
             string path = _config.GetSection("Paths")["DefaultLinguistics"];
@@ -87,24 +94,23 @@ namespace FasType.ViewModels
             var content = System.IO.File.ReadAllText(path);
             var dto = System.Text.Json.JsonSerializer.Deserialize<LinguisticsDTO>(content);
 
-            GenderContext = dto.GenderType;
-            PluralContext = dto.PluralType;
-            GenderPluralContext = dto.GenderPluralType;
+            GenderTypeContext = dto.GenderType;
+            PluralTypeContext = dto.PluralType;
+            GenderPluralTypeContext = dto.GenderPluralType;
+
+            GenderCompletionContext = dto.GenderCompletion;
+            PluralCompletionContext = dto.PluralCompletion;
+            GenderPluralCompletionContext = dto.GenderPluralCompletion;
 
             _storage.AbbreviationMethods = dto.AbbreviationMethods;
             OnPropertyChanged(string.Empty);
         }
 
-        bool CanOpenSyllable() => !IsMethodWindowOpen;
+        bool CanOpenSyllable() => !AbbreviationMethodsWindow.IsOpen;
         void OpenSyllable()
         {
-            var w = App.Current.ServiceProvider.GetRequiredService<SyllableAbbreviationWindow>();
+            var w = App.Current.ServiceProvider.GetRequiredService<AbbreviationMethodsWindow>();
 
-            w.Closed += delegate
-            {
-                IsMethodWindowOpen = false;
-            };
-            IsMethodWindowOpen = true;
             w.Show();
         }
 
@@ -121,19 +127,30 @@ namespace FasType.ViewModels
 
             return true;
         }
-        bool CanSavePlural() => CanSave(PluralContext, (GrammarTypeRecord)_storage.PluralType);
-        bool CanSaveGenre() => CanSave(GenderContext, (GrammarTypeRecord)_storage.GenderType);
-        bool CanSaveGenrePlural() => CanSave(GenderPluralContext, (GrammarTypeRecord)_storage.GenderPluralType);
-        bool CanSave() => !string.IsNullOrEmpty(GenderContext.Repr)
-                          && !string.IsNullOrEmpty(PluralContext.Repr)
-                          && !string.IsNullOrEmpty(GenderPluralContext.Repr)
-                          && (CanSavePlural() || CanSaveGenre() || CanSaveGenrePlural());
+        bool CanSavePluralType() => CanSave(PluralTypeContext, (GrammarTypeRecord)_storage.PluralType);
+        bool CanSaveGenderType() => CanSave(GenderTypeContext, (GrammarTypeRecord)_storage.GenderType);
+        bool CanSaveGenrePluralType() => CanSave(GenderPluralTypeContext, (GrammarTypeRecord)_storage.GenderPluralType);
+        bool CanSavePluralCompletion() => CanSave(PluralCompletionContext, (GrammarTypeRecord)_storage.PluralCompletion);
+        bool CanSaveGenderCompletion() => CanSave(GenderCompletionContext, (GrammarTypeRecord)_storage.GenderCompletion);
+        bool CanSaveGenrePluralCompletion() => CanSave(GenderPluralCompletionContext, (GrammarTypeRecord)_storage.GenderPluralCompletion);
+        bool CanSave() => !string.IsNullOrEmpty(GenderTypeContext.Repr)
+                          && !string.IsNullOrEmpty(PluralTypeContext.Repr)
+                          && !string.IsNullOrEmpty(GenderPluralTypeContext.Repr)
+                          && !string.IsNullOrEmpty(GenderCompletionContext.Repr)
+                          && !string.IsNullOrEmpty(PluralCompletionContext.Repr)
+                          && !string.IsNullOrEmpty(GenderPluralCompletionContext.Repr)
+                          && (CanSavePluralType() || CanSaveGenderType() || CanSaveGenrePluralType()
+                              || CanSavePluralCompletion() || CanSaveGenderCompletion() || CanSaveGenrePluralCompletion());
         void Save(Window w)
         {
             //PropertiesToSettings();
-            _storage.PluralType = PluralContext;
-            _storage.GenderType = GenderContext;
-            _storage.GenderPluralType = GenderPluralContext;
+            _storage.PluralType = PluralTypeContext;
+            _storage.GenderType = GenderTypeContext;
+            _storage.GenderPluralType = GenderPluralTypeContext;
+
+            _storage.PluralCompletion = PluralCompletionContext;
+            _storage.GenderCompletion = GenderCompletionContext;
+            _storage.GenderPluralCompletion = GenderPluralCompletionContext;
 
             w.Close();
         }

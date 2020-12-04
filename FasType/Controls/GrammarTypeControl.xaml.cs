@@ -19,7 +19,9 @@ namespace FasType.Controls
     /// </summary>
     public partial class GrammarTypeControl : UserControl
     {
-        public static readonly DependencyProperty GrammarTypeNameProperty = DependencyProperty.Register(nameof(GrammarTypeName), typeof(string), typeof(string));
+        public static readonly DependencyProperty GrammarTypeNameProperty = DependencyProperty.Register(nameof(GrammarTypeName), typeof(string), typeof(GrammarTypeControl));
+        public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.Register(nameof(MaxLength), typeof(int), typeof(GrammarTypeControl), new(0));
+        public static readonly DependencyProperty TextBoxWidthProperty = DependencyProperty.Register(nameof(TextBoxWidth), typeof(int), typeof(GrammarTypeControl));
 
         public string GrammarTypeName
         {
@@ -27,8 +29,20 @@ namespace FasType.Controls
             set
             {
                 SetValue(GrammarTypeNameProperty, value);
-                NameTextBlock.Text = value;
+                //string oldVal = NameTextBlock.Text;
+                //NameTextBlock.Text = value;
+                //OnPropertyChanged(new(GrammarTypeNameProperty, oldVal, value));
             }
+        }
+        public int MaxLength
+        {
+            get => (int)GetValue(MaxLengthProperty);
+            set => SetValue(MaxLengthProperty, value);
+        }
+        public int TextBoxWidth
+        {
+            get => (int)GetValue(TextBoxWidthProperty);
+            set => SetValue(TextBoxWidthProperty, value);
         }
 
         public GrammarTypeControl()

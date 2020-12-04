@@ -27,6 +27,7 @@ namespace FasType.ViewModels
         BaseAbbreviation _choosedAbbrev;
         List<BaseAbbreviation> _matchingAbbrevs;
         int _abbrevIndex;
+
         //string _choosedFullForm;
         //List<string> _matchingFullForms;
         //int _fullFormIndex;
@@ -34,10 +35,10 @@ namespace FasType.ViewModels
         //public string ChoosedFullForm { get => _choosedFullForm; set => SetProperty(ref _choosedFullForm, value); }
         //public List<string> MatchingFullForms { get => _matchingFullForms; set => SetProperty(ref _matchingFullForms, value); }
         //public int FullFormIndex { get => _fullFormIndex; set => SetProperty(ref _fullFormIndex, value); }
-        
-        public static bool IsLinguisticsWindowOpen { get; private set; }
-        public static bool IsSeeAllWindowOpen { get; private set; }
-        public static bool IsAddNewWindowOpen { get; private set; }
+        public static bool IsPaused => SeeAllWindow.IsOpen
+                                       || AddAbbreviationWindow.IsOpen
+                                       || LinguisticsWindow.IsOpen
+                                       || AbbreviationMethodsWindow.IsOpen;
 
         public int AbbrevIndex { get => _abbrevIndex; set => SetProperty(ref _abbrevIndex, value); }
         public BaseAbbreviation ChoosedAbbrev { get => _choosedAbbrev; set => SetProperty(ref _choosedAbbrev, value); }
@@ -58,16 +59,13 @@ namespace FasType.ViewModels
         public Command<BaseAbbreviation> ChooseCommand { get; }
         public Command OpenLinguisticsCommand { get; }
 
+        //static MainWindowViewModel() => _instance = App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>();
         public MainWindowViewModel(IAbbreviationStorage storage)
         {
             CurrentWord = string.Empty;
             _listener = new();
             _storage = storage;
             CurrentListenerState = ListenerStates.Inserting;
-            
-            IsLinguisticsWindowOpen = false;
-            IsSeeAllWindowOpen = false;
-            IsAddNewWindowOpen = false;
 
             AddNewCommand = new(AddNew, CanAddNew);
             SeeAllCommand = new(SeeAll, CanSeeAll);
@@ -75,62 +73,30 @@ namespace FasType.ViewModels
             OpenLinguisticsCommand = new(OpenLinguistics, CanOpenLinguistics);
         }
 
-        bool CanOpenLinguistics() => !IsLinguisticsWindowOpen;
+        bool CanOpenLinguistics() => !LinguisticsWindow.IsOpen;
         void OpenLinguistics()
         {
             var lw = App.Current.ServiceProvider.GetRequiredService<LinguisticsWindow>();
 
-            lw.Closed += delegate
-            {
-                IsLinguisticsWindowOpen = false;
-                Continue();
-            };
-            Pause();
-            IsLinguisticsWindowOpen = true;
             lw.Show();
-
-            //Pause();
-            //tw.ShowDialog();
-            //Continue();
         }
 
-        bool CanAddNew(Type t) => t != null && t.IsSubclassOf(typeof(Page)) && !IsAddNewWindowOpen;
+        bool CanAddNew(Type t) => t != null && t.IsSubclassOf(typeof(Page)) && !AddAbbreviationWindow.IsOpen;
         void AddNew(Type t)
         {
             var aaw = App.Current.ServiceProvider.GetRequiredService<AddAbbreviationWindow>();
             var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;// Activator.CreateInstance(t) as Page;//new Pages.SimpleAbbreviationPage();
 
             aaw.Content = p;
-
-            aaw.Closed += delegate
-            {
-                IsAddNewWindowOpen = false;
-                Continue();
-            };
-            IsAddNewWindowOpen = true;
-            Pause();
             aaw.Show();
-            //Pause();
-            //aaw.ShowDialog();
-            //Continue();
         }
 
-        bool CanSeeAll() => _storage.Count > 0 && !IsSeeAllWindowOpen;
-        public void SeeAll()
+        bool CanSeeAll() => _storage.Count > 0 && !SeeAllWindow.IsOpen;
+        void SeeAll()
         {
             var saw = App.Current.ServiceProvider.GetRequiredService<SeeAllWindow>();
 
-            saw.Closed += delegate
-            {
-                IsSeeAllWindowOpen = false;
-                Continue();
-            };
-            IsSeeAllWindowOpen = true;
-            Pause();
             saw.Show();
-            //Pause();
-            //saw.ShowDialog();
-            //Continue();
         }
 
         #region IKeyboardListenerHandler
@@ -162,6 +128,8 @@ namespace FasType.ViewModels
 
         void ListenerEvent(object sender, KeyPressedEventArgs e)
         {
+            if (IsPaused) 
+                return;
             Log.Information("Current Listener State: {listenerState}", CurrentListenerState);
             if (CurrentListenerState is ListenerStates.Inserting)
                 Inserting(sender, e);
@@ -294,16 +262,31 @@ namespace FasType.ViewModels
             }
         }
 
-        public void Load() => Load(null, null);
+        //public void Load() => Load(null, null);
         public void Load(object sender, RoutedEventArgs e)
         {
             _listener.HookKeyboard();
-            Continue();
+            _listener.OnKeyPressed += ListenerEvent;
         }
-        public void Close() => Load(null, null);
-        public void Close(object sender, CancelEventArgs e) => _listener.UnHookKeyboard();
-        public void Pause() => _listener.OnKeyPressed -= ListenerEvent;
-        public void Continue() => _listener.OnKeyPressed += ListenerEvent;
+        //public void Close() => Load(null, null);
+        public void Close(object sender, CancelEventArgs e)
+        {
+            _listener.OnKeyPressed -= ListenerEvent;
+            _listener.UnHookKeyboard();
+        }
+
+        //public void Pause()
+        //{
+        //    _listener.OnKeyPressed -= ListenerEvent;
+        //}
+
+        //public void Continue()
+        //{
+        //    if (IsPaused)
+        //    {
+        //        _listener.OnKeyPressed += ListenerEvent;
+        //    }
+        //}
 
         enum ListenerStates
         {

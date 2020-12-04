@@ -20,34 +20,38 @@ namespace FasType.Storage
     public class EFSqliteLinguisticsContext : DbContext, ILinguisticsStorage
     {
         public DbSet<GrammarTypeRecord> GrammarTypes { get; set; }
-        public DbSet<SyllableAbbreviationRecord> AbbreviationMethods { get; set; }
+        public DbSet<AbbreviationMethodRecord> AbbreviationMethods { get; set; }
 
-        IEnumerable<SyllableAbbreviation> ILinguisticsStorage.AbbreviationMethods 
+        IEnumerable<AbbreviationMethod> ILinguisticsStorage.AbbreviationMethods 
         { 
             get => GetAbbreviationMethods();
-            set => SetAbbreviationMethods(value.Cast<SyllableAbbreviationRecord>());
+            set => SetAbbreviationMethods(value.Cast<AbbreviationMethodRecord>());
         }
         public GrammarType GenderType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
         public GrammarType PluralType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
         public GrammarType GenderPluralType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
+
+        public GrammarType GenderCompletion { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
+        public GrammarType PluralCompletion { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
+        public GrammarType GenderPluralCompletion { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
 
         public EFSqliteLinguisticsContext(DbContextOptions<EFSqliteLinguisticsContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GrammarTypeRecord>().HasKey(nameof(GrammarTypeRecord.Name));
-            modelBuilder.Entity<SyllableAbbreviationRecord>().HasKey(nameof(SyllableAbbreviationRecord.Key));
+            modelBuilder.Entity<AbbreviationMethodRecord>().HasKey(nameof(AbbreviationMethodRecord.Key));
 
             base.OnModelCreating(modelBuilder);
         }
 
-        IEnumerable<SyllableAbbreviation> GetAbbreviationMethods()
+        IEnumerable<AbbreviationMethod> GetAbbreviationMethods()
         {
-            var enumerable = AbbreviationMethods.AsEnumerable().Cast<SyllableAbbreviation>();
+            var enumerable = AbbreviationMethods.AsEnumerable().Cast<AbbreviationMethod>();
 
             return enumerable;
         }
-        void SetAbbreviationMethods(IEnumerable<SyllableAbbreviationRecord> enumerable)
+        void SetAbbreviationMethods(IEnumerable<AbbreviationMethodRecord> enumerable)
         {
             AbbreviationMethods.RemoveRange(AbbreviationMethods);
             AbbreviationMethods.AddRange(enumerable);

@@ -14,7 +14,12 @@ namespace FasType.Services
         GrammarType GenderType { get; set; }
         GrammarType PluralType { get; set; }
         GrammarType GenderPluralType { get; set; }
-        IEnumerable<SyllableAbbreviation> AbbreviationMethods { get; set; }
+
+        GrammarType GenderCompletion { get; set; }
+        GrammarType PluralCompletion { get; set; }
+        GrammarType GenderPluralCompletion { get; set; }
+
+        IEnumerable<AbbreviationMethod> AbbreviationMethods { get; set; }
 
 
         bool Import(string filename);

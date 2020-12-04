@@ -1,7 +1,7 @@
 TODOS:
+- Multiple Window appearence
 - Other forms auto-completion
 - Duplicate abbrevs on FullForm
-- Multiple Window appearence
 - myinputbox ?
 
 

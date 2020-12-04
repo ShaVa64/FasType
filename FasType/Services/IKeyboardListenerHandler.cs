@@ -9,10 +9,10 @@ namespace FasType.Services
     {
         string CurrentWord { get; }
 
-        void Load();
-        void Close();
+        //void Load();
+        //void Close();
 
-        void Pause();
-        void Continue();
+        //void Pause();
+        //void Continue();
     }
 }

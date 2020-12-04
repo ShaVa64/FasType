@@ -17,12 +17,16 @@ namespace FasType.Windows
     /// </summary>
     public partial class AddAbbreviationWindow : Window
     {
+        public static bool IsOpen { get; private set; }
+
+        static AddAbbreviationWindow() => IsOpen = false;
         public AddAbbreviationWindow()
         {
             InitializeComponent();
             Owner = App.Current.MainWindow;
+            IsOpen = true;
 
-            //KeyDown += AddAbbreviationWindow_KeyDown;
+            Closed += delegate { IsOpen = false; };
         }
 
         private void AddAbbreviationWindow_KeyDown(object sender, KeyEventArgs e)
