@@ -163,7 +163,7 @@ namespace FasType.ViewModels
 
                 //MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
                 //ChoosedFullForm = MatchingFullForms[0];
-                MatchingAbbrevs = abbrevs;
+                MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).ToList();
                 ChoosedAbbrev = MatchingAbbrevs[0];
 
                 //foreach (var abbrev in abbrevs)

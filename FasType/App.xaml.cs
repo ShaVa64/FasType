@@ -189,6 +189,7 @@ namespace FasType
         protected override void OnExit(ExitEventArgs e)
         {
             FasType.Properties.Settings.Default.Save();
+            Log.Information("Default Settings saved!");
             base.OnExit(e);
         }
 

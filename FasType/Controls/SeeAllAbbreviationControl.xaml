@@ -4,10 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FasType.Controls" xmlns:mdl="clr-namespace:FasType.Models.Abbreviations"
+             xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
              d:DataContext="{d:DesignInstance mdl:BaseAbbreviation}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <cvt:IntToStringConverter x:Key="IntToStringConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -16,7 +21,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0" Text="{Binding ComplexRepresentation}" Margin="10, 5, 2, 5"
                    VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Left"/>
-        <TextBlock Grid.Column="1" Text="{Binding Used, StringFormat='({0})'}" Margin="5" FontStyle="Italic"
+        <TextBlock Grid.Column="1" Text="{Binding Used, Converter={StaticResource IntToStringConverter}, ConverterParameter={x:Static cvt:IntToStringConverter+Parameter.UsedSeeAll}}" Margin="5" FontStyle="Italic"
                    VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Right"/>
         <Button Grid.Column="2" Width="20" Height="20" Style="{StaticResource RedButtonStyle}" Padding="5, 0" Margin="2, 5, 10, 5"
                 HorizontalAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"

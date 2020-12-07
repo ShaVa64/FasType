@@ -142,6 +142,15 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Such abbreviation already exists..
+        /// </summary>
+        public static string DupAbbrevToolTip {
+            get {
+                return ResourceManager.GetString("DupAbbrevToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can&apos;t create an empty abbreviation..
         /// </summary>
         public static string EmptyAbbrevDialog {
@@ -165,6 +174,15 @@ namespace FasType.Properties {
         public static string EmptyAbbrevMethodList2 {
             get {
                 return ResourceManager.GetString("EmptyAbbrevMethodList2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot create an empty abbreviation..
+        /// </summary>
+        public static string EmptyAbbrevToolTip {
+            get {
+                return ResourceManager.GetString("EmptyAbbrevToolTip", resourceCulture);
             }
         }
         

@@ -26,9 +26,9 @@ namespace FasType.ViewModels
         string _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
         string _sfToolTip, _ffToolTip, _preview;
         Brush _borderBrush;
-        bool _autoComplete;
+        //bool _autoComplete;
 
-        public bool AutoComplete { get => _autoComplete; set => SetProperty(ref _autoComplete, value); }
+        //public bool AutoComplete { get => _autoComplete; set => SetProperty(ref _autoComplete, value); }
 
         public string ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value/*, SetPreview*/); }
         public string FullForm { get => _fullForm; set => SetProperty(ref _fullForm, value/*, SetPreview*/); }
@@ -45,6 +45,7 @@ namespace FasType.ViewModels
 
         public Command<Page> CreateNewCommand { get; set; }
         public Command OpenLinguisticsCommand { get; set; }
+        public Command AutoCompleteCommand { get; set; }
 
         public SimpleAbbreviationViewModel()
         {
@@ -52,15 +53,16 @@ namespace FasType.ViewModels
 
             CreateNewCommand = new(CreateNew, CanCreateNew);
             OpenLinguisticsCommand = new(OpenLinguistics, CanOpenLinguistics);
+            AutoCompleteCommand = new(AutoComplete);
 
             ShortForm = FullForm = GenderForm = PluralForm = GenderPluralForm = string.Empty;
             SFToolTip = FFToolTip = null;
             BorderBrush = _defaultBorderBrush;
-            AutoComplete = false;
+            //AutoComplete = false;
 
             this.PropertyChanged += SimpleAbbreviationViewModel_PropertyChanged;
 #if DEBUG
-            AutoComplete = true;
+            //AutoComplete = true;
             ShortForm = "pss";
             //FullForm = "passé";
             //GenderForm = "passée";
@@ -69,12 +71,20 @@ namespace FasType.ViewModels
 #endif
         }
 
-        private void SimpleAbbreviationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void SimpleAbbreviationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName.EndsWith("Form"))
                 SetPreview();
-            if (AutoComplete && (e.PropertyName == nameof(FullForm) || e.PropertyName == nameof(AutoComplete)))
+            if (Settings.Default.FormsAutoComplete && e.PropertyName == nameof(FullForm))
                 ComputeAutoComplete();
+        }
+
+        void AutoComplete()
+        {
+            if (Settings.Default.FormsAutoComplete)
+                ComputeAutoComplete();
+            else
+                GenderForm = PluralForm = GenderPluralForm = string.Empty;
         }
 
         bool CanOpenLinguistics() => !LinguisticsWindow.IsOpen;
@@ -114,7 +124,7 @@ namespace FasType.ViewModels
         {
             if (string.IsNullOrEmpty(FullForm))
             {
-                GenderForm = PluralForm = GenderPluralForm = "";
+                GenderForm = PluralForm = GenderPluralForm = string.Empty;
                 return;
             }
             GenderForm = Linguistics.GenderCompletion.Grammarify(FullForm);// + "e";
@@ -133,9 +143,9 @@ namespace FasType.ViewModels
             if (isSFEmpty || isFFEmpty) 
             {
                 if (isSFEmpty)
-                    SFToolTip = "Cannot create an empty abbreviation.";
+                    SFToolTip = Resources.EmptyAbbrevToolTip;
                 if (isFFEmpty)
-                    FFToolTip = "Cannot create an empty abbreviation.";
+                    FFToolTip = Resources.EmptyAbbrevToolTip;
                 return;
             }
 
@@ -143,7 +153,7 @@ namespace FasType.ViewModels
             if (Storage.Contains(_currentAbbrev))
             {
                 BorderBrush = _duplicateBorderBrush;
-                FFToolTip = "Such abbreviation already exists.";
+                FFToolTip = Resources.DupAbbrevToolTip;
                 return;
             }
 

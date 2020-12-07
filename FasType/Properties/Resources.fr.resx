@@ -237,4 +237,10 @@
   <data name="SettingsHeader" xml:space="preserve">
     <value>_Préférences</value>
   </data>
+  <data name="EmptyAbbrevToolTip" xml:space="preserve">
+    <value>Impossible de créer une abréviation vide.</value>
+  </data>
+  <data name="DupAbbrevToolTip" xml:space="preserve">
+    <value>Une telle abréviation existe déjà.</value>
+  </data>
 </root>

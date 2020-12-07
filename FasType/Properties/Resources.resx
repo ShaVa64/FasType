@@ -245,4 +245,10 @@
   <data name="SettingsHeader" xml:space="preserve">
     <value>_Settings</value>
   </data>
+  <data name="EmptyAbbrevToolTip" xml:space="preserve">
+    <value>Cannot create an empty abbreviation.</value>
+  </data>
+  <data name="DupAbbrevToolTip" xml:space="preserve">
+    <value>Such abbreviation already exists.</value>
+  </data>
 </root>

@@ -98,7 +98,6 @@ namespace FasType.ViewModels
             _storage.Remove(abbrev);
             AllAbbreviations = _storage.ToList();
         }
-
         public enum FormOrderBy
         {
             ShortForm,
