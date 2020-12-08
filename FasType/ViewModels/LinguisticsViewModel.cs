@@ -25,6 +25,8 @@ namespace FasType.ViewModels
         //public ObservableCollection<GrammarType> Plurals { get => _plurals; set => SetProperty(ref _plurals, value); }
         readonly ILinguisticsStorage _storage;
         readonly IConfiguration _config;
+        static readonly Dictionary<string, string> PropertiesContextPair;
+        static readonly string[] NoDupProperties;
 
         public Command<Window> SaveCommand { get; }
         public Command OpenSyllableCommand { get; }
@@ -37,6 +39,20 @@ namespace FasType.ViewModels
         public GrammarType GenderCompletionContext { get; private set; }
         public GrammarType PluralCompletionContext { get; private set; }
         public GrammarType GenderPluralCompletionContext { get; private set; }
+
+        static LinguisticsViewModel()
+        {
+            PropertiesContextPair = new()
+            {
+                { nameof(GenderTypeContext), nameof(ILinguisticsStorage.GenderType) },
+                { nameof(PluralTypeContext), nameof(ILinguisticsStorage.PluralType) },
+                { nameof(GenderPluralTypeContext), nameof(ILinguisticsStorage.GenderPluralType) },
+                { nameof(GenderCompletionContext), nameof(ILinguisticsStorage.GenderCompletion) },
+                { nameof(PluralCompletionContext), nameof(ILinguisticsStorage.PluralCompletion) },
+                { nameof(GenderPluralCompletionContext), nameof(ILinguisticsStorage.GenderPluralCompletion) },
+            };
+            NoDupProperties = new string[] { nameof(GenderTypeContext), nameof(PluralTypeContext), nameof(GenderPluralTypeContext) };
+        }
 
         public LinguisticsViewModel(IConfiguration configuration, ILinguisticsStorage storage)
         {
@@ -114,7 +130,7 @@ namespace FasType.ViewModels
             w.Show();
         }
 
-        static bool CanSave(GrammarType context, GrammarTypeRecord record)
+        static bool CanSave(GrammarType context, GrammarType record)
         {
             //if (string.IsNullOrEmpty(context.Repr)) //Empty Repr
             //    return false;
@@ -122,25 +138,29 @@ namespace FasType.ViewModels
             //if (string.IsNullOrEmpty(context.Name)) //Empty Name
             //    return false;
 
-            if ((GrammarTypeRecord)context == record) //No Changes
+            if ((GrammarTypeRecord)context == (GrammarTypeRecord)record) //No Changes
                 return false;
 
             return true;
         }
-        bool CanSavePluralType() => CanSave(PluralTypeContext, (GrammarTypeRecord)_storage.PluralType);
-        bool CanSaveGenderType() => CanSave(GenderTypeContext, (GrammarTypeRecord)_storage.GenderType);
-        bool CanSaveGenrePluralType() => CanSave(GenderPluralTypeContext, (GrammarTypeRecord)_storage.GenderPluralType);
-        bool CanSavePluralCompletion() => CanSave(PluralCompletionContext, (GrammarTypeRecord)_storage.PluralCompletion);
-        bool CanSaveGenderCompletion() => CanSave(GenderCompletionContext, (GrammarTypeRecord)_storage.GenderCompletion);
-        bool CanSaveGenrePluralCompletion() => CanSave(GenderPluralCompletionContext, (GrammarTypeRecord)_storage.GenderPluralCompletion);
-        bool CanSave() => !string.IsNullOrEmpty(GenderTypeContext.Repr)
-                          && !string.IsNullOrEmpty(PluralTypeContext.Repr)
-                          && !string.IsNullOrEmpty(GenderPluralTypeContext.Repr)
-                          && !string.IsNullOrEmpty(GenderCompletionContext.Repr)
-                          && !string.IsNullOrEmpty(PluralCompletionContext.Repr)
-                          && !string.IsNullOrEmpty(GenderPluralCompletionContext.Repr)
-                          && (CanSavePluralType() || CanSaveGenderType() || CanSaveGenrePluralType()
-                              || CanSavePluralCompletion() || CanSaveGenderCompletion() || CanSaveGenrePluralCompletion());
+        bool EmptyRepr() => GetType().GetProperties().Where(pi => pi.PropertyType == typeof(GrammarType)).Select(pi => (pi.GetValue(this) as GrammarType).Repr).ToList().Any(string.IsNullOrEmpty);
+        //string.IsNullOrEmpty(GenderTypeContext.Repr)
+        //                    || string.IsNullOrEmpty(PluralTypeContext.Repr)
+        //                    || string.IsNullOrEmpty(GenderPluralTypeContext.Repr)
+        //                    || string.IsNullOrEmpty(GenderCompletionContext.Repr)
+        //                    || string.IsNullOrEmpty(PluralCompletionContext.Repr)
+        //                    || string.IsNullOrEmpty(GenderPluralCompletionContext.Repr);
+        bool CanSaveGrammarType(string propName) => CanSave(typeof(LinguisticsViewModel).GetProperty(propName).GetValue(this) as GrammarType, 
+            typeof(ILinguisticsStorage).GetProperty(PropertiesContextPair[propName]).GetValue(_storage) as GrammarType);
+
+        bool NoDup() => NoDupProperties.Select(s => (typeof(LinguisticsViewModel).GetProperty(s).GetValue(this) as GrammarType).Repr).Distinct().Count() == NoDupProperties.Length;//.ToList()
+        //bool CanSavePluralType() => CanSave(PluralTypeContext, (GrammarTypeRecord)_storage.PluralType);
+        //bool CanSaveGenderType() => CanSave(GenderTypeContext, (GrammarTypeRecord)_storage.GenderType);
+        //bool CanSaveGenrePluralType() => CanSave(GenderPluralTypeContext, (GrammarTypeRecord)_storage.GenderPluralType);
+        //bool CanSavePluralCompletion() => CanSave(PluralCompletionContext, (GrammarTypeRecord)_storage.PluralCompletion);
+        //bool CanSaveGenderCompletion() => CanSave(GenderCompletionContext, (GrammarTypeRecord)_storage.GenderCompletion);
+        //bool CanSaveGenrePluralCompletion() => CanSave(GenderPluralCompletionContext, (GrammarTypeRecord)_storage.GenderPluralCompletion);
+        bool CanSave() => !EmptyRepr() && NoDup() && PropertiesContextPair.Keys.ToList().Any(CanSaveGrammarType);//(CanSavePluralType() || CanSaveGenderType() || CanSaveGenrePluralType() || CanSavePluralCompletion() || CanSaveGenderCompletion() || CanSaveGenrePluralCompletion());
         void Save(Window w)
         {
             //PropertiesToSettings();

@@ -21,6 +21,7 @@
 
 
   <ItemGroup>
+    <Compile Remove="Models\Abbreviations\IAbbreviation.cs" />
     <Compile Remove="Storage\FileDataStorage.cs" />
     <Compile Remove="Storage\UserGrammar.cs" />
   </ItemGroup>

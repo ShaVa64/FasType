@@ -14,8 +14,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Dictionaries\MenuItemDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
+
             <cvt:AbbreviationToFormConverter x:Key="AbbreviationToForm"/>
+            <cvt:IntToStringConverter x:Key="IntToString"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -41,36 +42,41 @@
                  HorizontalAlignment="Stretch" VerticalAlignment="Center"
                  Margin="10" DockPanel.Dock="Bottom"/>
 
-        <ListBox IsEnabled="{Binding IsChoosing}"
-                 ItemsSource="{Binding MatchingAbbrevs}" SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"
-                 Grid.Row="0" SelectionMode="Single" HorizontalContentAlignment="Stretch">
-            <!--ItemsSource="{Binding MatchingAbbrevs}" SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"-->
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <!--<TextBlock Text="{Binding ElementaryRepresentation}">-->
-                        <TextBlock Grid.Column="0" HorizontalAlignment="Left">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource AbbreviationToForm}">
-                                    <Binding Path="."/>
-                                    <Binding Path="DataContext.CurrentWord" RelativeSource="{RelativeSource AncestorType=Window}"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                            <TextBlock.InputBindings>
-                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ChooseCommand}" CommandParameter="{Binding .}"/>
-                            </TextBlock.InputBindings>
-                        </TextBlock>
-                        <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="{Binding Used, StringFormat='({0})'}" FontStyle="Italic"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <ListBox IsEnabled="{Binding IsChoosing}" ItemsSource="{Binding MatchingAbbrevs}"
+                     SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"
+                     SelectionMode="Single" HorizontalContentAlignment="Stretch">
+                <!--ItemsSource="{Binding MatchingAbbrevs}" SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"-->
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <!--<TextBlock Text="{Binding ElementaryRepresentation}">-->
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Left">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource AbbreviationToForm}">
+                                        <Binding Path="."/>
+                                        <Binding Path="DataContext.CurrentWord" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                                <TextBlock.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ChooseCommand}" CommandParameter="{Binding .}"/>
+                                </TextBlock.InputBindings>
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Right" FontStyle="Italic"
+                                       Text="{Binding Used, Converter={StaticResource IntToString}, 
+                                       ConverterParameter={x:Static cvt:IntToStringConverter+Parameter.UsedMain}}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
 
-        <ProgressBar HorizontalAlignment="Center" VerticalAlignment="Center" 
-                     IsIndeterminate="True" Width="50" Height="20"/>
+        <!--<ProgressBar HorizontalAlignment="Center" VerticalAlignment="Center"
+                     IsIndeterminate="True" Width="50" Height="20"/>-->
+
     </DockPanel>
 </Window>

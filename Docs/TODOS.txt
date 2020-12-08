@@ -1,5 +1,8 @@
 TODOS:
-- myinputbox ?
+- TextBox BorderBrush
+- Duplicate GrammarType
+- Abbreviations Auto-creation
+(myinputbox)
 
 
 

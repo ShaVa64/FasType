@@ -13,9 +13,12 @@ namespace FasType.Converters.Xaml
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values == null || values.Length != 2 || values[0] == null || values[1] == null)
+                return null;
+
             var a = values[0] as BaseAbbreviation;
             var sf = values[1] as string;
-            string ff = a.GetFullForm(sf);
+            string ff = a?.GetFullForm(sf);
 
             return ff;
         }

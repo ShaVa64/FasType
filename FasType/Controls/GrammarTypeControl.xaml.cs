@@ -22,6 +22,7 @@ namespace FasType.Controls
         public static readonly DependencyProperty GrammarTypeNameProperty = DependencyProperty.Register(nameof(GrammarTypeName), typeof(string), typeof(GrammarTypeControl));
         public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.Register(nameof(MaxLength), typeof(int), typeof(GrammarTypeControl), new(0));
         public static readonly DependencyProperty TextBoxWidthProperty = DependencyProperty.Register(nameof(TextBoxWidth), typeof(int), typeof(GrammarTypeControl));
+        public static readonly DependencyProperty BBTBGroupNameProperty = DependencyProperty.Register(nameof(BBTBGroupName), typeof(string), typeof(GrammarTypeControl), new(""));
 
         public string GrammarTypeName
         {
@@ -43,6 +44,11 @@ namespace FasType.Controls
         {
             get => (int)GetValue(TextBoxWidthProperty);
             set => SetValue(TextBoxWidthProperty, value);
+        }
+        public string BBTBGroupName
+        {
+            get => (string)GetValue(BBTBGroupNameProperty);
+            set => SetValue(BBTBGroupNameProperty, value);
         }
 
         public GrammarTypeControl()

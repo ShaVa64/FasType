@@ -20,5 +20,6 @@ namespace FasType.Models.Linguistics
         public void Dispose() => throw new NotImplementedException();
         public bool Export(string filename) => throw new NotImplementedException();
         public bool Import(string filename) => throw new NotImplementedException();
+        public List<string> Words(string currentWord) => throw new NotImplementedException();
     }
 }

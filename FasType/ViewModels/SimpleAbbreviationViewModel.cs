@@ -20,8 +20,6 @@ namespace FasType.ViewModels
         static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
         static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
 
-        static readonly Brush _defaultBorderBrush = new SolidColorBrush(Color.FromRgb(170, 170, 170));
-        static readonly Brush _duplicateBorderBrush = Brushes.DarkOrange;
         SimpleAbbreviation _currentAbbrev;
         string _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
         string _sfToolTip, _ffToolTip, _preview;
@@ -57,7 +55,7 @@ namespace FasType.ViewModels
 
             ShortForm = FullForm = GenderForm = PluralForm = GenderPluralForm = string.Empty;
             SFToolTip = FFToolTip = null;
-            BorderBrush = _defaultBorderBrush;
+            BorderBrush = null;
             //AutoComplete = false;
 
             this.PropertyChanged += SimpleAbbreviationViewModel_PropertyChanged;
@@ -136,7 +134,7 @@ namespace FasType.ViewModels
         {
             Preview = "";
             SFToolTip = FFToolTip = null;
-            BorderBrush = _defaultBorderBrush;
+            BorderBrush = null;
             CommandManager.InvalidateRequerySuggested();
             bool isSFEmpty = string.IsNullOrEmpty(ShortForm);
             bool isFFEmpty = string.IsNullOrEmpty(FullForm);
@@ -152,7 +150,7 @@ namespace FasType.ViewModels
             _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, 0, GenderForm, PluralForm, GenderPluralForm);
             if (Storage.Contains(_currentAbbrev))
             {
-                BorderBrush = _duplicateBorderBrush;
+                BorderBrush = Controls.BorderBrushTextBox.WarningBrush;
                 FFToolTip = Resources.DupAbbrevToolTip;
                 return;
             }

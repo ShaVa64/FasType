@@ -56,6 +56,10 @@ namespace FasType
 
             //T();
             //F();
+
+            //var res = ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words("pçé");
+
+            //var bbtb = new FasType.Controls.BorderBrushTextBox();
         }
 
         private void ConfigureServices(ServiceCollection services)

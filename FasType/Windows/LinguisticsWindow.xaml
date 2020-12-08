@@ -31,13 +31,16 @@
         <Separator/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" 
                                  DataContext="{Binding GenderTypeContext}"
-                                 MaxLength="1" TextBoxWidth="18"/>
+                                 MaxLength="1" TextBoxWidth="18"
+                                 BBTBGroupName="{x:Static prop:Resources.Grammar}"/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Plural}" 
                                  DataContext="{Binding PluralTypeContext}"
-                                 MaxLength="1" TextBoxWidth="18" />
+                                 MaxLength="1" TextBoxWidth="18" 
+                                 BBTBGroupName="{x:Static prop:Resources.Grammar}"/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.GnP}" 
                                  DataContext="{Binding GenderPluralTypeContext}"
-                                 MaxLength="1" TextBoxWidth="18" />
+                                 MaxLength="1" TextBoxWidth="18" 
+                                 BBTBGroupName="{x:Static prop:Resources.Grammar}"/>
         <!--<Separator/>-->
         <!--<ItemsControl ItemsSource="{Binding Plurals}">
             <ItemsControl.ItemTemplate>

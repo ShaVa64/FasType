@@ -12,7 +12,8 @@ namespace FasType.Converters.Xaml
     {
         public enum Parameter
         {
-            UsedSeeAll
+            UsedSeeAll,
+            UsedMain
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -22,10 +23,12 @@ namespace FasType.Converters.Xaml
             return param switch
             {
                 Parameter.UsedSeeAll => UsedSeeAll((ulong)value),
+                Parameter.UsedMain => UsedMain((ulong)value),
                 _ => value.ToString()
             };
         }
 
+        static string UsedMain(ulong val) => val == 0 ? "" : $"({val})";
         static string UsedSeeAll(ulong val) => val == 0 ? "" : $"(x{val})";
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
