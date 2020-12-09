@@ -11,7 +11,44 @@ using System.Windows.Media;
 
 namespace FasType.Controls
 {
-    public class BorderBrushTextBox : TextBox
+    public class ClearableTextBox : TextBox
+    {
+        protected readonly static ResourceDictionary _defaultRes;
+        protected static T GetResource<T>([CallerMemberName] string name = "") where T : class => _defaultRes[name] as T;
+        public static Brush DefaultBrush => GetResource<Brush>();
+        static ClearableTextBox() => _defaultRes = new ResourceDictionary { Source = new(@"..\Dictionaries\TextBoxDictionary.xaml", UriKind.Relative) };
+
+
+        private static readonly DependencyPropertyKey HasTextPropertyKey = DependencyProperty.RegisterReadOnly(nameof(HasText), typeof(bool), typeof(ClearableTextBox), new());
+        public static readonly DependencyProperty HasTextProperty = HasTextPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty IsClearableProperty = DependencyProperty.Register(nameof(IsClearable), typeof(bool), typeof(ClearableTextBox), new(false));
+        public bool IsClearable { get => (bool)GetValue(IsClearableProperty); set => SetValue(IsClearableProperty, value); }
+        public bool HasText { get => (bool)GetValue(HasTextProperty); protected set => SetValue(HasTextPropertyKey, value); }
+        public ClearableTextBox()
+        {
+            Resources.MergedDictionaries.Add(_defaultRes);
+            Template = FindResource("MyTextBoxControlTemplate") as ControlTemplate;
+
+            TextChanged += ClearableTextBox_TextChanged;
+            //var btn = GetTemplateChild("ClearButton");
+            //btn.Click += ClearTextEvent;
+
+            Loaded += ClearableTextBox_Loaded;
+
+            BorderBrush = DefaultBrush;
+        }
+
+        private void ClearableTextBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            var btn = GetTemplateChild("ClearButton") as Button;
+            btn.Click += ClearTextEvent;
+        }
+
+        private void ClearTextEvent(object sender, RoutedEventArgs e) => Text = string.Empty;
+        private void ClearableTextBox_TextChanged(object sender, TextChangedEventArgs e) => HasText = !string.IsNullOrEmpty(Text);
+    }
+
+    public class BorderBrushTextBox : ClearableTextBox
     {
         #region GroupName
         readonly static Dictionary<string, List<BorderBrushTextBox>> Groups = new();
@@ -69,22 +106,15 @@ namespace FasType.Controls
             }
         }
         #endregion
-
-        readonly static ResourceDictionary _defaultRes = new ResourceDictionary { Source = new(@"..\Dictionaries\BorderBrushTextBoxDictionary.xaml", UriKind.Relative) };
-        static Brush GetBrush([CallerMemberName] string name = "") => _defaultRes[name] as Brush;
-        public static Brush DefaultBrush => GetBrush();
-        public static Brush ErrorBrush => GetBrush();
-        public static Brush WarningBrush => GetBrush();
+        public static Brush ErrorBrush => GetResource<Brush>();
+        public static Brush WarningBrush => GetResource<Brush>();
 
 
-        public static readonly DependencyProperty ForceBorderBrushProperty = DependencyProperty.Register(nameof(ForceBorderBrush), typeof(Brush), typeof(BorderBrushTextBox));
-        public Brush ForceBorderBrush { get => (Brush)GetValue(ForceBorderBrushProperty); set => SetValue(ForceBorderBrushProperty, value); }
+        public static readonly DependencyProperty ForceBorderBrushProperty = DependencyProperty.Register(nameof(ForcedBorderBrush), typeof(Brush), typeof(BorderBrushTextBox));
+        public Brush ForcedBorderBrush { get => (Brush)GetValue(ForceBorderBrushProperty); set => SetValue(ForceBorderBrushProperty, value); }
         
-        public BorderBrushTextBox() : base()
+        public BorderBrushTextBox()
         {
-            Resources.MergedDictionaries.Add(_defaultRes);
-
-            Template = FindResource("BBTBControlTemplate") as ControlTemplate;
             //BorderBrush = string.IsNullOrEmpty(Text) ? ErrorBrush : DefaultBrush;
             UpdateBorderColor();
 
@@ -105,7 +135,7 @@ namespace FasType.Controls
             if (string.IsNullOrEmpty(Text))
                 BorderBrush = ErrorBrush;
 
-            BorderBrush = ForceBorderBrush ?? BorderBrush;
+            BorderBrush = ForcedBorderBrush ?? BorderBrush;
         }
     }
 }

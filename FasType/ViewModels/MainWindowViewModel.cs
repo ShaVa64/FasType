@@ -147,7 +147,7 @@ namespace FasType.ViewModels
 
                 if (abbrevs.Count == 0)
                 {
-                    var vals = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words(CurrentWord);
+                    //var vals = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words(CurrentWord);
                     CurrentWord = "";
                     return;
                 }

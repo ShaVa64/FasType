@@ -82,7 +82,7 @@
 
         </Grid>
         <Separator/>
-        <TextBlock Text="Default Completion" Style="{StaticResource SettingTitleStyle}"/>
+        <TextBlock Text="{x:Static prop:Resources.DefaultCompletion}" Style="{StaticResource SettingTitleStyle}"/>
         <Separator/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" 
                                  DataContext="{Binding GenderCompletionContext}" 

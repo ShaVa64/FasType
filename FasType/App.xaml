@@ -8,7 +8,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml"/>
-                <ResourceDictionary Source="Dictionaries\BorderBrushTextBoxDictionary.xaml"/>
+                <ResourceDictionary Source="Dictionaries\TextBoxDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -21,7 +21,7 @@ namespace FasType.Models.Linguistics.Grammars
             _ => throw new NotImplementedException()
         };
 
-        public bool Ungrammarify(string form, out string shortForm) 
+        public bool TryUngrammarify(string form, out string shortForm) 
         {
             shortForm = null;
             if (!SuitsGrammar(form))
@@ -67,7 +67,7 @@ namespace FasType.Models.Linguistics.Grammars
             GrammarPosition.Postfix => form.EndsWith(Repr),
             _ => throw new NotImplementedException()
         };
-        public bool Ungrammarify(string form, out string shortForm)
+        public bool TryUngrammarify(string form, out string shortForm)
         {
             shortForm = null;
             if (!SuitsGrammar(form))
@@ -75,8 +75,8 @@ namespace FasType.Models.Linguistics.Grammars
 
             shortForm = Position switch
             {
-                GrammarPosition.Prefix => form[1..],
-                GrammarPosition.Postfix => form[..^1],
+                GrammarPosition.Prefix => form[(Repr.Length)..],
+                GrammarPosition.Postfix => form[..^(Repr.Length)],
                 _ => throw new NotImplementedException()
             };
             return true;

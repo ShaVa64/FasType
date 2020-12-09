@@ -115,6 +115,24 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto-complete.
+        /// </summary>
+        public static string AutoComplete {
+            get {
+                return ResourceManager.GetString("AutoComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Completion.
+        /// </summary>
+        public static string DefaultCompletion {
+            get {
+                return ResourceManager.GetString("DefaultCompletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {

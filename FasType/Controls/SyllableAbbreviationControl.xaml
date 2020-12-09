@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FasType.Controls" xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
              xmlns:utils="clr-namespace:FasType.Utils" xmlns:models="clr-namespace:FasType.Models.Linguistics"
-             xmlns:prop="clr-namespace:FasType.Properties"
+             xmlns:prop="clr-namespace:FasType.Properties" xmlns:ctrl="clr-namespace:FasType.Controls"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance models:AbbreviationMethod}"
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -47,14 +47,12 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" Style="{StaticResource EmptyTextBox}" 
-                 Text="{Binding ShortForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Width="40" Height="18" Margin="5, 0, 0, 0"/>
+        <ctrl:BorderBrushTextBox Grid.Column="0" Width="40" Height="18" Margin="5, 0, 0, 0"
+                                 Text="{Binding ShortForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Grid.Column="1" Text="{x:Static utils:Unicodes.Arrow}" 
                    Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBox Grid.Column="2" Style="{StaticResource EmptyTextBox}"
-                 Text="{Binding FullForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Width="40" Height="18" Margin="0"/>
+        <ctrl:BorderBrushTextBox Grid.Column="2" Width="40" Height="18" Margin="0"
+                 Text="{Binding FullForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <CheckBox Grid.Column="3" Content="{x:Static prop:Resources.Start}" IsChecked="{Binding IsBefore}" 
                   BorderBrush="{Binding Position, Converter={StaticResource EnumToColor}}" Margin="10, 0, 0, 0"

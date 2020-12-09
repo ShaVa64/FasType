@@ -79,30 +79,30 @@ namespace FasType.Storage
         List<string> Words(string _curr, string from, List<string> poss)
         {
             if (from == string.Empty)
+            {
                 poss.Add(_curr);
+                return poss;
+            }
+
+            AbbreviationMethodRecord[] amrs = Array.Empty<AbbreviationMethodRecord>();
+            if (_curr == string.Empty)
+            {
+                amrs = AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.Before) && from.StartsWith(m.ShortForm)).ToArray();//.AsEnumerable().Where(m => m.SatisfiesBefore(from)).ToArray();
+            }
             else
             {
-                AbbreviationMethodRecord[] amrs = Array.Empty<AbbreviationMethodRecord>();
-                if (_curr == string.Empty)
-                {
-                    amrs = AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.Before) && from.StartsWith(m.ShortForm)).ToArray();//.AsEnumerable().Where(m => m.SatisfiesBefore(from)).ToArray();
-                }
-                else
-                {
-                    amrs = AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.In) && from.StartsWith(m.ShortForm) && from.Length != m.ShortForm.Length).ToArray();
-                    amrs = amrs.Concat(AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.After) && from.EndsWith(m.ShortForm) && from.Length == m.ShortForm.Length)).ToArray();
-                }
-
-
-
-                string temp = _curr;
-                _curr += from[0];
-                Words(_curr, from[1..], poss);
-
-                _curr = temp;
-                foreach (var amr in amrs)
-                    Words(_curr + amr.FullForm, from[(amr.ShortForm.Length)..], poss);
+                amrs = AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.In) && from.StartsWith(m.ShortForm) && from.Length != m.ShortForm.Length).ToArray();
+                amrs = amrs.Concat(AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.After) && from.EndsWith(m.ShortForm) && from.Length == m.ShortForm.Length)).ToArray();
             }
+
+            string temp = _curr;
+            _curr += from[0];
+            Words(_curr, from[1..], poss);
+
+            _curr = temp;
+            foreach (var amr in amrs)
+                Words(_curr + amr.FullForm, from[(amr.ShortForm.Length)..], poss);
+
             return poss;
         }
 

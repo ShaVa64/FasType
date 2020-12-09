@@ -21,9 +21,9 @@ namespace FasType.Storage
         public int Count => Abbreviations.Count();
         public DbSet<BaseAbbreviation> Abbreviations { get; set; }
 
-        public Type ElementType => Abbreviations.AsQueryable().ElementType;
-        public Expression Expression => Abbreviations.AsQueryable().Expression;
-        public IQueryProvider Provider => Abbreviations.AsQueryable().Provider;
+        public Type ElementType => Abbreviations.AsNoTracking().ElementType;
+        public Expression Expression => Abbreviations.AsNoTracking().Expression;
+        public IQueryProvider Provider => Abbreviations.AsNoTracking().Provider;
 
         //public DbSet<VerbAbbreviation> VerbAbbreviations { get; set; }
 
@@ -112,11 +112,11 @@ namespace FasType.Storage
         public IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm)
         {
             var forms = new List<string>() { shortForm };
-            if (Linguistics.GenderType.Ungrammarify(shortForm, out string form))
+            if (Linguistics.GenderType.TryUngrammarify(shortForm, out string form))
                 forms.Add(form);
-            if (Linguistics.PluralType.Ungrammarify(shortForm, out form))
+            if (Linguistics.PluralType.TryUngrammarify(shortForm, out form))
                 forms.Add(form);
-            if (Linguistics.GenderPluralType.Ungrammarify(shortForm, out form))
+            if (Linguistics.GenderPluralType.TryUngrammarify(shortForm, out form))
                 forms.Add(form);
 
             var l = Abbreviations.Where(a => forms.Contains(a.ShortForm))/*.OrderByDescending(a => a.Used)*/.ToList();

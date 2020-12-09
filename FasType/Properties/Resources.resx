@@ -251,4 +251,10 @@
   <data name="DupAbbrevToolTip" xml:space="preserve">
     <value>Such abbreviation already exists.</value>
   </data>
+  <data name="DefaultCompletion" xml:space="preserve">
+    <value>Default Completion</value>
+  </data>
+  <data name="AutoComplete" xml:space="preserve">
+    <value>Auto-complete</value>
+  </data>
 </root>

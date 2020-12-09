@@ -1,15 +1,16 @@
 TODOS:
-- TextBox BorderBrush
-- Duplicate GrammarType
+- Dictionary/anti-dictionary
 - Abbreviations Auto-creation
 (myinputbox)
 
 
 
-
+- Localized text
+- SeeAllWindow possible memory leak
+- TextBox BorderBrush
+- Duplicate GrammarType
 - Add "x" Used
 - Remove Used == 0
-- Localized text
 - Multiple Window appearence
 - Other forms auto-completion
 - Duplicate abbrevs on FullForm

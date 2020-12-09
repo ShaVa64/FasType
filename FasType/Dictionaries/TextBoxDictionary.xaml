@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctrl="clr-namespace:FasType.Controls">
+                    <!--xmlns:local="clr-namespace:FasType.Dictionaries"-->
+
+    <SolidColorBrush x:Key="DefaultBrush" Color="#aaa"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="Red"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="DarkOrange"/>
+
+    <ControlTemplate x:Key="BBTBControlTemplate" TargetType="TextBox">
+        <Border BorderThickness="1.2" BorderBrush="{TemplateBinding BorderBrush}" x:Name="border">
+            <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+        </Border>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="MyTextBoxControlTemplate" TargetType="ctrl:ClearableTextBox">
+        <Border BorderThickness="1.2" BorderBrush="{TemplateBinding BorderBrush}" x:Name="border">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer Grid.Column="0" Grid.ColumnSpan="2"
+                              Margin="0" x:Name="PART_ContentHost" />
+                <Button x:Name="ClearButton" Grid.Column="1" Visibility="Collapsed"
+                        Height="{TemplateBinding Height}" Width="{TemplateBinding Height}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Border Background="Transparent">
+                                            <Path Stretch="Uniform" Stroke="Black" 
+                                                  Data="{StaticResource CrossGeometry}" StrokeThickness="2" 
+                                                  Margin="5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="HasText" Value="True"/>
+                    <Condition Property="IsClearable" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="ClearButton" Property="Visibility" Value="Visible"/>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--<Style x:Key="BorderBrushTextBox" TargetType="{x:Type ctrl:BorderBrushTextBox}">
+        <Setter Property="BorderBrush" Value="{StaticResource DefaultBrush}"/>
+    </Style>
+
+    <Style x:Key="EmptyTextBox" TargetType="{x:Type ctrl:BorderBrushTextBox}" BasedOn="{StaticResource BorderBrushTextBox}">
+        <Style.Triggers>
+            <Trigger Property="Text" Value="">
+                <Setter Property="BorderBrush" Value="{StaticResource ErrorBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>-->
+</ResourceDictionary>

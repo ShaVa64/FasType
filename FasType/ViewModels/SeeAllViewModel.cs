@@ -20,7 +20,7 @@ namespace FasType.ViewModels
         string _queryString;
         FormOrderBy _sortBy;
         readonly IAbbreviationStorage _storage;
-        IList<BaseAbbreviation> _allAbbreviations;
+        List<BaseAbbreviation> _allAbbreviations;
 
         public string Title => Resources.AllAbbrevs + $"  ({Count})";
 
@@ -45,7 +45,7 @@ namespace FasType.ViewModels
         }
 
         public int Count => AllAbbreviations.Count;
-        public IList<BaseAbbreviation> AllAbbreviations
+        public List<BaseAbbreviation> AllAbbreviations
         {
             get => _allAbbreviations;
             private set
@@ -68,6 +68,8 @@ namespace FasType.ViewModels
             //AllAbbreviations = _storage.Take(2).ToList();
         }
 
+
+
         void OrderAndFilterAbbreviations() => AllAbbreviations = (OrderBy switch
         {
             FormOrderBy.FullForm => _storage.Where(a => a.FullForm.Contains(QueryString)).OrderBy(a => a.FullForm),
@@ -87,7 +89,7 @@ namespace FasType.ViewModels
             _ => throw new NotImplementedException()
         }).ToList();
 
-    bool CanRemove() => true;
+        bool CanRemove() => true;
         void Remove(BaseAbbreviation abbrev)
         {
             var message = string.Format(Resources.DeleteDialogFormat, Environment.NewLine, abbrev.ElementaryRepresentation);
