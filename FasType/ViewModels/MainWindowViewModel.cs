@@ -131,10 +131,21 @@ namespace FasType.ViewModels
             if (IsPaused) 
                 return;
             Log.Information("Current Listener State: {listenerState}", CurrentListenerState);
-            if (CurrentListenerState is ListenerStates.Inserting)
-                Inserting(sender, e);
-            else if (CurrentListenerState is ListenerStates.Choosing)
-                Choosing(sender, e);
+            switch (CurrentListenerState)
+            {
+                case ListenerStates.Inserting:
+                    Inserting(sender, e);
+                    break;
+                case ListenerStates.Choosing:
+                    Choosing(sender, e);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+            //if (CurrentListenerState is ListenerStates.Inserting)
+            //    Inserting(sender, e);
+            //else if (CurrentListenerState is ListenerStates.Choosing)
+            //    Choosing(sender, e);
         }
 
         void Inserting(object sender, KeyPressedEventArgs e)
@@ -202,7 +213,7 @@ namespace FasType.ViewModels
             }
             else if (e.KeyPressed == Key.Back && !string.IsNullOrEmpty(CurrentWord))
             {
-                CurrentWord = CurrentWord.Remove(CurrentWord.Length - 1);
+                CurrentWord = CurrentWord[..^1];//.Remove(CurrentWord.Length - 1);
                 Log.Verbose("Last char removed, Current Word: {@currentWord}", CurrentWord);
             }
             else if (e.KeyPressed.IsModifier() || (e.KeyPressed == Key.Oem6 && e.Old.KeyPressed != Key.Oem6)) { }
