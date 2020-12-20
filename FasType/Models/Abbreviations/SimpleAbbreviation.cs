@@ -27,7 +27,7 @@ namespace FasType.Models.Abbreviations
         [MaxLength(50)] public string GenderPluralForm { get; private set; }
 
         public SimpleAbbreviation(string shortForm, string fullForm, ulong used, string genderForm, string pluralForm, string genderPluralForm)
-            : base(shortForm.ToLower(), fullForm.ToLower(), used) 
+            : base(shortForm.ToLower(), fullForm, used) 
         {
             PluralForm = pluralForm;
             GenderForm = genderForm;

@@ -58,6 +58,7 @@ namespace FasType.ViewModels
         public Command SeeAllCommand { get; }
         public Command<BaseAbbreviation> ChooseCommand { get; }
         public Command OpenLinguisticsCommand { get; }
+        public Command<System.Media.SystemSound> PlaySoundCommand { get; }
 
         //static MainWindowViewModel() => _instance = App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>();
         public MainWindowViewModel(IAbbreviationStorage storage)
@@ -71,7 +72,10 @@ namespace FasType.ViewModels
             SeeAllCommand = new(SeeAll, CanSeeAll);
             ChooseCommand = new(Choose, CanChoose);
             OpenLinguisticsCommand = new(OpenLinguistics, CanOpenLinguistics);
+            PlaySoundCommand = new(PlaySound);
         }
+
+        static void PlaySound(System.Media.SystemSound sound) => sound.Play();
 
         bool CanOpenLinguistics() => !LinguisticsWindow.IsOpen;
         void OpenLinguistics()
@@ -171,7 +175,9 @@ namespace FasType.ViewModels
                     return;
                 }
                 //else if (abbrevs.Count > 1)
+
                 CurrentListenerState = ListenerStates.Choosing;
+                new System.Media.SoundPlayer(@"Assets\sound.wav").Play();
 
                 //MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
                 //ChoosedFullForm = MatchingFullForms[0];

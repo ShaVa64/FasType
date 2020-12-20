@@ -99,6 +99,9 @@
     <None Update="Assets\keyboard.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Assets\sound.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="linguistics.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

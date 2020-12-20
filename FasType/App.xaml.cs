@@ -23,6 +23,7 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Data;
 using FasType.Models.Linguistics;
+using System.Text;
 
 namespace FasType
 {
@@ -100,59 +101,75 @@ namespace FasType
             MainWindow.Show();
         }
 
-        //void T()
-        //{
-        //    string fp = @"D:\Visual Studio Projects\FasType\Docs\abréviations.txt";
-        //    string tb = @"D:\Visual Studio Projects\FasType\Docs\table_mère avec toutes les formes.txt";
+        void T()
+        {
+            string fp = @"D:\Visual Studio Projects\FasType\Docs\abréviations.txt";
+            string tb = @"D:\Visual Studio Projects\FasType\Docs\table_mère avec toutes les formes.txt";
+            string db = @"D:\Visual Studio Projects\FasType\Docs\doublons.txt";
 
-        //    using var stream1 = new FileStream(fp, FileMode.Open, FileAccess.Read);
-        //    using var reader1 = new StreamReader(stream1); 
-            
-        //    using var stream2 = new FileStream(tb, FileMode.Open, FileAccess.Read);
-        //    using var reader2 = new StreamReader(stream2);
+            using var stream1 = new FileStream(fp, FileMode.Open, FileAccess.Read);
+            using var reader1 = new StreamReader(stream1);
 
-        //    using var _context = ServiceProvider.GetRequiredService<IAbbreviationStorage>();
+            using var stream2 = new FileStream(tb, FileMode.Open, FileAccess.Read);
+            using var reader2 = new StreamReader(stream2);
 
+            //using var _context = ServiceProvider.GetRequiredService<IAbbreviationStorage>();
 
-        //    var abbrevs = new List<(string, string)>();
-        //    string l;
-        //    while ((l = reader1.ReadLine()) != null)
-        //    {
-        //        var sp = l.Replace("\"", string.Empty).Split(';');
+            StringBuilder sb = new();
 
-        //        string sf = sp[0];
-        //        string ff = sp[1];
+            var abbrevs = new List<(string, string)>();
+            string l;
+            while ((l = reader1.ReadLine()) != null)
+            {
+                var sp = l.Replace("\"", string.Empty).Split(';');
 
-        //        abbrevs.Add((sf, ff));
-        //        //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
-        //    }
+                string sf = sp[0];
+                string ff = sp[1];
 
-        //    var simples = new List<Models.Abbreviations.BaseAbbreviation>();
-        //    l = reader2.ReadLine();
-        //    while ((l = reader2.ReadLine()) != null)
-        //    {
-        //        var sp = l.Replace("\"", string.Empty).Split(';');
+                abbrevs.Add((sf, ff));
+                //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+            }
 
-        //        string ff = sp[1];
-        //        string gf = sp[2];
-        //        string gpf = sp[3];
-        //        string pf = sp[4];
+            //var simples = new List<Models.Abbreviations.BaseAbbreviation>();
+            l = reader2.ReadLine();
+            while ((l = reader2.ReadLine()) != null)
+            {
+                var sp = l.Replace("\"", string.Empty).Split(';');
 
-        //        string sf;
-        //        var sfs = abbrevs.Where(t => t.Item2 == ff).ToArray();
+                string ff = sp[1];
+                string gf = sp[2];
+                string gpf = sp[3];
+                string pf = sp[4];
 
-        //        if (sfs.Length == 1)
-        //            sf = sfs.Single().Item1;
-        //        else
-        //        {
-        //            continue;
-        //        }
+                string sf;
+                var sfs = abbrevs.Where(t => t.Item2 == ff).ToArray();
 
-        //        simples.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, 0, gf, pf, gpf));
-        //        //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
-        //    }
-        //    _context.AddRange(simples);
-        //}
+                //if (sfs.Length == 1)
+                //    sf = sfs.Single().Item1;
+                //else 
+                if (sfs.Length > 1)
+                {
+                    sb.Append(ff)
+                        .Append(": ");
+                    sb.AppendJoin(", ", sfs.Select(t => t.Item1));
+                    //foreach (string ssf in sfs.Select(t => t.Item1))
+                    //    sb.Append(ssf).Append(", ");
+                    sb.AppendLine();
+                    string prev = sb.ToString();
+                    continue;
+                }
+                else 
+                {
+                    continue;
+                }
+
+                //simples.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, 0, gf, pf, gpf));
+                //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+            }
+            //_context.AddRange(simples);
+
+            System.IO.File.WriteAllText(db, sb.ToString());
+        }
 
         //void F()
         //{

@@ -4,16 +4,28 @@ TODOS:
 (myinputbox)
 
 
-
 - Localized text
 - SeeAllWindow possible memory leak
 - TextBox BorderBrush
 - Duplicate GrammarType
 - Add "x" Used
-- Remove Used == 0
+- Remove Used==0
 - Multiple Window appearence
 - Other forms auto-completion
 - Duplicate abbrevs on FullForm
 
+bzr zr baser baser biseauter bizarre bizarre baser bizarre baser baser passé biseauter baser bzr
+baser baser bzr bzr zr bzr zr bzr 
+
 QUESTIONS:
+- duplicates on known abbreviations
 - #used by abbreviation or form ?
+- Import/Export simplified tools for Abbrevs/Linguistics
+
+
+PROBS:
+- Double first letter in word, etc..
+- Abbreviations auto-complete not existing forms
+- (!) Sound when need choice for abbreviations
+- Upper Case problem on abbreviations
+- Special abbreviations for one-letter short form
