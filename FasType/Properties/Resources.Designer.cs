@@ -88,6 +88,15 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Simple Abbreviation.
+        /// </summary>
+        public static string AddSimpleAbbrevTitle {
+            get {
+                return ResourceManager.GetString("AddSimpleAbbrevTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Abbreviations.
         /// </summary>
         public static string AllAbbrevs {
@@ -97,7 +106,7 @@ namespace FasType.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The abbreviation you are trying to create already exists.{0}({1}).
+        ///   Looks up a localized string similar to The abbreviation you are trying to create already exists ({0}).{1}Would you like to replace it ?.
         /// </summary>
         public static string AlreadyExistsErrorFormat {
             get {
@@ -313,6 +322,33 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modify.
+        /// </summary>
+        public static string Modify {
+            get {
+                return ResourceManager.GetString("Modify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify Simple Abbreviation.
+        /// </summary>
+        public static string ModifySimpleAbbrevTitle {
+            get {
+                return ResourceManager.GetString("ModifySimpleAbbrevTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One-Letters.
+        /// </summary>
+        public static string OneLetters {
+            get {
+                return ResourceManager.GetString("OneLetters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string Open {
@@ -426,15 +462,6 @@ namespace FasType.Properties {
         public static string SimpleAbbrevHeader {
             get {
                 return ResourceManager.GetString("SimpleAbbrevHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add Simple Abbreviation.
-        /// </summary>
-        public static string SimpleAbbrevTitle {
-            get {
-                return ResourceManager.GetString("SimpleAbbrevTitle", resourceCulture);
             }
         }
         

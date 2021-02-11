@@ -66,10 +66,10 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"
+            <TextBlock Grid.Column="0" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" TextAlignment="Center"
                        Style="{StaticResource SettingTitleStyle}" Text="{x:Static prop:Resources.AbbreviationMethod}"/>
             <Button Grid.Column="1" Content="{x:Static prop:Resources.Open}" HorizontalAlignment="Right" VerticalAlignment="Center"
                     BorderThickness="1.5" Margin="5" Padding="4, 2" Command="{Binding OpenSyllableCommand}">
@@ -81,7 +81,7 @@
             </Button>
 
         </Grid>
-        <Separator/>
+        <!--<Separator/>
         <TextBlock Text="{x:Static prop:Resources.DefaultCompletion}" Style="{StaticResource SettingTitleStyle}"/>
         <Separator/>
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.Gender}" 
@@ -92,7 +92,26 @@
                                  TextBoxWidth="30" MaxLength="2" />
         <ctrl:GrammarTypeControl GrammarTypeName="{x:Static prop:Resources.GnP}"
                                  DataContext="{Binding GenderPluralCompletionContext}"
-                                 TextBoxWidth="30" MaxLength="2" />
+                                 TextBoxWidth="30" MaxLength="2" />-->
+        <Separator/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" TextAlignment="Center"
+                       Style="{StaticResource SettingTitleStyle}" Text="{x:Static prop:Resources.OneLetters}"/>
+            <Button Grid.Column="1" Content="{x:Static prop:Resources.Open}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    BorderThickness="1.5" Margin="5" Padding="4, 2" Command="{Binding OpenOneLettersCommand}">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+
+        </Grid>
         <Separator/>
 
         <Grid Margin="5, 20, 5, 5">

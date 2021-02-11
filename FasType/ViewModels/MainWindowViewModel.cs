@@ -36,9 +36,10 @@ namespace FasType.ViewModels
         //public List<string> MatchingFullForms { get => _matchingFullForms; set => SetProperty(ref _matchingFullForms, value); }
         //public int FullFormIndex { get => _fullFormIndex; set => SetProperty(ref _fullFormIndex, value); }
         public static bool IsPaused => SeeAllWindow.IsOpen
-                                       || AddAbbreviationWindow.IsOpen
+                                       || AbbreviationWindow.IsOpen
                                        || LinguisticsWindow.IsOpen
-                                       || AbbreviationMethodsWindow.IsOpen;
+                                       || AbbreviationMethodsWindow.IsOpen
+                                       || OneLettersWindow.IsOpen;
 
         public int AbbrevIndex { get => _abbrevIndex; set => SetProperty(ref _abbrevIndex, value); }
         public BaseAbbreviation ChoosedAbbrev { get => _choosedAbbrev; set => SetProperty(ref _choosedAbbrev, value); }
@@ -85,11 +86,11 @@ namespace FasType.ViewModels
             lw.Show();
         }
 
-        bool CanAddNew(Type t) => t != null && t.IsSubclassOf(typeof(Page)) && !AddAbbreviationWindow.IsOpen;
+        bool CanAddNew(Type t) => t != null && t.IsSubclassOf(typeof(Page)) && !AbbreviationWindow.IsOpen;
         void AddNew(Type t)
         {
-            var aaw = App.Current.ServiceProvider.GetRequiredService<AddAbbreviationWindow>();
-            var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;// Activator.CreateInstance(t) as Page;//new Pages.SimpleAbbreviationPage();
+            var aaw = App.Current.ServiceProvider.GetRequiredService<AbbreviationWindow>();
+            var p = App.Current.ServiceProvider.GetRequiredService(t) as Page;
 
             aaw.Content = p;
             aaw.Show();
@@ -162,7 +163,16 @@ namespace FasType.ViewModels
 
                 if (abbrevs.Count == 0)
                 {
-                    //var vals = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words(CurrentWord);
+                    var vals = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words(CurrentWord);
+                    var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
+
+                    var elems = vals.Select(val => dict.GetElement(val)).Where(elem => elem != null).ToList();
+
+                    if (elems.Count > 0)
+                    {
+
+                    }
+
                     CurrentWord = "";
                     return;
                 }

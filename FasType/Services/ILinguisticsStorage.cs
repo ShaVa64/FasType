@@ -21,7 +21,7 @@ namespace FasType.Services
 
         IEnumerable<AbbreviationMethod> AbbreviationMethods { get; set; }
 
-        List<string> Words(string currentWord);
+        string[] Words(string currentWord);
         bool Import(string filename);
         bool Export(string filename);
     }

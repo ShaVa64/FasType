@@ -17,6 +17,16 @@ namespace FasType.Utils
         public static bool IsModifier(this Key k) => k is Key.LeftCtrl or Key.RightCtrl or Key.LeftShift or Key.RightShift or Key.LWin or Key.RWin or Key.CapsLock;
     }
 
+    public static class AbbreviationExtensions
+    {
+        public static Type GetModifyPageType(this Models.Abbreviations.BaseAbbreviation ba) => ba switch
+        {
+            Models.Abbreviations.SimpleAbbreviation => typeof(Pages.SimpleAbbreviationPage),
+            Models.Abbreviations.VerbAbbreviation => null,
+            _ => null,
+        };
+    }
+
     public static class StringExtensions
     {
         public static bool IsFirstCharUpper(this string input) => input switch

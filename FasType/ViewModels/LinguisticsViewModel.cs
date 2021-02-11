@@ -31,6 +31,7 @@ namespace FasType.ViewModels
         public Command<Window> SaveCommand { get; }
         public Command OpenSyllableCommand { get; }
         public Command ResetCommand { get; }
+        public Command OpenOneLettersCommand { get; }
 
         public GrammarType GenderTypeContext { get; private set; }
         public GrammarType PluralTypeContext { get; private set; }
@@ -66,6 +67,7 @@ namespace FasType.ViewModels
             SaveCommand = new(Save, CanSave);
             OpenSyllableCommand = new(OpenSyllable, CanOpenSyllable);
             ResetCommand = new(Reset, CanReset);
+            OpenOneLettersCommand = new(OpenOneLetters, CanOpenOneLetters);
 
             GenderTypeContext       = storage.GenderType;      //(GrammarType)UserGrammar.GenderRecord;
             PluralTypeContext       = storage.PluralType;      //(GrammarType)UserGrammar.PluralRecord;
@@ -74,6 +76,14 @@ namespace FasType.ViewModels
             GenderCompletionContext = storage.GenderCompletion;
             PluralCompletionContext = storage.PluralCompletion;
             GenderPluralCompletionContext = storage.GenderPluralCompletion;
+        }
+
+        bool CanOpenOneLetters() => !OneLettersWindow.IsOpen;
+        void OpenOneLetters()
+        {
+            var w = App.Current.ServiceProvider.GetRequiredService<OneLettersWindow>();
+
+            w.Show();
         }
 
         //void RemovePlural(GrammarType gt)

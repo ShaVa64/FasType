@@ -15,19 +15,172 @@ using FasType.Windows;
 
 namespace FasType.ViewModels
 {
-    public class SimpleAbbreviationViewModel : ObservableObject
+    public class AddSimpleAbbreviationViewModel : SimpleAbbreviationViewModel
     {
-        static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
-        static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
+        public AddSimpleAbbreviationViewModel() : base(Resources.AddSimpleAbbrevTitle, Resources.Add, false)
+        {
+#if DEBUG
+            ShortForm = "pçé";
+            FullForm = "passé";
+            GenderForm = "passée";
+            PluralForm = "passés";
+            GenderPluralForm = "passées";
+#endif
+        }
+        public AddSimpleAbbreviationViewModel(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm) : this()
+        {
+            ShortForm = shortForm;
+            FullForm = fullForm;
+            GenderForm = genderForm;
+            PluralForm = pluralForm;
+            GenderPluralForm = genderPluralForm;
+        }
 
-        SimpleAbbreviation _currentAbbrev;
+        protected override void CreateNew(Page p)
+        {
+            if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
+            {
+                MessageBox.Show(Resources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                return;
+            }
+            if (Storage.Contains(_currentAbbrev))
+            {
+                var message = string.Format(Resources.AlreadyExistsErrorFormat, FullForm, Environment.NewLine);
+                var res = MessageBox.Show(message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No);
+                if (res == MessageBoxResult.No)
+                    return;
+                var success = Storage.UpdateAbbreviation(_currentAbbrev);
+                if (!success)
+                {
+                    message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                    MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                    return;
+                }
+                (p.Parent as Window).Close();
+                return;
+            }
+            if (!Storage.Add(_currentAbbrev))
+            {
+                var message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                return;
+            }
+
+            (p.Parent as Window).Close();
+        }
+
+        protected override void SetPreview()
+        {
+            Preview = "";
+            SFToolTip = FFToolTip = null;
+            BorderBrush = null;
+            CommandManager.InvalidateRequerySuggested();
+            bool isSFEmpty = string.IsNullOrEmpty(ShortForm);
+            bool isFFEmpty = string.IsNullOrEmpty(FullForm);
+            if (isSFEmpty || isFFEmpty) 
+            {
+                if (isSFEmpty)
+                    SFToolTip = Resources.EmptyAbbrevToolTip;
+                if (isFFEmpty)
+                    FFToolTip = Resources.EmptyAbbrevToolTip;
+                return;
+            }
+
+            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, 0, GenderForm, PluralForm, GenderPluralForm);
+            if (Storage.Contains(_currentAbbrev))
+            {
+                BorderBrush = Controls.BorderBrushTextBox.WarningBrush;
+                FFToolTip = Resources.DupAbbrevToolTip;
+                //return;
+            }
+
+            Preview = _currentAbbrev.ComplexRepresentation;
+        }
+    }
+
+    public class ModifySimpleAbbreviationViewModel : SimpleAbbreviationViewModel
+    {
+        SimpleAbbreviation _toModify;
+
+        public ModifySimpleAbbreviationViewModel(SimpleAbbreviation sa) : base(Resources.ModifySimpleAbbrevTitle, Resources.Modify, true)
+        {
+            _toModify = sa;
+
+            ShortForm = sa.ShortForm;
+            FullForm = sa.FullForm;
+            GenderForm = sa.GenderForm;
+            PluralForm = sa.PluralForm;
+            GenderPluralForm = sa.GenderPluralForm;
+        }
+
+        protected override void CreateNew(Page p)
+        {
+            if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
+            {
+                MessageBox.Show(Resources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                return;
+            }
+            if (!Storage.Remove(_toModify))
+            {
+                //var message = string.Format(Resources.AlreadyExistsErrorFormat, Environment.NewLine, FullForm);
+                //var res = MessageBox.Show(message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No);
+                //if (res == MessageBoxResult.No)
+                //    return;
+                //var success = Storage.UpdateAbbreviation(_currentAbbrev);
+                //if (!success)
+                //{
+                //    message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                //    MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                //    return;
+                //}
+                return;
+            }
+            if (!Storage.Add(_currentAbbrev))
+            {
+                var message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                return;
+            }
+
+           (p.Parent as Window).Close();
+        }
+
+        protected override void SetPreview()
+        {
+            Preview = "";
+            SFToolTip = FFToolTip = null;
+            BorderBrush = null;
+            CommandManager.InvalidateRequerySuggested();
+            bool isSFEmpty = string.IsNullOrEmpty(ShortForm);
+            bool isFFEmpty = string.IsNullOrEmpty(FullForm);
+            if (isSFEmpty || isFFEmpty)
+            {
+                if (isSFEmpty)
+                    SFToolTip = Resources.EmptyAbbrevToolTip;
+                if (isFFEmpty)
+                    FFToolTip = Resources.EmptyAbbrevToolTip;
+                return;
+            }
+
+            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, 0, GenderForm, PluralForm, GenderPluralForm);
+
+            Preview = _currentAbbrev.ComplexRepresentation;
+        }
+    }
+
+    public abstract class SimpleAbbreviationViewModel : ObservableObject
+    {
+        protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
+        protected static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
+
+        protected SimpleAbbreviation _currentAbbrev;
         string _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
         string _sfToolTip, _ffToolTip, _preview;
         Brush _borderBrush;
-        //bool _autoComplete;
 
-        //public bool AutoComplete { get => _autoComplete; set => SetProperty(ref _autoComplete, value); }
-
+        public string Title { get; }
+        public string ButtonText { get; }
+        public bool ShortFormReadOnly { get; }
         public string ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value/*, SetPreview*/); }
         public string FullForm { get => _fullForm; set => SetProperty(ref _fullForm, value/*, SetPreview*/); }
         public string GenderForm { get => _genderForm; set => SetProperty(ref _genderForm, value/*, SetPreview*/); }
@@ -45,8 +198,12 @@ namespace FasType.ViewModels
         public Command OpenLinguisticsCommand { get; set; }
         public Command AutoCompleteCommand { get; set; }
 
-        public SimpleAbbreviationViewModel()
+        public SimpleAbbreviationViewModel(string title, string buttonText, bool shortFormReadOnly)
         {
+            Title = title;
+            ShortFormReadOnly = shortFormReadOnly;
+            ButtonText = buttonText;
+            
             _currentAbbrev = null;
 
             CreateNewCommand = new(CreateNew, CanCreateNew);
@@ -59,14 +216,6 @@ namespace FasType.ViewModels
             //AutoComplete = false;
 
             this.PropertyChanged += SimpleAbbreviationViewModel_PropertyChanged;
-#if DEBUG
-            //AutoComplete = true;
-            ShortForm = "pss";
-            //FullForm = "passé";
-            //GenderForm = "passée";
-            //PluralForm = "passés";
-            //GenderPluralForm = "passées";
-#endif
         }
 
         void SimpleAbbreviationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -94,29 +243,7 @@ namespace FasType.ViewModels
         }
 
         bool CanCreateNew() => !string.IsNullOrEmpty(FullForm) && !string.IsNullOrEmpty(ShortForm);
-        public void CreateNew(Page p)
-        {
-            if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
-            {
-                MessageBox.Show(Resources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
-                return;
-            }
-
-            if (Storage.Contains(_currentAbbrev))
-            {
-                var message = string.Format(Resources.AlreadyExistsErrorFormat, Environment.NewLine, FullForm);
-                MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
-                return;
-            }
-            if (!Storage.Add(_currentAbbrev))
-            {
-                var message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
-                MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
-                return;
-            }
-
-            (p.Parent as Window).Close();
-        }
+        protected abstract void CreateNew(Page p);
 
         void ComputeAutoComplete()
         {
@@ -125,37 +252,13 @@ namespace FasType.ViewModels
                 GenderForm = PluralForm = GenderPluralForm = string.Empty;
                 return;
             }
-            GenderForm = Linguistics.GenderCompletion.Grammarify(FullForm);// + "e";
-            PluralForm = Linguistics.PluralCompletion.Grammarify(FullForm);// + "s";
-            GenderPluralForm = Linguistics.GenderPluralCompletion.Grammarify(FullForm);// + "es";
+            //TODO: Get from dictionary
+
+            //GenderForm = Linguistics.GenderCompletion.Grammarify(FullForm);// + "e";
+            //PluralForm = Linguistics.PluralCompletion.Grammarify(FullForm);// + "s";
+            //GenderPluralForm = Linguistics.GenderPluralCompletion.Grammarify(FullForm);// + "es";
         }
 
-        void SetPreview()
-        {
-            Preview = "";
-            SFToolTip = FFToolTip = null;
-            BorderBrush = null;
-            CommandManager.InvalidateRequerySuggested();
-            bool isSFEmpty = string.IsNullOrEmpty(ShortForm);
-            bool isFFEmpty = string.IsNullOrEmpty(FullForm);
-            if (isSFEmpty || isFFEmpty) 
-            {
-                if (isSFEmpty)
-                    SFToolTip = Resources.EmptyAbbrevToolTip;
-                if (isFFEmpty)
-                    FFToolTip = Resources.EmptyAbbrevToolTip;
-                return;
-            }
-
-            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, 0, GenderForm, PluralForm, GenderPluralForm);
-            if (Storage.Contains(_currentAbbrev))
-            {
-                BorderBrush = Controls.BorderBrushTextBox.WarningBrush;
-                FFToolTip = Resources.DupAbbrevToolTip;
-                return;
-            }
-
-            Preview = _currentAbbrev.ComplexRepresentation;
-        }
+        protected abstract void SetPreview();
     }
 }

@@ -52,9 +52,13 @@ namespace FasType
             _abbrevContext?.Database.Migrate();
             using var _lingContext = ServiceProvider.GetRequiredService<ILinguisticsStorage>() as DbContext;
             _lingContext?.Database.Migrate();
+            using var _dicContext = ServiceProvider.GetRequiredService<IDictionaryStorage>() as DbContext;
+            _dicContext?.Database.Migrate();
             //_context.Database.EnsureCreated();
             //var x = System.Text.Json.JsonSerializer.Serialize(_lingContext as ILinguisticsStorage/*, new() { WriteIndented = true }*/);
 
+            //H();
+            //G();
             //T();
             //F();
 
@@ -73,6 +77,7 @@ namespace FasType
 
             services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")).EnableSensitiveDataLogging(), ServiceLifetime.Transient, ServiceLifetime.Transient);
             //services.AddTransient<IDataStorage, EFSqliteStorage>();
 
             services.AddSingleton(Configuration);
@@ -80,9 +85,10 @@ namespace FasType
             services.AddSingleton<MainWindow>();
             services.AddTransient<MainWindowViewModel>();
             
-            services.AddTransient<AddAbbreviationWindow>();
+            services.AddTransient<AbbreviationWindow>();
             services.AddTransient<SimpleAbbreviationPage>();
-            services.AddTransient<SimpleAbbreviationViewModel>();
+            services.AddTransient<AddSimpleAbbreviationViewModel>();
+            services.AddTransient<ModifySimpleAbbreviationViewModel>();
 
             services.AddTransient<SeeAllWindow>();
             services.AddTransient<SeeAllViewModel>();
@@ -92,6 +98,9 @@ namespace FasType
 
             services.AddTransient<AbbreviationMethodsWindow>();
             services.AddTransient<AbbreviationMethodsViewModel>();
+
+            services.AddTransient<OneLettersWindow>();
+            services.AddTransient<OneLettersViewModel>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)
@@ -101,75 +110,121 @@ namespace FasType
             MainWindow.Show();
         }
 
-        void T()
-        {
-            string fp = @"D:\Visual Studio Projects\FasType\Docs\abréviations.txt";
-            string tb = @"D:\Visual Studio Projects\FasType\Docs\table_mère avec toutes les formes.txt";
-            string db = @"D:\Visual Studio Projects\FasType\Docs\doublons.txt";
+        //void H()
+        //{
+        //    using var _context = ServiceProvider.GetRequiredService<IDictionaryStorage>() as EFSqliteDictionaryContext;
 
-            using var stream1 = new FileStream(fp, FileMode.Open, FileAccess.Read);
-            using var reader1 = new StreamReader(stream1);
+        //    var l = new List<Models.Dictionary.BaseDictionaryElement>();
+        //    string fp = @"D:\Visual Studio Projects\FasType\Docs\table_mère avec toutes les formes.txt";
 
-            using var stream2 = new FileStream(tb, FileMode.Open, FileAccess.Read);
-            using var reader2 = new StreamReader(stream2);
+        //    var lines = System.IO.File.ReadAllLines(fp);
+        //    for (int index = 1; index < lines.Length; index++)
+        //    {
+        //        var line = lines[index];
+        //        var sp = line.Replace("\"", string.Empty).Split(';');
 
-            //using var _context = ServiceProvider.GetRequiredService<IAbbreviationStorage>();
+        //        var ff = sp[1];
+        //        var gf = sp[2];
+        //        var pf = sp[4];
+        //        var gpf = sp[3];
 
-            StringBuilder sb = new();
+        //        if (l.Any(e => e.FullForm == ff))
+        //            continue;
+        //        if (ff == "passé")
+        //            continue;
+        //        if (ff.Contains(' '))
+        //        {
+        //            var sp2 = ff.Split(' ');
+        //            if (sp2.All(s => char.IsUpper(s[0])))
+        //                continue;
+        //        }
 
-            var abbrevs = new List<(string, string)>();
-            string l;
-            while ((l = reader1.ReadLine()) != null)
-            {
-                var sp = l.Replace("\"", string.Empty).Split(';');
+        //        var elem = new Models.Dictionary.SimpleDictionaryElement(ff, gf, pf, gpf);
+        //        l.Add(elem);
+        //    }
 
-                string sf = sp[0];
-                string ff = sp[1];
+        //    _context.Dictionary.AddRange(l);
+        //    _context.SaveChanges();
 
-                abbrevs.Add((sf, ff));
-                //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
-            }
+        //    //_context.Add(new Models.Dictionary.SimpleDictionaryElement("passé", "passée", "passés", "passées"));
+        //}
 
-            //var simples = new List<Models.Abbreviations.BaseAbbreviation>();
-            l = reader2.ReadLine();
-            while ((l = reader2.ReadLine()) != null)
-            {
-                var sp = l.Replace("\"", string.Empty).Split(';');
+        //void G()
+        //{
+        //    using var _context = ServiceProvider.GetRequiredService<IAbbreviationStorage>() as EFSqliteAbbreviationContext;
+        //    var x1 = _context.Abbreviations.Where(ba => ba.ShortForm.Length == 1).ToArray();
+        //    var x2 = _context.Abbreviations.Where(ba => ba.FullForm.Contains(" ")).ToArray();
+        //}
 
-                string ff = sp[1];
-                string gf = sp[2];
-                string gpf = sp[3];
-                string pf = sp[4];
+        //void T()
+        //{
+        //    string fp = @"D:\Visual Studio Projects\FasType\Docs\abréviations.txt";
+        //    string tb = @"D:\Visual Studio Projects\FasType\Docs\table_mère avec toutes les formes.txt";
+        //    string db = @"D:\Visual Studio Projects\FasType\Docs\doublons.txt";
 
-                string sf;
-                var sfs = abbrevs.Where(t => t.Item2 == ff).ToArray();
+        //    using var stream1 = new FileStream(fp, FileMode.Open, FileAccess.Read);
+        //    using var reader1 = new StreamReader(stream1);
 
-                //if (sfs.Length == 1)
-                //    sf = sfs.Single().Item1;
-                //else 
-                if (sfs.Length > 1)
-                {
-                    sb.Append(ff)
-                        .Append(": ");
-                    sb.AppendJoin(", ", sfs.Select(t => t.Item1));
-                    //foreach (string ssf in sfs.Select(t => t.Item1))
-                    //    sb.Append(ssf).Append(", ");
-                    sb.AppendLine();
-                    string prev = sb.ToString();
-                    continue;
-                }
-                else 
-                {
-                    continue;
-                }
+        //    using var stream2 = new FileStream(tb, FileMode.Open, FileAccess.Read);
+        //    using var reader2 = new StreamReader(stream2);
 
-                //simples.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, 0, gf, pf, gpf));
-                //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
-            }
-            //_context.AddRange(simples);
+        //    //using var _context = ServiceProvider.GetRequiredService<IAbbreviationStorage>();
 
-            System.IO.File.WriteAllText(db, sb.ToString());
-        }
+        //    StringBuilder sb = new();
+
+        //    var abbrevs = new List<(string, string)>();
+        //    string l;
+        //    while ((l = reader1.ReadLine()) != null)
+        //    {
+        //        var sp = l.Replace("\"", string.Empty).Split(';');
+
+        //        string sf = sp[0];
+        //        string ff = sp[1];
+
+        //        abbrevs.Add((sf, ff));
+        //        //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+        //    }
+
+        //    //var simples = new List<Models.Abbreviations.BaseAbbreviation>();
+        //    l = reader2.ReadLine();
+        //    while ((l = reader2.ReadLine()) != null)
+        //    {
+        //        var sp = l.Replace("\"", string.Empty).Split(';');
+
+        //        string ff = sp[1];
+        //        string gf = sp[2];
+        //        string gpf = sp[3];
+        //        string pf = sp[4];
+
+        //        string sf;
+        //        var sfs = abbrevs.Where(t => t.Item2 == ff).ToArray();
+
+        //        //if (sfs.Length == 1)
+        //        //    sf = sfs.Single().Item1;
+        //        //else 
+        //        if (sfs.Length > 1)
+        //        {
+        //            sb.Append(ff)
+        //                .Append(": ");
+        //            sb.AppendJoin(", ", sfs.Select(t => t.Item1));
+        //            //foreach (string ssf in sfs.Select(t => t.Item1))
+        //            //    sb.Append(ssf).Append(", ");
+        //            sb.AppendLine();
+        //            string prev = sb.ToString();
+        //            continue;
+        //        }
+        //        else 
+        //        {
+        //            continue;
+        //        }
+
+        //        //simples.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff, 0, gf, pf, gpf));
+        //        //_context.Add(new Models.Abbreviations.SimpleAbbreviation(sf, ff));
+        //    }
+        //    //_context.AddRange(simples);
+
+        //    System.IO.File.WriteAllText(db, sb.ToString());
+        //}
 
         //void F()
         //{

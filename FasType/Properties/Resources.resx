@@ -156,7 +156,7 @@
   <data name="RunAtStartUp" xml:space="preserve">
     <value>Run At Start Up</value>
   </data>
-  <data name="SimpleAbbrevTitle" xml:space="preserve">
+  <data name="AddSimpleAbbrevTitle" xml:space="preserve">
     <value>Add Simple Abbreviation</value>
   </data>
   <data name="ShortForm" xml:space="preserve">
@@ -177,7 +177,7 @@
     <value>_Linguistics</value>
   </data>
   <data name="AlreadyExistsErrorFormat" xml:space="preserve">
-    <value>The abbreviation you are trying to create already exists.{0}({1})</value>
+    <value>The abbreviation you are trying to create already exists ({0}).{1}Would you like to replace it ?</value>
   </data>
   <data name="Linguistics" xml:space="preserve">
     <value>Linguistics</value>
@@ -256,5 +256,14 @@
   </data>
   <data name="AutoComplete" xml:space="preserve">
     <value>Auto-complete</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="OneLetters" xml:space="preserve">
+    <value>One-Letters</value>
+  </data>
+  <data name="ModifySimpleAbbrevTitle" xml:space="preserve">
+    <value>Modify Simple Abbreviation</value>
   </data>
 </root>

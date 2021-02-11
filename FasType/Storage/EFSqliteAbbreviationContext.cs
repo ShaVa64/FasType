@@ -108,6 +108,24 @@ namespace FasType.Storage
             var r = SaveChanges();
             return r > 0;
         }
+        public bool UpdateAbbreviation(BaseAbbreviation abbrev)
+        {
+            if (!Abbreviations.Contains(abbrev) && Contains(abbrev))
+            {
+                var other = Abbreviations.Where(a => a.FullForm == abbrev.FullForm).SingleOrDefault();
+                if (other == null)
+                    return false;
+                //if (other.Key != abbrev.Key)
+                return Remove(other) && Add(abbrev);
+                //var success = Remove(other);
+                //if (!success)
+                //    return false;
+            }
+            Abbreviations.Update(abbrev);
+
+            var r = SaveChanges();
+            return r > 0;
+        }
 
         public IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm)
         {

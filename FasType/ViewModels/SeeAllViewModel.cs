@@ -9,7 +9,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -40,7 +39,7 @@ namespace FasType.ViewModels
             set
             {
                 if (SetProperty(ref _queryString, value))
-                    FilterAbbreviations();
+                    OrderAndFilterAbbreviations();
             }
         }
 
@@ -98,37 +97,12 @@ namespace FasType.ViewModels
                 return;
 
             _storage.Remove(abbrev);
-            AllAbbreviations = _storage.ToList();
+            OrderAndFilterAbbreviations();
         }
         public enum FormOrderBy
         {
             ShortForm,
             FullForm
-        }
-    }
-
-    public class SeeAllSelector : DataTemplateSelector
-    {
-        public DataTemplate First { get; set; }
-        public DataTemplate Default { get; set; }
-        public DataTemplate Last { get; set; }
-        public DataTemplate Only { get; set; }
-
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
-        {
-            int altIndex = ItemsControl.GetAlternationIndex(container);
-
-            var ic = ItemsControl.ItemsControlFromItemContainer(container);
-            int altCount = ic.AlternationCount;
-
-            if (altCount == 1)
-                return Only;
-
-            if (altIndex == 0)
-                return First;
-            if (altIndex == altCount - 1)
-                return Last;
-            return Default;
         }
     }
 }

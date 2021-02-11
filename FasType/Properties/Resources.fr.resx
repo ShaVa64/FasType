@@ -150,7 +150,7 @@
   <data name="RunAtStartUp" xml:space="preserve">
     <value>Lancer au Démarrage</value>
   </data>
-  <data name="SimpleAbbrevTitle" xml:space="preserve">
+  <data name="AddSimpleAbbrevTitle" xml:space="preserve">
     <value>Ajout d'Abréviation Simple</value>
   </data>
   <data name="ShortForm" xml:space="preserve">
@@ -169,7 +169,7 @@
     <value>_Linguistique</value>
   </data>
   <data name="AlreadyExistsErrorFormat" xml:space="preserve">
-    <value>L'abréviation que vous tentez d'ajouter existe déjà.{0}({1})</value>
+    <value>L'abréviation que vous tentez d'ajouter existe déjà ({0}).{1} Voulez-vous la remplacer ?</value>
   </data>
   <data name="Linguistics" xml:space="preserve">
     <value>Linguistique</value>
@@ -248,5 +248,14 @@
   </data>
   <data name="AutoComplete" xml:space="preserve">
     <value>Auto-complétion</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="OneLetters" xml:space="preserve">
+    <value>Lettres seules</value>
+  </data>
+  <data name="ModifySimpleAbbrevTitle" xml:space="preserve">
+    <value>Modification d'Abréviation Simple</value>
   </data>
 </root>

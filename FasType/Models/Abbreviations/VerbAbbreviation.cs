@@ -8,7 +8,7 @@ namespace FasType.Models.Abbreviations
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public class VerbAbbreviation : BaseAbbreviation
     {
-        public VerbAbbreviation() 
+        private VerbAbbreviation() 
             : base(null, null, 0) { }
 
         public override string GetFullForm(string shortForm) => throw new NotImplementedException();

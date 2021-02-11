@@ -34,6 +34,11 @@
     <None Remove="abbreviations.json" />
     <None Remove="abréviations.txt" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Page Remove="Dictionaries\TextBoxDictionary.xaml" />
+  </ItemGroup>
   
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary.dll">

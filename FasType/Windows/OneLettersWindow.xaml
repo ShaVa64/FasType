@@ -1,0 +1,85 @@
+﻿<Window x:Class="FasType.Windows.OneLettersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FasType.Windows" xmlns:mdl="clr-namespace:FasType.Models.Abbreviations"
+        mc:Ignorable="d" xmlns:vm="clr-namespace:FasType.ViewModels" xmlns:sel="clr-namespace:FasType.Selectors"
+        xmlns:ctrl="clr-namespace:FasType.Controls" x:Name="Window" xmlns:prop="clr-namespace:FasType.Properties"
+        d:DataContext="{d:DesignInstance vm:OneLettersViewModel}" ResizeMode="NoResize"
+        Title="{x:Static prop:Resources.OneLetters}" Height="450" MinWidth="300" SizeToContent="WidthAndHeight">
+
+    <Window.Resources>
+        <Style TargetType="StackPanel">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="Separator" x:Key="edgeSep">
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <Style TargetType="Separator" x:Key="middleSep">
+            <Setter Property="Margin" Value="10, 0"/>
+        </Style>
+
+        <DataTemplate x:Key="FirstDisplayTemplate" DataType="{x:Type mdl:BaseAbbreviation}">
+            <StackPanel>
+                <Separator Style="{StaticResource edgeSep}"/>
+                <ctrl:OneLetterAbbreviationControl 
+                    ModifyCommand="{Binding ElementName=Window, Path='DataContext.OpenAbbreviationPageCommand'}"/>
+            </StackPanel>
+        </DataTemplate>
+                <!--<TextBlock Text="{Binding ComplexRepresentation}" TextAlignment="Center"/>-->
+
+        <DataTemplate x:Key="DisplayTemplate" DataType="{x:Type mdl:BaseAbbreviation}">
+            <StackPanel>
+                <Separator Style="{StaticResource middleSep}"/>
+                <ctrl:OneLetterAbbreviationControl 
+                    ModifyCommand="{Binding ElementName=Window, Path='DataContext.OpenAbbreviationPageCommand'}"/>
+            </StackPanel>
+        </DataTemplate>
+                <!--<WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <TextBlock Text="{Binding ComplexRepresentation}" TextAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button Content="Modify" HorizontalAlignment="Center" 
+                            Command="{Binding Source={x:Reference Name=window}, Path='DataContext.OpenAbbreviationPageCommand'}"
+                            CommandParameter="{Binding .}"/>
+                </WrapPanel>-->
+
+        <DataTemplate x:Key="LastDisplayTemplate" DataType="{x:Type mdl:BaseAbbreviation}">
+            <StackPanel>
+                <Separator Style="{StaticResource middleSep}"/>
+                <ctrl:OneLetterAbbreviationControl 
+                    ModifyCommand="{Binding ElementName=Window, Path='DataContext.OpenAbbreviationPageCommand'}"/>
+                <Separator Style="{StaticResource edgeSep}"/>
+            </StackPanel>
+        </DataTemplate>
+                <!--<TextBlock Text="{Binding ComplexRepresentation}" TextAlignment="Center"/>-->
+
+        <DataTemplate x:Key="OnlyDisplayTemplate" DataType="{x:Type mdl:BaseAbbreviation}">
+            <StackPanel>
+                <Separator Style="{StaticResource edgeSep}"/>
+                <ctrl:OneLetterAbbreviationControl 
+                    ModifyCommand="{Binding ElementName=Window, Path='DataContext.OpenAbbreviationPageCommand'}"/>
+                <Separator Style="{StaticResource edgeSep}"/>
+            </StackPanel>
+        </DataTemplate>
+                <!--<TextBlock Text="{Binding ComplexRepresentation}" TextAlignment="Center"/>-->
+    </Window.Resources>
+    
+    <Grid Margin="5">
+        <ItemsControl ItemsSource="{Binding OneLetters}" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=ItemsSource.Count}">
+            <ItemsControl.ItemTemplateSelector>
+                <sel:OrderSelector First="{StaticResource FirstDisplayTemplate}" Default="{StaticResource DisplayTemplate}"
+                                   Last="{StaticResource LastDisplayTemplate}" Only="{StaticResource OnlyDisplayTemplate}"/>
+            </ItemsControl.ItemTemplateSelector>
+            <!--<ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type mdl:BaseAbbreviation}">
+                    <TextBlock Text="{Binding ComplexRepresentation}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>-->
+        </ItemsControl>
+    </Grid>
+</Window>

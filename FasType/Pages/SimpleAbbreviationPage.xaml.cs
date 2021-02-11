@@ -1,4 +1,5 @@
 ﻿using FasType.Models;
+using FasType.Models.Abbreviations;
 using FasType.Services;
 using FasType.ViewModels;
 using System;
@@ -22,110 +23,45 @@ namespace FasType.Pages
     /// <summary>
     /// Interaction logic for SimpleAbbreviationPage.xaml
     /// </summary>
-    public partial class SimpleAbbreviationPage : Page
-    {
-        readonly SimpleAbbreviationViewModel _vm;
+    /// 
 
-        public SimpleAbbreviationPage(SimpleAbbreviationViewModel vm)
+    public class AbbreviationPage : Page
+    {
+        public virtual void SetModifyAbbreviation(BaseAbbreviation ba)
+        { }
+        public virtual void SetNewAbbreviation(string shortForm, string fullForm, params string[] others)
+        { }
+    }
+
+    public partial class SimpleAbbreviationPage : AbbreviationPage
+    {
+        SimpleAbbreviationViewModel _currentVm;
+
+        public SimpleAbbreviationPage(AddSimpleAbbreviationViewModel addVm)
         {
             InitializeComponent();
 
-            DataContext = _vm = vm;
+            DataContext = _currentVm = addVm;
             FirstTB.Focus();
 
             //Init();
         }
 
-        //private async void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
-        //    {
-        //        MessageBox.Show("You can't create an empty abbreviation", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
-        //        return;
-        //    }
+        public override void SetModifyAbbreviation(BaseAbbreviation ba) => SetModifyAbbreviation(ba as SimpleAbbreviation);
+        public void SetModifyAbbreviation(SimpleAbbreviation abbrev)
+        {
+            DataContext = _currentVm = new ModifySimpleAbbreviationViewModel(abbrev);
 
-        //    bool b = await _storage.AddAsync(_currentAbbrev);
-        //    if (!b)
-        //    {
-        //        MessageBox.Show($"An error has occured while trying to create the abbreviation ({_currentAbbrev.ElementaryRepresentation}).", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
-        //        return;
-        //    }
-
-        //    (Parent as Window).Close();
-        //}
-        
-        //private void TB_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    PreviewText.Text = "";
-
-        //    string sf = sfTB.Text.Trim();
-        //    string ff = ffTB.Text.Trim();
-
-        //}
-
-        //void Init()
-        //{
-        //    Grid g = NewGrid();
-
-        //    var ctors = typeof(Models.SimpleAbbreviation).GetConstructors();
-        //    var @params = ctors[0].GetParameters();
-
-        //    foreach (var param in @params)
-        //    {
-        //        var rd = g.RowDefinitions;
-        //        rd.Insert(rd.Count - 1, new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-        //        g.Children.Add(NewTextBox(rd.Count - 2));
-        //        g.Children.Add(NewLabel(rd.Count - 2, param));
-        //    }
-
-        //    g.Children.Add(NewButton(g.RowDefinitions.Count - 1));
-
-        //    Content = g;
-        //}
-
-        //Grid NewGrid()
-        //{
-        //    Grid g = new();
-
-        //    var cd = g.ColumnDefinitions;
-        //    cd.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-        //    cd.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-
-        //    var rd = g.RowDefinitions;
-        //    rd.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-
-        //    return g;
-        //}
-
-        //Button NewButton(int row)
-        //{
-        //    Button b = new();
-        //    b.Content = "Create";
-
-        //    Grid.SetRow(b, row);
-        //    Grid.SetColumnSpan(b, 2);
-
-        //    return b;
-        //}
-
-        //TextBox NewTextBox(int row)
-        //{
-        //    TextBox tb = new();
-        //    Grid.SetColumn(tb, 1);
-        //    Grid.SetRow(tb, row);
-
-        //    return tb;
-        //}
-
-        //Label NewLabel(int row, ParameterInfo pi)
-        //{
-        //    Label l = new();
-        //    Grid.SetColumn(l, 0);
-        //    Grid.SetRow(l, row);
-
-        //    l.Content = string.Concat(pi.Name.Select((c, i) => i > 0 ? ((char.IsUpper(c) ? " " : "") + c) : char.ToUpper(c).ToString())) + ":";
-
-        //    return l;
-        //}
+            //_currentVm.ShortForm = abbrev.ShortForm;
+            //_currentVm.FullForm = abbrev.FullForm;
+            //_currentVm.GenderForm = abbrev.GenderForm;
+            //_currentVm.PluralForm = abbrev.PluralForm;
+            //_currentVm.GenderPluralForm = abbrev.GenderPluralForm;
+        }
+        public override void SetNewAbbreviation(string shortForm, string fullForm, params string[] others) => SetNewAbbreviation(shortForm, fullForm, others[0], others[1], others[2]);
+        public void SetNewAbbreviation(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm)
+        {
+            DataContext = _currentVm = new AddSimpleAbbreviationViewModel(shortForm, fullForm, genderForm, pluralForm, genderPluralForm);
+        }
     }
 }

@@ -92,8 +92,8 @@ namespace FasType.Storage
             else
             {
                 amrs = AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.In) && from.StartsWith(m.ShortForm) && from.Length != m.ShortForm.Length).ToArray();
-                amrs = amrs.Concat(AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.After) && from.EndsWith(m.ShortForm) && from.Length == m.ShortForm.Length)).ToArray();
             }
+            amrs = amrs.Concat(AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.After) && from.EndsWith(m.ShortForm) && from.Length == m.ShortForm.Length)).ToArray();
 
             string temp = _curr;
             _curr += from[0];
@@ -106,7 +106,7 @@ namespace FasType.Storage
             return poss;
         }
 
-        public List<string> Words(string currentWord) => Words("", currentWord, new());
+        public string[] Words(string currentWord) => Words("", currentWord, new()).ToArray();
 
         public bool Import(string filename) => throw new NotImplementedException();
         public bool Export(string filename) => throw new NotImplementedException();

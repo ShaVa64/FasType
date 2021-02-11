@@ -24,7 +24,6 @@ namespace FasType.Models.Abbreviations
         [Required, MaxLength(50)] public string FullForm { get; private set; }
         [Required] public ulong Used { get; private set; }
 
-
         public string StringKey => string.Concat(ShortForm.Take(_stringKeyLength));
 
         public BaseAbbreviation(string shortForm, string fullForm, ulong used)

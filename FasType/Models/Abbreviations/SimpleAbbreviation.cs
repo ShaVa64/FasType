@@ -76,6 +76,7 @@ namespace FasType.Models.Abbreviations
             return true;
         }
 
+        #region Representations
         static string ElementaryCapitalize(string @in)
         {
             StringBuilder sb = new();
@@ -143,5 +144,6 @@ namespace FasType.Models.Abbreviations
 
             return sb.ToString();
         }
+        #endregion
     }
 }

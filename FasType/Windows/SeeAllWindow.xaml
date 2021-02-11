@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FasType.Windows" xmlns:prop="clr-namespace:FasType.Properties"
         xmlns:vm="clr-namespace:FasType.ViewModels" xmlns:ctrl="clr-namespace:FasType.Controls" 
         xmlns:behaviors="clr-namespace:FasType.Behaviors" xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
-        d:DataContext="{d:DesignInstance vm:SeeAllViewModel}"
+        d:DataContext="{d:DesignInstance vm:SeeAllViewModel}" xmlns:sel="clr-namespace:FasType.Selectors"
         WindowStyle="ToolWindow" ShowInTaskbar="False"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="{Binding Title}" 
@@ -122,7 +122,7 @@
                                                     <Expander.Content>
                                                         <ItemsControl ItemsSource="{Binding Items}" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=ItemsSource.Count}">
                                                             <ItemsControl.ItemTemplateSelector>
-                                                                <vm:SeeAllSelector First="{StaticResource FirstDisplayTemplate}" Default="{StaticResource DisplayTemplate}"
+                                                                <sel:OrderSelector First="{StaticResource FirstDisplayTemplate}" Default="{StaticResource DisplayTemplate}"
                                                                                    Last="{StaticResource LastDisplayTemplate}" Only="{StaticResource OnlyDisplayTemplate}"/>
                                                             </ItemsControl.ItemTemplateSelector>
                                                         </ItemsControl>

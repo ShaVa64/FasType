@@ -1,14 +1,14 @@
-﻿<Page x:Class="FasType.Pages.SimpleAbbreviationPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:FasType.Pages" xmlns:prop="clr-namespace:FasType.Properties" 
-      xmlns:vm="clr-namespace:FasType.ViewModels" xmlns:ctrl="clr-namespace:FasType.Controls"
-      d:DataContext="{d:DesignInstance Type=vm:SimpleAbbreviationViewModel}"
-      mc:Ignorable="d" WindowTitle="{x:Static prop:Resources.SimpleAbbrevTitle}"
-      WindowHeight="310" WindowWidth="270" d:DesignHeight="310" d:DesignWidth="270"
-      Title="SimpleAbbreviationPage" x:Name="Page">
+﻿<local:AbbreviationPage x:Class="FasType.Pages.SimpleAbbreviationPage"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                        xmlns:local="clr-namespace:FasType.Pages" xmlns:prop="clr-namespace:FasType.Properties" 
+                        xmlns:vm="clr-namespace:FasType.ViewModels" xmlns:ctrl="clr-namespace:FasType.Controls"
+                        d:DataContext="{d:DesignInstance Type=vm:SimpleAbbreviationViewModel}"
+                        mc:Ignorable="d"
+                        WindowHeight="310" WindowWidth="270" d:DesignHeight="310" d:DesignWidth="270"
+                        Title="{Binding Title}" x:Name="Page">
 
     <Page.Resources>
         <Style TargetType="Control" x:Key="Style.Base">
@@ -65,7 +65,7 @@
             <Label Grid.Row="0" Grid.Column="0"
                    Content="{x:Static prop:Resources.ShortForm}" ContentStringFormat="{}{0}:"/>
             <ctrl:BorderBrushTextBox Text="{Binding ShortForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                     x:Name="FirstTB" Grid.Row="0" Grid.Column="1"
+                                     x:Name="FirstTB" Grid.Row="0" Grid.Column="1" IsReadOnly="{Binding ShortFormReadOnly}"
                                      ToolTip="{Binding SFToolTip}" IsClearable="True"/>
             <Label Grid.Row="1" Grid.Column="0"
                    Content="{x:Static prop:Resources.FullForm}" ContentStringFormat="{}{0}:"/>
@@ -93,8 +93,8 @@
         </Grid>
 
         <Button Command="{Binding CreateNewCommand}" CommandParameter="{x:Reference Page}"
-                Content="{x:Static prop:Resources.Add}" 
-                DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                Content="{Binding ButtonText}" DockPanel.Dock="Bottom" 
+                VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
 
         <Border MinHeight="100">
             <TextBlock Text="{Binding Preview, Mode=OneWay}"
@@ -102,4 +102,4 @@
                        HorizontalAlignment="Center"/>
         </Border>
     </DockPanel>
-</Page>
+</local:AbbreviationPage>
