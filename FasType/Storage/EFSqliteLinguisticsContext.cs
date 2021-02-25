@@ -31,10 +31,6 @@ namespace FasType.Storage
         public GrammarType PluralType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
         public GrammarType GenderPluralType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
 
-        public GrammarType GenderCompletion { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
-        public GrammarType PluralCompletion { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
-        public GrammarType GenderPluralCompletion { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
-
         public EFSqliteLinguisticsContext(DbContextOptions<EFSqliteLinguisticsContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

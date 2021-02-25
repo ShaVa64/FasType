@@ -20,7 +20,7 @@
             <cvt:IntToStringConverter x:Key="IntToString"/>
         </ResourceDictionary>
     </Window.Resources>
-
+    
     <DockPanel>
         <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
             <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={ex:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
@@ -55,7 +55,7 @@
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
             <ListBox IsEnabled="{Binding IsChoosing}" ItemsSource="{Binding MatchingAbbrevs}"
                      SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"
-                     SelectionMode="Single" HorizontalContentAlignment="Stretch">
+                     SelectionMode="Single" HorizontalContentAlignment="Stretch" Background="{Binding Background}">
                 <!--ItemsSource="{Binding MatchingAbbrevs}" SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>

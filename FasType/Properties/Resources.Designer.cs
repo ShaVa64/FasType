@@ -106,15 +106,6 @@ namespace FasType.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The abbreviation you are trying to create already exists ({0}).{1}Would you like to replace it ?.
-        /// </summary>
-        public static string AlreadyExistsErrorFormat {
-            get {
-                return ResourceManager.GetString("AlreadyExistsErrorFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to FasType.
         /// </summary>
         public static string AppName {
@@ -151,20 +142,11 @@ namespace FasType.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure to delete this abbreviation?{0}({1}).
+        ///   Looks up a localized string similar to Dictionary.
         /// </summary>
-        public static string DeleteDialogFormat {
+        public static string Dictionary {
             get {
-                return ResourceManager.GetString("DeleteDialogFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure to delete this abbreviation method ?.
-        /// </summary>
-        public static string DeleteMethodDialog {
-            get {
-                return ResourceManager.GetString("DeleteMethodDialog", resourceCulture);
+                return ResourceManager.GetString("Dictionary", resourceCulture);
             }
         }
         
@@ -174,15 +156,6 @@ namespace FasType.Properties {
         public static string DupAbbrevToolTip {
             get {
                 return ResourceManager.GetString("DupAbbrevToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can&apos;t create an empty abbreviation..
-        /// </summary>
-        public static string EmptyAbbrevDialog {
-            get {
-                return ResourceManager.GetString("EmptyAbbrevDialog", resourceCulture);
             }
         }
         
@@ -228,15 +201,6 @@ namespace FasType.Properties {
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An error has occured while trying to create the abbreviation.{0}({1}).
-        /// </summary>
-        public static string ErrorDialogFormat {
-            get {
-                return ResourceManager.GetString("ErrorDialogFormat", resourceCulture);
             }
         }
         
@@ -340,6 +304,15 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to --- None ---.
+        /// </summary>
+        public static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to One-Letters.
         /// </summary>
         public static string OneLetters {
@@ -354,6 +327,15 @@ namespace FasType.Properties {
         public static string Open {
             get {
                 return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --- Other... ---.
+        /// </summary>
+        public static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
             }
         }
         

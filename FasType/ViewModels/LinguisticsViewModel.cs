@@ -37,10 +37,6 @@ namespace FasType.ViewModels
         public GrammarType PluralTypeContext { get; private set; }
         public GrammarType GenderPluralTypeContext { get; private set; }
 
-        public GrammarType GenderCompletionContext { get; private set; }
-        public GrammarType PluralCompletionContext { get; private set; }
-        public GrammarType GenderPluralCompletionContext { get; private set; }
-
         static LinguisticsViewModel()
         {
             PropertiesContextPair = new()
@@ -48,9 +44,6 @@ namespace FasType.ViewModels
                 { nameof(GenderTypeContext), nameof(ILinguisticsStorage.GenderType) },
                 { nameof(PluralTypeContext), nameof(ILinguisticsStorage.PluralType) },
                 { nameof(GenderPluralTypeContext), nameof(ILinguisticsStorage.GenderPluralType) },
-                { nameof(GenderCompletionContext), nameof(ILinguisticsStorage.GenderCompletion) },
-                { nameof(PluralCompletionContext), nameof(ILinguisticsStorage.PluralCompletion) },
-                { nameof(GenderPluralCompletionContext), nameof(ILinguisticsStorage.GenderPluralCompletion) },
             };
             NoDupProperties = new string[] { nameof(GenderTypeContext), nameof(PluralTypeContext), nameof(GenderPluralTypeContext) };
         }
@@ -72,10 +65,6 @@ namespace FasType.ViewModels
             GenderTypeContext       = storage.GenderType;      //(GrammarType)UserGrammar.GenderRecord;
             PluralTypeContext       = storage.PluralType;      //(GrammarType)UserGrammar.PluralRecord;
             GenderPluralTypeContext = storage.GenderPluralType;//(GrammarType)UserGrammar.GenderPluralRecord;
-
-            GenderCompletionContext = storage.GenderCompletion;
-            PluralCompletionContext = storage.PluralCompletion;
-            GenderPluralCompletionContext = storage.GenderPluralCompletion;
         }
 
         bool CanOpenOneLetters() => !OneLettersWindow.IsOpen;
@@ -124,10 +113,6 @@ namespace FasType.ViewModels
             PluralTypeContext = dto.PluralType;
             GenderPluralTypeContext = dto.GenderPluralType;
 
-            GenderCompletionContext = dto.GenderCompletion;
-            PluralCompletionContext = dto.PluralCompletion;
-            GenderPluralCompletionContext = dto.GenderPluralCompletion;
-
             _storage.AbbreviationMethods = dto.AbbreviationMethods;
             OnPropertyChanged(string.Empty);
         }
@@ -148,7 +133,7 @@ namespace FasType.ViewModels
             //if (string.IsNullOrEmpty(context.Name)) //Empty Name
             //    return false;
 
-            if ((GrammarTypeRecord)context == (GrammarTypeRecord)record) //No Changes
+            if (((GrammarTypeRecord)context) == ((GrammarTypeRecord)record)) //No Changes
                 return false;
 
             return true;
@@ -177,10 +162,6 @@ namespace FasType.ViewModels
             _storage.PluralType = PluralTypeContext;
             _storage.GenderType = GenderTypeContext;
             _storage.GenderPluralType = GenderPluralTypeContext;
-
-            _storage.PluralCompletion = PluralCompletionContext;
-            _storage.GenderCompletion = GenderCompletionContext;
-            _storage.GenderPluralCompletion = GenderPluralCompletionContext;
 
             w.Close();
         }

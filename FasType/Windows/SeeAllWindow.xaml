@@ -76,7 +76,7 @@
 
             <Grid ToolBar.OverflowMode="Never" Width="130" Margin="5, 0">
                 <!-- enter term here -->
-                <TextBox Name="TxtSearchBox" Background="White" Text="{Binding QueryString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <TextBox Name="TxtSearchBox" Background="White" Text="{Binding QueryString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
                 <!-- overlay with hint text -->
                 <TextBlock Padding="2, 0" Text="{x:Static prop:Resources.Search}" Foreground="LightSteelBlue" 
                            Background="Transparent" IsHitTestVisible="False" VerticalAlignment="Center"

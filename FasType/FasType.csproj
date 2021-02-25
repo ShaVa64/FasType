@@ -52,6 +52,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\DialogResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DialogResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -65,6 +70,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\DialogResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DialogResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.fr-FR.resx">
       <Generator></Generator>
     </EmbeddedResource>
@@ -76,16 +85,16 @@
 
   <ItemGroup>
     <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

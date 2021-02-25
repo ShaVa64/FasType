@@ -24,9 +24,11 @@ namespace FasType.ViewModels
         readonly LowLevelKeyboardListener _listener;
         ListenerStates _currentListenerState;
         readonly IAbbreviationStorage _storage;
+        readonly IDictionaryStorage _dictionary;
         BaseAbbreviation _choosedAbbrev;
         List<BaseAbbreviation> _matchingAbbrevs;
         int _abbrevIndex;
+        System.Windows.Media.Brush _background;
 
         //string _choosedFullForm;
         //List<string> _matchingFullForms;
@@ -39,7 +41,8 @@ namespace FasType.ViewModels
                                        || AbbreviationWindow.IsOpen
                                        || LinguisticsWindow.IsOpen
                                        || AbbreviationMethodsWindow.IsOpen
-                                       || OneLettersWindow.IsOpen;
+                                       || OneLettersWindow.IsOpen
+                                       || PopupWindow.IsOpen;
 
         public int AbbrevIndex { get => _abbrevIndex; set => SetProperty(ref _abbrevIndex, value); }
         public BaseAbbreviation ChoosedAbbrev { get => _choosedAbbrev; set => SetProperty(ref _choosedAbbrev, value); }
@@ -49,8 +52,13 @@ namespace FasType.ViewModels
             get => _currentListenerState;
             set
             {
-                if (SetProperty(ref _currentListenerState, value))
-                    OnPropertyChanged(nameof(IsChoosing));
+                if (!SetProperty(ref _currentListenerState, value))
+                    return;
+                OnPropertyChanged(nameof(IsChoosing));
+                if (IsChoosing)
+                    StartWindowAlert();
+                else
+                    StopWindowAlert();
             }
         }
         public bool IsChoosing => CurrentListenerState == ListenerStates.Choosing;
@@ -60,14 +68,17 @@ namespace FasType.ViewModels
         public Command<BaseAbbreviation> ChooseCommand { get; }
         public Command OpenLinguisticsCommand { get; }
         public Command<System.Media.SystemSound> PlaySoundCommand { get; }
+        public System.Windows.Media.Brush Background { get => _background; set => SetProperty(ref _background, value); }
 
         //static MainWindowViewModel() => _instance = App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>();
-        public MainWindowViewModel(IAbbreviationStorage storage)
+        public MainWindowViewModel(IAbbreviationStorage storage, IDictionaryStorage dictionary)
         {
             CurrentWord = string.Empty;
             _listener = new();
             _storage = storage;
+            _dictionary = dictionary;
             CurrentListenerState = ListenerStates.Inserting;
+            Background = System.Windows.Media.Brushes.White;
 
             AddNewCommand = new(AddNew, CanAddNew);
             SeeAllCommand = new(SeeAll, CanSeeAll);
@@ -152,10 +163,22 @@ namespace FasType.ViewModels
             //else if (CurrentListenerState is ListenerStates.Choosing)
             //    Choosing(sender, e);
         }
+        async void StartWindowAlert()
+        {
+            new System.Media.SoundPlayer(@"Assets\sound.wav").Play();
 
+            Background = System.Windows.Media.Brushes.Red;
+            await System.Threading.Tasks.Task.Delay(400);
+            Background = System.Windows.Media.Brushes.White;
+            App.Current.FlashApp();
+        }
+        void StopWindowAlert()
+        {
+            App.Current.StopFlashingApp();
+        }
         void Inserting(object sender, KeyPressedEventArgs e)
         {
-            if (e.KeyPressed == Key.Space)
+            if (e.KeyPressed == Key.Space && !string.IsNullOrEmpty(CurrentWord))
             {
                 string shortForm = CurrentWord.ToLower();
 
@@ -163,14 +186,22 @@ namespace FasType.ViewModels
 
                 if (abbrevs.Count == 0)
                 {
-                    var vals = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words(CurrentWord);
-                    var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
+                    //var vals = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words(CurrentWord);
+                    //var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
 
-                    var elems = vals.Select(val => dict.GetElement(val)).Where(elem => elem != null).ToList();
+                    //var elems = vals.Select(val => dict.GetElement(val)).Where(elem => elem != null).ToList();
 
-                    if (elems.Count > 0)
+                    //if (elems.Count > 0)
+                    //{
+
+                    //}
+
+                    //using var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
+                    if (!_dictionary.Contains(shortForm))
                     {
-
+                        var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
+                        window.SearchForWord(CurrentWord);
+                        window.Show();
                     }
 
                     CurrentWord = "";
@@ -187,7 +218,6 @@ namespace FasType.ViewModels
                 //else if (abbrevs.Count > 1)
 
                 CurrentListenerState = ListenerStates.Choosing;
-                new System.Media.SoundPlayer(@"Assets\sound.wav").Play();
 
                 //MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
                 //ChoosedFullForm = MatchingFullForms[0];
@@ -205,6 +235,14 @@ namespace FasType.ViewModels
             {
                 string newChar = (e.Old?.KeyPressed, e.Old?.IsShifted, e.KeyPressed, e.IsShifted) switch
                 {
+                    (Key.Oem6, false, Key.O   , false) => "ô",
+                    (Key.Oem6, true , Key.O   , false) => "ö",
+                    (Key.Oem6, false, Key.O   , true ) => "Ô",
+                    (Key.Oem6, true , Key.O   , true ) => "Ö",
+                    (Key.Oem6, false, Key.A   , false) => "â",
+                    (Key.Oem6, true , Key.A   , false) => "ä",
+                    (Key.Oem6, false, Key.A   , true ) => "Â",
+                    (Key.Oem6, true , Key.A   , true ) => "Ä",
                     (Key.Oem6, false, Key.E   , false) => "ê",
                     (Key.Oem6, true , Key.E   , false) => "ë",
                     (Key.Oem6, false, Key.E   , true ) => "Ê",

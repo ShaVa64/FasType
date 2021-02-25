@@ -141,15 +141,6 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
-  <data name="EmptyAbbrevDialog" xml:space="preserve">
-    <value>You can't create an empty abbreviation.</value>
-  </data>
-  <data name="ErrorDialogFormat" xml:space="preserve">
-    <value>An error has occured while trying to create the abbreviation.{0}({1})</value>
-  </data>
-  <data name="DeleteDialogFormat" xml:space="preserve">
-    <value>Are you sure to delete this abbreviation?{0}({1})</value>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -175,9 +166,6 @@
   </data>
   <data name="LinguisticsHeader" xml:space="preserve">
     <value>_Linguistics</value>
-  </data>
-  <data name="AlreadyExistsErrorFormat" xml:space="preserve">
-    <value>The abbreviation you are trying to create already exists ({0}).{1}Would you like to replace it ?</value>
   </data>
   <data name="Linguistics" xml:space="preserve">
     <value>Linguistics</value>
@@ -239,9 +227,6 @@
   <data name="EmptyAbbrevMethodList2" xml:space="preserve">
     <value>Abbreviation Methods registered</value>
   </data>
-  <data name="DeleteMethodDialog" xml:space="preserve">
-    <value>Are you sure to delete this abbreviation method ?</value>
-  </data>
   <data name="SettingsHeader" xml:space="preserve">
     <value>_Settings</value>
   </data>
@@ -265,5 +250,14 @@
   </data>
   <data name="ModifySimpleAbbrevTitle" xml:space="preserve">
     <value>Modify Simple Abbreviation</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>--- Other... ---</value>
+  </data>
+  <data name="Dictionary" xml:space="preserve">
+    <value>Dictionary</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>--- None ---</value>
   </data>
 </root>

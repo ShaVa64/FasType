@@ -20,11 +20,11 @@ namespace FasType.ViewModels
         public AddSimpleAbbreviationViewModel() : base(Resources.AddSimpleAbbrevTitle, Resources.Add, false)
         {
 #if DEBUG
-            ShortForm = "pçé";
-            FullForm = "passé";
-            GenderForm = "passée";
-            PluralForm = "passés";
-            GenderPluralForm = "passées";
+            //ShortForm = "pçé";
+            //FullForm = "passé";
+            //GenderForm = "passée";
+            //PluralForm = "passés";
+            //GenderPluralForm = "passées";
 #endif
         }
         public AddSimpleAbbreviationViewModel(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm) : this()
@@ -40,19 +40,19 @@ namespace FasType.ViewModels
         {
             if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
             {
-                MessageBox.Show(Resources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                MessageBox.Show(DialogResources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
             if (Storage.Contains(_currentAbbrev))
             {
-                var message = string.Format(Resources.AlreadyExistsErrorFormat, FullForm, Environment.NewLine);
+                var message = string.Format(DialogResources.AlreadyExistsErrorFormat, FullForm, Environment.NewLine);
                 var res = MessageBox.Show(message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No);
                 if (res == MessageBoxResult.No)
                     return;
                 var success = Storage.UpdateAbbreviation(_currentAbbrev);
                 if (!success)
                 {
-                    message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                    message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
                     MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                     return;
                 }
@@ -61,11 +61,12 @@ namespace FasType.ViewModels
             }
             if (!Storage.Add(_currentAbbrev))
             {
-                var message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                var message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
                 MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
 
+            CheckDictionaryAdd();
             (p.Parent as Window).Close();
         }
 
@@ -100,7 +101,7 @@ namespace FasType.ViewModels
 
     public class ModifySimpleAbbreviationViewModel : SimpleAbbreviationViewModel
     {
-        SimpleAbbreviation _toModify;
+        readonly SimpleAbbreviation _toModify;
 
         public ModifySimpleAbbreviationViewModel(SimpleAbbreviation sa) : base(Resources.ModifySimpleAbbrevTitle, Resources.Modify, true)
         {
@@ -117,7 +118,7 @@ namespace FasType.ViewModels
         {
             if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
             {
-                MessageBox.Show(Resources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                MessageBox.Show(DialogResources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
             if (!Storage.Remove(_toModify))
@@ -137,12 +138,13 @@ namespace FasType.ViewModels
             }
             if (!Storage.Add(_currentAbbrev))
             {
-                var message = string.Format(Resources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                var message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
                 MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
-
-           (p.Parent as Window).Close();
+            
+            CheckDictionaryAdd();
+            (p.Parent as Window).Close();
         }
 
         protected override void SetPreview()
@@ -170,6 +172,7 @@ namespace FasType.ViewModels
 
     public abstract class SimpleAbbreviationViewModel : ObservableObject
     {
+        protected static IDictionaryStorage Dictionary => App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
         protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
         protected static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
 
@@ -244,6 +247,17 @@ namespace FasType.ViewModels
 
         bool CanCreateNew() => !string.IsNullOrEmpty(FullForm) && !string.IsNullOrEmpty(ShortForm);
         protected abstract void CreateNew(Page p);
+        protected void CheckDictionaryAdd()
+        {
+            if (Dictionary.Contains(FullForm))
+                return;
+
+            var res = MessageBox.Show(DialogResources.AddDictionary, Resources.Dictionary, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+            if (res == MessageBoxResult.No)
+                return;
+
+            Dictionary.Add(_currentAbbrev);
+        }
 
         void ComputeAutoComplete()
         {
@@ -253,6 +267,16 @@ namespace FasType.ViewModels
                 return;
             }
             //TODO: Get from dictionary
+            var elem = Dictionary.GetElement<Models.Dictionary.SimpleDictionaryElement>(FullForm);
+            if (elem == null)
+            {
+                GenderForm = PluralForm = GenderPluralForm = string.Empty;
+                return;
+            }
+
+            GenderForm = elem.GenderForm;
+            PluralForm = elem.PluralForm;
+            GenderPluralForm = elem.GenderPluralForm;
 
             //GenderForm = Linguistics.GenderCompletion.Grammarify(FullForm);// + "e";
             //PluralForm = Linguistics.PluralCompletion.Grammarify(FullForm);// + "s";

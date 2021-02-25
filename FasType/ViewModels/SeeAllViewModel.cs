@@ -67,8 +67,6 @@ namespace FasType.ViewModels
             //AllAbbreviations = _storage.Take(2).ToList();
         }
 
-
-
         void OrderAndFilterAbbreviations() => AllAbbreviations = (OrderBy switch
         {
             FormOrderBy.FullForm => _storage.Where(a => a.FullForm.Contains(QueryString)).OrderBy(a => a.FullForm),
@@ -91,7 +89,7 @@ namespace FasType.ViewModels
         bool CanRemove() => true;
         void Remove(BaseAbbreviation abbrev)
         {
-            var message = string.Format(Resources.DeleteDialogFormat, Environment.NewLine, abbrev.ElementaryRepresentation);
+            var message = string.Format(DialogResources.DeleteDialogFormat, Environment.NewLine, abbrev.ElementaryRepresentation);
             var res = MessageBox.Show(message, Resources.Delete, MessageBoxButton.OKCancel, MessageBoxImage.Question);
             if (res == MessageBoxResult.Cancel)
                 return;

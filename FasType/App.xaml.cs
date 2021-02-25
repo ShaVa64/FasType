@@ -57,6 +57,7 @@ namespace FasType
             //_context.Database.EnsureCreated();
             //var x = System.Text.Json.JsonSerializer.Serialize(_lingContext as ILinguisticsStorage/*, new() { WriteIndented = true }*/);
 
+            //I();
             //H();
             //G();
             //T();
@@ -77,7 +78,7 @@ namespace FasType
 
             services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
-            services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")).EnableSensitiveDataLogging(), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             //services.AddTransient<IDataStorage, EFSqliteStorage>();
 
             services.AddSingleton(Configuration);
@@ -101,6 +102,9 @@ namespace FasType
 
             services.AddTransient<OneLettersWindow>();
             services.AddTransient<OneLettersViewModel>();
+
+            services.AddTransient<PopupWindow>();
+            services.AddTransient<PopupViewModel>();
         }
 
         private void OnStartup(object sender, StartupEventArgs args)
@@ -108,6 +112,32 @@ namespace FasType
             var mw = ServiceProvider.GetService<MainWindow>();
             MainWindow = mw;
             MainWindow.Show();
+        }
+
+        void I()
+        {
+            using var _context = ServiceProvider.GetRequiredService<IDictionaryStorage>() as EFSqliteDictionaryContext;
+            var l = new List<Models.Dictionary.BaseDictionaryElement>();
+            string fp = @"D:\Visual Studio Projects\FasType\Docs\Lexique383.tsv";
+
+            var lines = System.IO.File.ReadAllLines(fp).Skip(1).ToArray();
+            var xs = lines.Select(s => s.Split('\t')).Select(t => new { F = t[0], B = t[2], T = t[3], G = t[4], N = t[5] }).ToList();
+
+            var rs = xs.Where(x => x.T != "VER" && x.T != "AUX").ToList();
+
+            var ts = rs.Select(x => x.T).Distinct().Select(t => new { T = t, N = rs.Count(x => x.T == t) }).OrderByDescending(x => x.N).Select(x => $"{x.T}, ({x.N})").ToList();
+
+            var gs = rs.GroupBy(x => x.B + "," + x.T).ToList();
+            var os = gs.Where(g => g.Count() >= 5).ToList();
+
+            gs = gs.Where(g => g.Count() < 5).ToList();
+
+
+            var keys = gs.Select(g => g.Key.Split(',')[0]).ToList();
+            var ggs = rs.Where(a => keys.Contains(a.B)).GroupBy(a => a.B).ToList();
+
+            var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
+            var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
         }
 
         //void H()

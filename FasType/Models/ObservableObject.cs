@@ -42,6 +42,6 @@ namespace FasType.Models
         }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "", object sender = null) => PropertyChanged?.Invoke(sender ?? this, new PropertyChangedEventArgs(propertyName));
-        protected void OnPropertiesChanged(object sender = null, params string[] propertiesName) => Array.ForEach(propertiesName, prop => OnPropertyChanged(prop, sender));// propertyName => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
+        protected void OnPropertiesChanged(object sender = null, params string[] propertiesName) => Array.ForEach(propertiesName, prop => OnPropertyChanged(sender: sender, propertyName: prop));// propertyName => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
     }
 }

@@ -52,7 +52,7 @@ namespace FasType.Storage
         });
         public bool Add(BaseDictionaryElement elem)
         {
-            if (elem == null)
+            if (elem == null || elem.FullForm == Properties.Resources.Other)
                 return false;
             Dictionary.Add(elem);
 

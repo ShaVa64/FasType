@@ -15,10 +15,6 @@ namespace FasType.Services
         GrammarType PluralType { get; set; }
         GrammarType GenderPluralType { get; set; }
 
-        GrammarType GenderCompletion { get; set; }
-        GrammarType PluralCompletion { get; set; }
-        GrammarType GenderPluralCompletion { get; set; }
-
         IEnumerable<AbbreviationMethod> AbbreviationMethods { get; set; }
 
         string[] Words(string currentWord);

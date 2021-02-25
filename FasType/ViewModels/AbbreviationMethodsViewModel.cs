@@ -45,7 +45,7 @@ namespace FasType.ViewModels
 
         void RemoveSyllable(AbbreviationMethod sa)
         {
-            var r = MessageBox.Show(Resources.DeleteMethodDialog, Resources.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+            var r = MessageBox.Show(DialogResources.DeleteMethodDialog, Resources.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
     
             if (r == MessageBoxResult.Yes)
             {

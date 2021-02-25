@@ -2,8 +2,11 @@ TODOS:
 - Dictionary/anti-dictionary
 - Abbreviations Auto-creation
 (myinputbox)
+- Show which shortform user 
+	is about to create
 - Special abbreviations for
 	one-letter short form
+
 
 
 - Localized text
@@ -18,6 +21,9 @@ TODOS:
 
 
 QUESTIONS:
+- what to do of written text when myinputbox appears ?
+
+
 - duplicates on known abbreviations
 - #used by abbreviation or form ?
 - Import/Export simplified tools for Abbrevs/Linguistics
@@ -25,6 +31,8 @@ QUESTIONS:
 
 PROBS:
 - Double first letter in word, etc..
+
+
 - Abbreviations auto-complete suggests not existing forms
 - (!) Sound when need choice for abbreviations
 - Upper Case problem on abbreviations

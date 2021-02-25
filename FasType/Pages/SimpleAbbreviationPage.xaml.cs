@@ -58,7 +58,7 @@ namespace FasType.Pages
             //_currentVm.PluralForm = abbrev.PluralForm;
             //_currentVm.GenderPluralForm = abbrev.GenderPluralForm;
         }
-        public override void SetNewAbbreviation(string shortForm, string fullForm, params string[] others) => SetNewAbbreviation(shortForm, fullForm, others[0], others[1], others[2]);
+        public override void SetNewAbbreviation(string shortForm, string fullForm, params string[] others) => SetNewAbbreviation(shortForm, fullForm, others?[0] ?? string.Empty, others?[1] ?? string.Empty, others?[2] ?? string.Empty);
         public void SetNewAbbreviation(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm)
         {
             DataContext = _currentVm = new AddSimpleAbbreviationViewModel(shortForm, fullForm, genderForm, pluralForm, genderPluralForm);
