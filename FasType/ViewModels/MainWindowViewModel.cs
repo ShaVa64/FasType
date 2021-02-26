@@ -52,13 +52,8 @@ namespace FasType.ViewModels
             get => _currentListenerState;
             set
             {
-                if (!SetProperty(ref _currentListenerState, value))
-                    return;
-                OnPropertyChanged(nameof(IsChoosing));
-                if (IsChoosing)
-                    StartWindowAlert();
-                else
-                    StopWindowAlert();
+                if (SetProperty(ref _currentListenerState, value))
+                    OnPropertyChanged(nameof(IsChoosing));
             }
         }
         public bool IsChoosing => CurrentListenerState == ListenerStates.Choosing;
@@ -166,15 +161,15 @@ namespace FasType.ViewModels
         async void StartWindowAlert()
         {
             new System.Media.SoundPlayer(@"Assets\sound.wav").Play();
+            while (App.Current.FlashApp() == false);
 
             Background = System.Windows.Media.Brushes.Red;
             await System.Threading.Tasks.Task.Delay(400);
             Background = System.Windows.Media.Brushes.White;
-            App.Current.FlashApp();
         }
         void StopWindowAlert()
         {
-            App.Current.StopFlashingApp();
+            while (App.Current.StopFlashingApp());
         }
         void Inserting(object sender, KeyPressedEventArgs e)
         {
@@ -197,10 +192,10 @@ namespace FasType.ViewModels
                     //}
 
                     //using var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
-                    if (!_dictionary.Contains(shortForm))
+                    if (Properties.Settings.Default.AbbrevsAutoCreation && !_dictionary.Contains(shortForm))
                     {
                         var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
-                        window.SearchForWord(CurrentWord);
+                        window.SearchForWord(shortForm);
                         window.Show();
                     }
 
@@ -221,6 +216,7 @@ namespace FasType.ViewModels
 
                 //MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
                 //ChoosedFullForm = MatchingFullForms[0];
+                StartWindowAlert();
                 MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).ToList();
                 ChoosedAbbrev = MatchingAbbrevs[0];
 
@@ -294,6 +290,7 @@ namespace FasType.ViewModels
                 bool b = TryWriteAbbreviation(ChoosedAbbrev, CurrentWord, plusOne: true);
                 if (b)
                 {
+                    StopWindowAlert();
                     ChoosedAbbrev = null;
                     MatchingAbbrevs = null;
                     CurrentWord = "";
@@ -321,6 +318,7 @@ namespace FasType.ViewModels
             {
                 //ChoosedFullForm = null;
                 //MatchingFullForms = null;
+                StopWindowAlert();
                 ChoosedAbbrev = null;
                 MatchingAbbrevs = null;
                 CurrentListenerState = ListenerStates.Inserting;

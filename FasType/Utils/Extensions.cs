@@ -110,11 +110,30 @@ namespace FasType.Utils
             //Don't flash if the window is active            
             //if (win.IsActive) return;
             System.Windows.Interop.WindowInteropHelper h = new System.Windows.Interop.WindowInteropHelper(win);
+            Serilog.Log.Information($"FW, Handle: {h.Handle}");
             FLASHWINFO info = new FLASHWINFO
             {
                 hwnd = h.Handle,
-                dwFlags = FLASHW_ALL | FLASHW_TIMER,
+                dwFlags = FLASHW_TRAY | FLASHW_TIMER,
                 uCount = count,
+                dwTimeout = FLASH_TIMEOUT
+            };
+
+            info.cbSize = Convert.ToUInt32(System.Runtime.InteropServices.Marshal.SizeOf(info));
+            return FlashWindowEx(ref info);
+        }
+
+        public static bool FlashWindowUntillFocus(this Window win)
+        {
+            //Don't flash if the window is active            
+            //if (win.IsActive) return;
+            System.Windows.Interop.WindowInteropHelper h = new System.Windows.Interop.WindowInteropHelper(win);
+            Serilog.Log.Information($"FWUF, Handle: {h.Handle}");
+            FLASHWINFO info = new FLASHWINFO
+            {
+                hwnd = h.Handle,
+                dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG,
+                uCount = uint.MaxValue,
                 dwTimeout = FLASH_TIMEOUT
             };
 
@@ -125,6 +144,7 @@ namespace FasType.Utils
         public static bool StopFlashingWindow(this Window win)
         {
             System.Windows.Interop.WindowInteropHelper h = new System.Windows.Interop.WindowInteropHelper(win);
+            Serilog.Log.Information($"SFW, Handle: {h.Handle}");
             FLASHWINFO info = new FLASHWINFO
             {
                 hwnd = h.Handle,

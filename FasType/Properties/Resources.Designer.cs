@@ -61,11 +61,29 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abbreviation Auto-Creation.
+        /// </summary>
+        public static string AbbrevAutoCreation {
+            get {
+                return ResourceManager.GetString("AbbrevAutoCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Abbreviation Method.
         /// </summary>
         public static string AbbreviationMethod {
             get {
                 return ResourceManager.GetString("AbbreviationMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abbreviations auto-creation.
+        /// </summary>
+        public static string AbbrevsAutoCreation {
+            get {
+                return ResourceManager.GetString("AbbrevsAutoCreation", resourceCulture);
             }
         }
         

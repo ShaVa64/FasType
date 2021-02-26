@@ -34,6 +34,8 @@
                     <MenuItem Header="{x:Static prop:Resources.LinguisticsHeader}" Command="{Binding OpenLinguisticsCommand}"/>
                     <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" Style="{StaticResource ClearCheckMenuItem}"
                               IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
+                    <MenuItem Header="{x:Static prop:Resources.AbbrevsAutoCreation}" IsCheckable="True" Style="{StaticResource ClearCheckMenuItem}"
+                              IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=AbbrevsAutoCreation, Mode=TwoWay}"/>
                 </MenuItem>
             </Menu>
             <!--<Menu>

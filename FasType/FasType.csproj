@@ -10,12 +10,12 @@
 
   <PropertyGroup>
     <Authors>Eyal Vayness</Authors>
-    <Version>0.1</Version>
-    <FileVersion>0.1.0.0</FileVersion>
+    <Version>0.4</Version>
+    <FileVersion>0.4.0.0</FileVersion>
     <Company>Yaloude</Company>
     <ApplicationIcon>Assets\keyboard.ico</ApplicationIcon>
     <NeutralLanguage></NeutralLanguage>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <AssemblyVersion>0.4.0.0</AssemblyVersion>
     <RepositoryUrl>https://github.com/eyalvayness/FasType</RepositoryUrl>
   </PropertyGroup>
 
@@ -115,6 +115,9 @@
     </None>
     <None Update="Assets\sound.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="dictionary.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="linguistics.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

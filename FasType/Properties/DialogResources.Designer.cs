@@ -113,5 +113,23 @@ namespace FasType.Properties {
                 return ResourceManager.GetString("ErrorDialogFormat", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which abbreviation would you like to create ?.
+        /// </summary>
+        public static string PopupAbbrevCreation1 {
+            get {
+                return ResourceManager.GetString("PopupAbbrevCreation1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (From Short Form: .
+        /// </summary>
+        public static string PopupAbbrevCreation2 {
+            get {
+                return ResourceManager.GetString("PopupAbbrevCreation2", resourceCulture);
+            }
+        }
     }
 }

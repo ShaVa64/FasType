@@ -252,4 +252,10 @@
   <data name="None" xml:space="preserve">
     <value>--- Aucune ---</value>
   </data>
+  <data name="AbbrevsAutoCreation" xml:space="preserve">
+    <value>Création auto. des abréviations</value>
+  </data>
+  <data name="AbbrevAutoCreation" xml:space="preserve">
+    <value>Création Automatique des Abréviations</value>
+  </data>
 </root>

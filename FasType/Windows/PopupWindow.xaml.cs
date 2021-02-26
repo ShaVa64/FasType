@@ -1,4 +1,5 @@
-﻿using FasType.ViewModels;
+﻿using FasType.Utils;
+using FasType.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,12 @@ namespace FasType.Windows
 
             IsOpen = true;
             Closed += delegate { IsOpen = false; };
+
+            Loaded += delegate
+            {
+                new System.Media.SoundPlayer(@"Assets\sound.wav").Play();
+                this.FlashWindowUntillFocus();
+            };
         }
 
         private void PopupWindow_KeyDown(object sender, KeyEventArgs e)

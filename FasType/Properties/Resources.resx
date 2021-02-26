@@ -260,4 +260,10 @@
   <data name="None" xml:space="preserve">
     <value>--- None ---</value>
   </data>
+  <data name="AbbrevsAutoCreation" xml:space="preserve">
+    <value>Abbreviations auto-creation</value>
+  </data>
+  <data name="AbbrevAutoCreation" xml:space="preserve">
+    <value>Abbreviation Auto-Creation</value>
+  </data>
 </root>

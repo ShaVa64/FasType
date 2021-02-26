@@ -115,4 +115,10 @@
   <data name="ErrorDialogFormat" xml:space="preserve">
     <value>Une erreur est apparu lors de la création de l'abréviation.{0}({1})</value>
   </data>
+  <data name="PopupAbbrevCreation1" xml:space="preserve">
+    <value>Quelle abréviation voulez-vous créer ?</value>
+  </data>
+  <data name="PopupAbbrevCreation2" xml:space="preserve">
+    <value>(Depuis la Forme Courte : </value>
+  </data>
 </root>

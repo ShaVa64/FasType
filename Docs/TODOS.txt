@@ -22,7 +22,7 @@ TODOS:
 
 QUESTIONS:
 - what to do of written text when myinputbox appears ?
-
+- Multiple form for same G&P (ex: ... *I()*)
 
 - duplicates on known abbreviations
 - #used by abbreviation or form ?
