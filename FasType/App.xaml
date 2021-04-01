@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:tb="http://www.hardcodet.net/taskbar" xmlns:prop="clr-namespace:FasType.Properties"
-             xmlns:local="clr-namespace:FasType">
+             xmlns:local="clr-namespace:FasType" xmlns:vm="clr-namespace:FasType.ViewModels">
     <!-- StartupUri="MainWindow.xaml"-->
 
     
@@ -10,21 +10,27 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
-                        <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" StaysOpenOnClick="True"
-                                  IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
-                        <MenuItem Header="{x:Static prop:Resources.AutoComplete}" IsCheckable="True" StaysOpenOnClick="True"
-                                  IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=FormsAutoComplete, Mode=TwoWay}"/>
-                        <MenuItem Header="{x:Static prop:Resources.AbbrevsAutoCreation}" IsCheckable="True" StaysOpenOnClick="True"
-                                  IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=AbbrevsAutoCreation, Mode=TwoWay}"/>
-                        <Separator />
-                        <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}" />
-                    </ContextMenu>
-                    
-                    <tb:TaskbarIcon x:Key="NotifyIcon"
-                                    IconSource="Assets\keyboard.ico"
-                                    ToolTipText="Double-click for window, right-click for menu."
-                                    ContextMenu="{StaticResource SysTrayMenu}">
+
+
+                    <tb:TaskbarIcon x:Key="NotifyIcon" IconSource="Assets\keyboard.ico"
+                                    DoubleClickCommand="{Binding ShowAppCommand}"
+                                    ToolTipText="Double-click for window, right-click for menu.">
+                        <tb:TaskbarIcon.DataContext>
+                            <vm:TaskbarIconViewModel />
+                        </tb:TaskbarIcon.DataContext>
+                        
+                        <tb:TaskbarIcon.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static prop:Resources.RunAtStartUp}" IsCheckable="True" StaysOpenOnClick="True"
+                                          IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>
+                                <MenuItem Header="{x:Static prop:Resources.AutoComplete}" IsCheckable="True" StaysOpenOnClick="True"
+                                          IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=FormsAutoComplete, Mode=TwoWay}"/>
+                                <MenuItem Header="{x:Static prop:Resources.AbbrevsAutoCreation}" IsCheckable="True" StaysOpenOnClick="True"
+                                          IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=AbbrevsAutoCreation, Mode=TwoWay}"/>
+                                <Separator />
+                                <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}" />
+                            </ContextMenu>
+                        </tb:TaskbarIcon.ContextMenu>
                     </tb:TaskbarIcon>
                 </ResourceDictionary>
                 <ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml"/>

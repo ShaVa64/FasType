@@ -30,8 +30,19 @@ namespace FasType.Windows
             Left = area.Right - Width;
             Top = area.Bottom - Height;
 
-            Loaded += _vm.Load;
+
+            _vm.Load(this, new RoutedEventArgs());
+            //Loaded += _vm.Load;
             Closing += _vm.Close;
+
+            StateChanged += delegate
+            {
+                if (WindowState == WindowState.Minimized)
+                {
+                    WindowState = WindowState.Normal;
+                    Hide();
+                }
+            };
         }
     }
 }

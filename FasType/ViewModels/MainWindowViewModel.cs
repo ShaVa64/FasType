@@ -60,6 +60,9 @@ namespace FasType.ViewModels
                     OnPropertyChanged(nameof(IsChoosing));
             }
         }
+
+        private bool _hasAppeared;
+
         public bool IsChoosing => CurrentListenerState == ListenerStates.Choosing;
         public string CurrentWord { get => _currentWord; private set => SetProperty(ref _currentWord, value); }
         public Command<Type> AddNewCommand { get; }
@@ -239,6 +242,11 @@ namespace FasType.ViewModels
 
                 //MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
                 //ChoosedFullForm = MatchingFullForms[0];
+                if (App.Current.MainWindow.Visibility != Visibility.Visible)
+                {
+                    _hasAppeared = true;
+                    App.Current.MainWindow.Show();
+                }
                 StartWindowAlert();
                 MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).Append(BaseAbbreviation.OtherAbbreviation).ToList();
                 ChoosedAbbrev = MatchingAbbrevs[0];
@@ -324,6 +332,11 @@ namespace FasType.ViewModels
                     ChoosedAbbrev = null;
                     MatchingAbbrevs = null;
                     CurrentWord = "";
+                    if (_hasAppeared)
+                    {
+                        App.Current.MainWindow.Hide();
+                        _hasAppeared = false;
+                    }
                     return;
                 }
 
@@ -334,6 +347,11 @@ namespace FasType.ViewModels
                     ChoosedAbbrev = null;
                     MatchingAbbrevs = null;
                     CurrentWord = "";
+                    if (_hasAppeared)
+                    {
+                        App.Current.MainWindow.Hide();
+                        _hasAppeared = false;
+                    }
                 }
                 else
                 {
@@ -363,6 +381,11 @@ namespace FasType.ViewModels
                 MatchingAbbrevs = null;
                 CurrentListenerState = ListenerStates.Inserting;
                 CurrentWord = "";
+                if (_hasAppeared)
+                {
+                    App.Current.MainWindow.Hide();
+                    _hasAppeared = false;
+                }
             }
         }
 
