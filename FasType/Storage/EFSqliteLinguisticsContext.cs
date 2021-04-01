@@ -31,7 +31,11 @@ namespace FasType.Storage
         public GrammarType PluralType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
         public GrammarType GenderPluralType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
 
-        public EFSqliteLinguisticsContext(DbContextOptions<EFSqliteLinguisticsContext> options) : base(options) { }
+        public EFSqliteLinguisticsContext(DbContextOptions<EFSqliteLinguisticsContext> options) : base(options) 
+        {
+            _ = GrammarTypes ?? throw new NullReferenceException();
+            _ = AbbreviationMethods ?? throw new NullReferenceException();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,8 +58,9 @@ namespace FasType.Storage
 
             SaveChanges();
         }
-        GrammarType GetGrammarType([CallerMemberName] string name = null)
+        GrammarType GetGrammarType([CallerMemberName] string? name = null)
         {
+            _ = name ?? throw new NullReferenceException();
             var gtr = GrammarTypes.Find(name);
 
             return (GrammarType)(gtr ?? new(name, "", GrammarPosition.Prefix));

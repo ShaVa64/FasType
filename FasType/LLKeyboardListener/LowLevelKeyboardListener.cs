@@ -31,9 +31,9 @@ namespace FasType.LLKeyboardListener
 
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        public event EventHandler<KeyPressedEventArgs> OnKeyPressed;
+        public event EventHandler<KeyPressedEventArgs>? OnKeyPressed;
 
-        KeyPressedEventArgs.UniqueKeyPressed oldKey, newKey;
+        KeyPressedEventArgs.UniqueKeyPressed? oldKey, newKey;
 
         private readonly LowLevelKeyboardProc _proc;
         private IntPtr _hookID = IntPtr.Zero;
@@ -76,20 +76,22 @@ namespace FasType.LLKeyboardListener
         private static IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using Process curProcess = Process.GetCurrentProcess();
-            using ProcessModule curModule = curProcess.MainModule;
-            return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
+            using ProcessModule? curModule = curProcess.MainModule;
+            _ = curModule ?? throw new NullReferenceException();
+            var mName = curModule.ModuleName ?? throw new NullReferenceException();
+            return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(mName), 0);
         }
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            KeyPressedEventArgs eventArgs = null;
+            KeyPressedEventArgs? eventArgs = null;
             if (OnKeyPressed is not null && nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Key key = KeyInterop.KeyFromVirtualKey(vkCode);
                 newKey = new(key, vkCode);
                 eventArgs = new (oldKey, newKey);
-                OnKeyPressed(this, eventArgs);
+                OnKeyPressed?.Invoke(this, eventArgs);
             }
             oldKey = newKey;
 
@@ -101,12 +103,12 @@ namespace FasType.LLKeyboardListener
     public class KeyPressedEventArgs : EventArgs
     {
         public bool StopChain { get; set; }
-        public UniqueKeyPressed Old { get; }
+        public UniqueKeyPressed? Old { get; }
         public UniqueKeyPressed New { get; }
         public Key KeyPressed => New.KeyPressed;
         public bool IsShifted => New.IsShifted;
 
-        public KeyPressedEventArgs(UniqueKeyPressed old, UniqueKeyPressed @new)
+        public KeyPressedEventArgs(UniqueKeyPressed? old, UniqueKeyPressed @new)
         {
             StopChain = false;
             Old = old;

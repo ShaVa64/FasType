@@ -27,7 +27,7 @@ namespace FasType.Models.Dictionary
             AllForms = Others.Prepend(fullForm).ToArray();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is BaseDictionaryElement element &&
                    FullForm == element.FullForm;

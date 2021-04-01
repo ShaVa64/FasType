@@ -19,7 +19,10 @@ namespace FasType.Storage
         public DbSet<BaseDictionaryElement> Dictionary { get; set; }
         public int Count => Dictionary.Count();
 
-        public EFSqliteDictionaryContext(DbContextOptions<EFSqliteDictionaryContext> options) : base(options) { }
+        public EFSqliteDictionaryContext(DbContextOptions<EFSqliteDictionaryContext> options) : base(options) 
+        {
+            _ = Dictionary ?? throw new NullReferenceException();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,7 +43,7 @@ namespace FasType.Storage
             return Dictionary.Find(fullForm);
         }
 
-        public bool TryGetElement(string fullForm, out BaseDictionaryElement s)
+        public bool TryGetElement(string fullForm, out BaseDictionaryElement? s)
         {
             s = null;
             if (!Contains(fullForm))
@@ -50,7 +53,7 @@ namespace FasType.Storage
         }
 
         public BaseDictionaryElement[] GetElements(string regexFullForm, int regexLength) => Dictionary.FromSqlRaw("SELECT * FROM Dictionary WHERE LOWER(FullForm) LIKE {0} AND LENGTH(FullForm) <= LENGTH({0}) + {1}", regexFullForm, regexLength).ToArray();
-        public bool TryGetElements(string regexFullForm, out BaseDictionaryElement[] s)
+        public bool TryGetElements(string regexFullForm, out BaseDictionaryElement[]? s)
         {
             s = null;
             var r = GetElements(regexFullForm, regexFullForm.Count(c => c == '%'));
@@ -60,13 +63,13 @@ namespace FasType.Storage
             return true;
         }
 
-        public bool Add(BaseAbbreviation abbrev) => Add(abbrev switch
+        public bool Add(BaseAbbreviation? abbrev) => Add(abbrev switch
         {
             SimpleAbbreviation sa => new SimpleDictionaryElement(sa),
             VerbAbbreviation va => new VerbDictionaryElement(va),
             _ => null,
         });
-        public bool Add(BaseDictionaryElement elem)
+        public bool Add(BaseDictionaryElement? elem)
         {
             if (elem == null || elem.FullForm == Properties.Resources.Other)
                 return false;
@@ -76,8 +79,12 @@ namespace FasType.Storage
             return r > 0;
         }
 
-        public T GetElement<T>(string fullForm) where T : BaseDictionaryElement => GetElement(fullForm) as T;
-        public bool TryGetElement<T>(string fullForm, out T s) where T : BaseDictionaryElement => TryGetElement(fullForm, out s);
+        public T? GetElement<T>(string fullForm) where T : BaseDictionaryElement => GetElement(fullForm) as T;
+        public bool TryGetElement<T>(string fullForm, out T? s) where T : BaseDictionaryElement
+        {
+            s = GetElement<T>(fullForm);
+            return s != null;
+        }
     }
 
     class EFSqliteDictionaryContextFactory : IDesignTimeDbContextFactory<EFSqliteDictionaryContext>

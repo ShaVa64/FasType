@@ -21,7 +21,7 @@ namespace FasType.Controls
 
         static void CharacterCasingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var tb = d as TextBlock;
+            var tb = (TextBlock)d;
             tb.Text = (CharacterCasing)e.NewValue switch
             {
                 CharacterCasing.Normal => tb.Text,

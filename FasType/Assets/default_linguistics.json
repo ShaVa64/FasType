@@ -14,21 +14,6 @@
     "Repr": "w",
     "Position": 1
   },
-  "GenderCompletion": {
-    "Name": "GenderCompletion",
-    "Repr": "e",
-    "Position": 1
-  },
-  "PluralCompletion": {
-    "Name": "PluralCompletion",
-    "Repr": "s",
-    "Position": 1
-  },
-  "GenderPluralCompletion": {
-    "Name": "GenderPluralCompletion",
-    "Repr": "es",
-    "Position": 1
-  },
   "AbbreviationMethods": [
     {
       "Key": "2003784c-dbbf-4f98-b31e-9cc04a5e15bb",

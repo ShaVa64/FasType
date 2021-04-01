@@ -36,8 +36,9 @@ namespace FasType.ViewModels
             GenderPluralForm = genderPluralForm;
         }
 
-        protected override void CreateNew(Page p)
+        protected override void CreateNew(Page? p)
         {
+            _ = p ?? throw new NullReferenceException();
             if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
             {
                 MessageBox.Show(DialogResources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
@@ -56,7 +57,7 @@ namespace FasType.ViewModels
                     MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                     return;
                 }
-                (p.Parent as Window).Close();
+                (p.Parent as Window)?.Close();
                 return;
             }
             if (!Storage.Add(_currentAbbrev))
@@ -67,7 +68,7 @@ namespace FasType.ViewModels
             }
 
             CheckDictionaryAdd();
-            (p.Parent as Window).Close();
+            (p.Parent as Window)?.Close();
         }
 
         protected override void SetPreview()
@@ -87,7 +88,12 @@ namespace FasType.ViewModels
                 return;
             }
 
-            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, 0, GenderForm, PluralForm, GenderPluralForm);
+            _currentAbbrev = new SimpleAbbreviation(ShortForm ?? throw new NullReferenceException(),
+                                                    FullForm ?? throw new NullReferenceException(),
+                                                    0,
+                                                    GenderForm ?? throw new NullReferenceException(),
+                                                    PluralForm ?? throw new NullReferenceException(),
+                                                    GenderPluralForm ?? throw new NullReferenceException());
             if (Storage.Contains(_currentAbbrev))
             {
                 BorderBrush = Controls.BorderBrushTextBox.WarningBrush;
@@ -114,8 +120,9 @@ namespace FasType.ViewModels
             GenderPluralForm = sa.GenderPluralForm;
         }
 
-        protected override void CreateNew(Page p)
+        protected override void CreateNew(Page? p)
         {
+            _ = p ?? throw new NullReferenceException();
             if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
             {
                 MessageBox.Show(DialogResources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
@@ -144,7 +151,7 @@ namespace FasType.ViewModels
             }
             
             CheckDictionaryAdd();
-            (p.Parent as Window).Close();
+            (p.Parent as Window)?.Close();
         }
 
         protected override void SetPreview()
@@ -164,7 +171,12 @@ namespace FasType.ViewModels
                 return;
             }
 
-            _currentAbbrev = new SimpleAbbreviation(ShortForm, FullForm, 0, GenderForm, PluralForm, GenderPluralForm);
+            _currentAbbrev = new SimpleAbbreviation(ShortForm ?? throw new NullReferenceException(),
+                                                    FullForm ?? throw new NullReferenceException(),
+                                                    0,
+                                                    GenderForm ?? throw new NullReferenceException(),
+                                                    PluralForm ?? throw new NullReferenceException(),
+                                                    GenderPluralForm ?? throw new NullReferenceException());
 
             Preview = _currentAbbrev.ComplexRepresentation;
         }
@@ -176,10 +188,10 @@ namespace FasType.ViewModels
         protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
         protected static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
 
-        protected SimpleAbbreviation _currentAbbrev;
-        string _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
-        string _sfToolTip, _ffToolTip, _preview;
-        Brush _borderBrush;
+        protected SimpleAbbreviation? _currentAbbrev;
+        string? _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
+        string? _sfToolTip, _ffToolTip, _preview;
+        Brush? _borderBrush;
         bool _notSkipping;
 
 
@@ -187,18 +199,18 @@ namespace FasType.ViewModels
         public string ButtonText { get; }
         public bool ShortFormReadOnly { get; }
         public bool NotSkipping { get => _notSkipping; set => SetProperty(ref _notSkipping, value); }
-        public string ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value/*, SetPreview*/); }
-        public string FullForm { get => _fullForm; set => SetProperty(ref _fullForm, value/*, SetPreview*/); }
-        public string GenderForm { get => _genderForm; set => SetProperty(ref _genderForm, value/*, SetPreview*/); }
-        public string PluralForm { get => _pluralForm; set => SetProperty(ref _pluralForm, value/*, SetPreview*/); }
-        public string GenderPluralForm { get => _genderPluralForm; set => SetProperty(ref _genderPluralForm, value/*, SetPreview*/); }
+        public string? ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value/*, SetPreview*/); }
+        public string? FullForm { get => _fullForm; set => SetProperty(ref _fullForm, value/*, SetPreview*/); }
+        public string? GenderForm { get => _genderForm; set => SetProperty(ref _genderForm, value/*, SetPreview*/); }
+        public string? PluralForm { get => _pluralForm; set => SetProperty(ref _pluralForm, value/*, SetPreview*/); }
+        public string? GenderPluralForm { get => _genderPluralForm; set => SetProperty(ref _genderPluralForm, value/*, SetPreview*/); }
         
-        public string SFToolTip { get => _sfToolTip; set => SetProperty(ref _sfToolTip, value); }
-        public string FFToolTip { get => _ffToolTip; set => SetProperty(ref _ffToolTip, value); }
+        public string? SFToolTip { get => _sfToolTip; set => SetProperty(ref _sfToolTip, value); }
+        public string? FFToolTip { get => _ffToolTip; set => SetProperty(ref _ffToolTip, value); }
         
-        public Brush BorderBrush { get => _borderBrush; set => SetProperty(ref _borderBrush, value); }
+        public Brush? BorderBrush { get => _borderBrush; set => SetProperty(ref _borderBrush, value); }
 
-        public string Preview { get => _preview; set => SetProperty(ref _preview, value); }
+        public string? Preview { get => _preview; set => SetProperty(ref _preview, value); }
 
         public Command<Page> CreateNewCommand { get; set; }
         public Command OpenLinguisticsCommand { get; set; }
@@ -225,9 +237,9 @@ namespace FasType.ViewModels
             this.PropertyChanged += SimpleAbbreviationViewModel_PropertyChanged;
         }
 
-        void SimpleAbbreviationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void SimpleAbbreviationViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.EndsWith("Form"))
+            if (e.PropertyName?.EndsWith("Form") == true)
                 SetPreview();
             if (Settings.Default.FormsAutoComplete && e.PropertyName == nameof(FullForm))
                 ComputeAutoComplete();
@@ -250,10 +262,10 @@ namespace FasType.ViewModels
         }
 
         bool CanCreateNew() => !string.IsNullOrEmpty(FullForm) && !string.IsNullOrEmpty(ShortForm);
-        protected abstract void CreateNew(Page p);
+        protected abstract void CreateNew(Page? p);
         protected void CheckDictionaryAdd()
         {
-            if (Dictionary.Contains(FullForm))
+            if (Dictionary.Contains(FullForm ?? throw new NullReferenceException()))
                 return;
 
             var res = MessageBox.Show(DialogResources.AddDictionary, Resources.Dictionary, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);

@@ -51,8 +51,8 @@ namespace FasType.Controls
         static ClearableTextBox() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ClearableTextBox), new FrameworkPropertyMetadata(typeof(ClearableTextBox)));
 
         //protected virtual static Type GetCurrentType() => typeof(ClearableTextBox);
-        protected static ResourceDictionary DefaultRes => (App.Current.FindResource(typeof(ClearableTextBox)) as Style).Resources;
-        protected static T GetResource<T>([CallerMemberName] string name = "") where T : class => DefaultRes[name] as T;
+        protected static ResourceDictionary DefaultRes => ((Style)App.Current.FindResource(typeof(ClearableTextBox))).Resources;
+        protected static T GetResource<T>([CallerMemberName] string name = "") where T : class => (T)DefaultRes[name];
         public static Brush DefaultBrush => GetResource<Brush>();
         //static ClearableTextBox() => _defaultRes = new ResourceDictionary { Source = new(Path.Combine(Directory.GetCurrentDirectory(), @"Dictionaries\TextBoxDictionary.xaml")/*, UriKind.Relative*/) };
 
@@ -83,7 +83,7 @@ namespace FasType.Controls
 
         private void ClearableTextBox_Loaded(object sender, RoutedEventArgs e)
         {
-            var btn = GetTemplateChild("ClearButton") as Button;
+            var btn = (Button)GetTemplateChild("ClearButton");
             btn.Click += ClearTextEvent;
         }
 

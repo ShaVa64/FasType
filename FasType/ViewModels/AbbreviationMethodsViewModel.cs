@@ -31,6 +31,7 @@ namespace FasType.ViewModels
             _storage = storage;
             _arr = _storage.AbbreviationMethods.Cast<AbbreviationMethodRecord>()/*.OrderBy(amr => amr.)*/.ToArray();
             Syllables = new(_storage.AbbreviationMethods);//new(UserGrammar.SyllabesAbbreviations.Cast<SyllableAbbreviation>());
+            _ = _syllables ?? throw new NullReferenceException();
 
             AddSyllableCommand = new(AddSyllable);
             RemoveSyllableCommand = new(RemoveSyllable);
@@ -43,8 +44,9 @@ namespace FasType.ViewModels
             OnPropertyChanged(nameof(Title));
         }
 
-        void RemoveSyllable(AbbreviationMethod sa)
+        void RemoveSyllable(AbbreviationMethod? sa)
         {
+            _ = sa ?? throw new NullReferenceException();
             var r = MessageBox.Show(DialogResources.DeleteMethodDialog, Resources.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
     
             if (r == MessageBoxResult.Yes)
@@ -68,8 +70,9 @@ namespace FasType.ViewModels
 
             return false;
         }
-        void Save(Window w)
+        void Save(Window? w)
         {
+            _ = w ?? throw new NullReferenceException();
             _storage.AbbreviationMethods = Syllables;
             w.Close();
         }

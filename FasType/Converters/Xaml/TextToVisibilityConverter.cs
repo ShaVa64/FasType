@@ -11,7 +11,7 @@ namespace FasType.Converters.Xaml
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string text = value as string;
+            string text = (string)value;
             return string.IsNullOrEmpty(text) ? Visibility.Visible : Visibility.Hidden;
         }
 

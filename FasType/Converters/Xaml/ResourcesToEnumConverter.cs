@@ -29,7 +29,7 @@ namespace FasType.Converters.Xaml
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string form = (value as ContentControl).Content as string;
+            string form = (value as ContentControl)?.Content as string ?? throw new NullReferenceException();
 
             if (targetType == typeof(SeeAllViewModel.FormOrderBy))
             {

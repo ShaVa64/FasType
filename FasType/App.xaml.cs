@@ -7,7 +7,6 @@ using FasType.ViewModels;
 using IWshRuntimeLibrary;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-//using Microsoft.Extensions.Options;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -24,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Windows.Data;
 using FasType.Models.Linguistics;
 using System.Text;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace FasType
 {
@@ -35,6 +35,8 @@ namespace FasType
         public static new App Current => (App)Application.Current;
         public IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
+
+        TaskbarIcon? taskbarIcon;
 
         static App() => FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.Name)));
         public App()
@@ -75,6 +77,7 @@ namespace FasType
                 .MinimumLevel.Verbose()
                 .WriteTo.Debug()
                 .CreateLogger();
+            
 
             services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
@@ -107,44 +110,49 @@ namespace FasType
             services.AddTransient<PopupViewModel>();
         }
 
-        private void OnStartup(object sender, StartupEventArgs args)
+        protected override void OnStartup(StartupEventArgs e)
         {
-            var mw = ServiceProvider.GetService<MainWindow>();
+            base.OnStartup(e);
+
+            taskbarIcon = (TaskbarIcon)FindResource("NotifyIcon");
+            //taskbarIcon.ShowBalloonTip("TEST", "This is a test.", BalloonIcon.None);
+            var mw = ServiceProvider.GetRequiredService<MainWindow>();
             MainWindow = mw;
             MainWindow.Show();
         }
 
-        void I()
-        {
-            using var _context = ServiceProvider.GetRequiredService<IDictionaryStorage>() as EFSqliteDictionaryContext;
-            var l = new List<Models.Dictionary.BaseDictionaryElement>();
-            string fp = @"D:\Visual Studio Projects\FasType\Docs\Lexique383.tsv";
+        #region DB Methods
+        //void I()
+        //{
+        //    using var _context = ServiceProvider.GetRequiredService<IDictionaryStorage>() as EFSqliteDictionaryContext;
+        //    var l = new List<Models.Dictionary.BaseDictionaryElement>();
+        //    string fp = @"D:\Visual Studio Projects\FasType\Docs\Lexique383.tsv";
 
-            var lines = System.IO.File.ReadAllLines(fp).Skip(1).ToArray();
-            var xs = lines.Select(s => s.Split('\t')).Select(t => new { F = t[0], B = t[2], T = t[3], G = t[4], N = t[5] }).ToList();
+        //    var lines = System.IO.File.ReadAllLines(fp).Skip(1).ToArray();
+        //    var xs = lines.Select(s => s.Split('\t')).Select(t => new { F = t[0], B = t[2], T = t[3], G = t[4], N = t[5] }).ToList();
 
-            var ks = xs.Select(x => x.T).Distinct().ToList();
-            var rs = xs.Where(x => x.T != "VER" && x.T != "AUX").ToList();
+        //    var ks = xs.Select(x => x.T).Distinct().ToList();
+        //    var rs = xs.Where(x => x.T != "VER" && x.T != "AUX").ToList();
 
-            var ts = rs.Select(x => x.T).Distinct().Select(t => new { T = t, N = rs.Count(x => x.T == t) }).OrderByDescending(x => x.N).Select(x => $"{x.T}, ({x.N})").ToList();
+        //    var ts = rs.Select(x => x.T).Distinct().Select(t => new { T = t, N = rs.Count(x => x.T == t) }).OrderByDescending(x => x.N).Select(x => $"{x.T}, ({x.N})").ToList();
 
-            var gs = rs.GroupBy(x => x.B + "," + x.T).ToList();
-            var os = gs.Where(g => g.Count() >= 5).ToList();
+        //    var gs = rs.GroupBy(x => x.B + "," + x.T).ToList();
+        //    var os = gs.Where(g => g.Count() >= 5).ToList();
 
-            //gs = gs.Where(g => g.Count() < 5).ToList();
+        //    //gs = gs.Where(g => g.Count() < 5).ToList();
 
-            var keys = gs.Select(g => g.Key.Split(',')[0]).ToList();
-            var ggs = rs.Where(a => keys.Contains(a.B)).GroupBy(a => a.B).ToList();
+        //    var keys = gs.Select(g => g.Key.Split(',')[0]).ToList();
+        //    var ggs = rs.Where(a => keys.Contains(a.B)).GroupBy(a => a.B).ToList();
 
-            var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
-            var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
+        //    var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
+        //    var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
 
-            var r = ss.Where(g => g.Key.Contains("complot")).ToList();
+        //    var r = ss.Where(g => g.Key.Contains("complot")).ToList();
 
-            var solos = ss.Where(g => g.Key.Distinct().Count() == 1).ToList();
+        //    var solos = ss.Where(g => g.Key.Distinct().Count() == 1).ToList();
 
-            var vs = ggs.Where(gg => gg.Any(a => a.T.Contains("PRO"))).ToList();
-        }
+        //    var vs = ggs.Where(gg => gg.Any(a => a.T.Contains("PRO"))).ToList();
+        //}
 
         //void H()
         //{
@@ -297,11 +305,14 @@ namespace FasType
         //    var xx = System.Text.Json.JsonSerializer.Deserialize<LinguisticsDTO>(x);
         //    //var x = System.Text.Json.JsonSerializer.Serialize(methods);
         //}
+        #endregion
 
         protected override void OnExit(ExitEventArgs e)
         {
             FasType.Properties.Settings.Default.Save();
             Log.Information("Default Settings saved!");
+            
+            taskbarIcon?.Dispose();
             base.OnExit(e);
         }
 
@@ -310,8 +321,8 @@ namespace FasType
             var shell = new WshShellClass();
             var shortcut = (IWshShortcut)shell.CreateShortcut(path);
 
-            var targetPath = Process.GetCurrentProcess().MainModule.FileName;
-            var workingDirectory = new FileInfo(targetPath).Directory.FullName;
+            var targetPath = Process.GetCurrentProcess().MainModule?.FileName ?? throw new NullReferenceException();
+            var workingDirectory = new FileInfo(targetPath).Directory?.FullName ?? throw new NullReferenceException();
 
             shortcut.WorkingDirectory = workingDirectory;
             shortcut.TargetPath = targetPath;

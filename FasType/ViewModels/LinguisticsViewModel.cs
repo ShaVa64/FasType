@@ -107,7 +107,7 @@ namespace FasType.ViewModels
             string path = _config.GetSection("Paths")["DefaultLinguistics"];
 
             var content = System.IO.File.ReadAllText(path);
-            var dto = System.Text.Json.JsonSerializer.Deserialize<LinguisticsDTO>(content);
+            var dto = System.Text.Json.JsonSerializer.Deserialize<LinguisticsDTO>(content) ?? throw new NullReferenceException();
 
             GenderTypeContext = dto.GenderType;
             PluralTypeContext = dto.PluralType;
@@ -125,8 +125,10 @@ namespace FasType.ViewModels
             w.Show();
         }
 
-        static bool CanSave(GrammarType context, GrammarType record)
+        static bool CanSave(GrammarType? context, GrammarType? record)
         {
+            _ = context ?? throw new NullReferenceException();
+            _ = record ?? throw new NullReferenceException();
             //if (string.IsNullOrEmpty(context.Repr)) //Empty Repr
             //    return false;
 
@@ -138,17 +140,17 @@ namespace FasType.ViewModels
 
             return true;
         }
-        bool EmptyRepr() => GetType().GetProperties().Where(pi => pi.PropertyType == typeof(GrammarType)).Select(pi => (pi.GetValue(this) as GrammarType).Repr).ToList().Any(string.IsNullOrEmpty);
+        bool EmptyRepr() => GetType().GetProperties().Where(pi => pi.PropertyType == typeof(GrammarType)).Select(pi => (pi.GetValue(this) as GrammarType ?? throw new NullReferenceException()).Repr).ToList().Any(string.IsNullOrEmpty);
         //string.IsNullOrEmpty(GenderTypeContext.Repr)
         //                    || string.IsNullOrEmpty(PluralTypeContext.Repr)
         //                    || string.IsNullOrEmpty(GenderPluralTypeContext.Repr)
         //                    || string.IsNullOrEmpty(GenderCompletionContext.Repr)
         //                    || string.IsNullOrEmpty(PluralCompletionContext.Repr)
         //                    || string.IsNullOrEmpty(GenderPluralCompletionContext.Repr);
-        bool CanSaveGrammarType(string propName) => CanSave(typeof(LinguisticsViewModel).GetProperty(propName).GetValue(this) as GrammarType, 
-            typeof(ILinguisticsStorage).GetProperty(PropertiesContextPair[propName]).GetValue(_storage) as GrammarType);
+        bool CanSaveGrammarType(string propName) => CanSave(typeof(LinguisticsViewModel).GetProperty(propName)?.GetValue(this) as GrammarType, 
+            typeof(ILinguisticsStorage).GetProperty(PropertiesContextPair[propName])?.GetValue(_storage) as GrammarType);
 
-        bool NoDup() => NoDupProperties.Select(s => (typeof(LinguisticsViewModel).GetProperty(s).GetValue(this) as GrammarType).Repr).Distinct().Count() == NoDupProperties.Length;//.ToList()
+        bool NoDup() => NoDupProperties.Select(s => (typeof(LinguisticsViewModel).GetProperty(s)?.GetValue(this) as GrammarType)?.Repr).Distinct().Count() == NoDupProperties.Length;//.ToList()
         //bool CanSavePluralType() => CanSave(PluralTypeContext, (GrammarTypeRecord)_storage.PluralType);
         //bool CanSaveGenderType() => CanSave(GenderTypeContext, (GrammarTypeRecord)_storage.GenderType);
         //bool CanSaveGenrePluralType() => CanSave(GenderPluralTypeContext, (GrammarTypeRecord)_storage.GenderPluralType);
@@ -156,8 +158,9 @@ namespace FasType.ViewModels
         //bool CanSaveGenderCompletion() => CanSave(GenderCompletionContext, (GrammarTypeRecord)_storage.GenderCompletion);
         //bool CanSaveGenrePluralCompletion() => CanSave(GenderPluralCompletionContext, (GrammarTypeRecord)_storage.GenderPluralCompletion);
         bool CanSave() => !EmptyRepr() && NoDup() && PropertiesContextPair.Keys.ToList().Any(CanSaveGrammarType);//(CanSavePluralType() || CanSaveGenderType() || CanSaveGenrePluralType() || CanSavePluralCompletion() || CanSaveGenderCompletion() || CanSaveGenrePluralCompletion());
-        void Save(Window w)
+        void Save(Window? w)
         {
+            _ = w ?? throw new NullReferenceException();
             //PropertiesToSettings();
             _storage.PluralType = PluralTypeContext;
             _storage.GenderType = GenderTypeContext;

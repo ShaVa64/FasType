@@ -17,10 +17,10 @@ namespace FasType.ViewModels
     public class OneLettersViewModel : ObservableObject
     {
         readonly static string _soloLetters;
-        ObservableCollection<BaseAbbreviation> _oneLetters;
+        ObservableCollection<BaseAbbreviation>? _oneLetters;
 
         static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
-        public ObservableCollection<BaseAbbreviation> OneLetters { get => _oneLetters; set => SetProperty(ref _oneLetters, value); }
+        public ObservableCollection<BaseAbbreviation>? OneLetters { get => _oneLetters; set => SetProperty(ref _oneLetters, value); }
         public Command<BaseAbbreviation> OpenAbbreviationPageCommand { get; }
 
         static OneLettersViewModel() => _soloLetters = @"befghikopqruvwxzéèçù";
@@ -39,11 +39,13 @@ namespace FasType.ViewModels
         }
 
         bool CanOpenAbbreviationPage() => !Windows.AbbreviationWindow.IsOpen;
-        void OpenAbbreviationPage(BaseAbbreviation abbrev)
+        void OpenAbbreviationPage(BaseAbbreviation? abbrev)
         {
+            _ = abbrev ?? throw new NullReferenceException();
+
             var aaw = App.Current.ServiceProvider.GetRequiredService<Windows.AbbreviationWindow>();
             var t = abbrev.GetModifyPageType();
-            var p = App.Current.ServiceProvider.GetRequiredService(t) as AbbreviationPage;
+            var p = (AbbreviationPage)App.Current.ServiceProvider.GetRequiredService(t);
 
             p.SetModifyAbbreviation(abbrev);
 

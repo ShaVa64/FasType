@@ -22,8 +22,8 @@ namespace FasType.Utils
         public static Type GetModifyPageType(this Models.Abbreviations.BaseAbbreviation ba) => ba switch
         {
             Models.Abbreviations.SimpleAbbreviation => typeof(Pages.SimpleAbbreviationPage),
-            Models.Abbreviations.VerbAbbreviation => null,
-            _ => null,
+            Models.Abbreviations.VerbAbbreviation => throw new NotImplementedException(),
+            _ => throw new NotImplementedException(),
         };
     }
 
@@ -109,9 +109,9 @@ namespace FasType.Utils
         {
             //Don't flash if the window is active            
             //if (win.IsActive) return;
-            System.Windows.Interop.WindowInteropHelper h = new System.Windows.Interop.WindowInteropHelper(win);
+            System.Windows.Interop.WindowInteropHelper h = new(win);
             Serilog.Log.Information($"FW, Handle: {h.Handle}");
-            FLASHWINFO info = new FLASHWINFO
+            FLASHWINFO info = new()
             {
                 hwnd = h.Handle,
                 dwFlags = FLASHW_TRAY | FLASHW_TIMER,
@@ -127,9 +127,9 @@ namespace FasType.Utils
         {
             //Don't flash if the window is active            
             //if (win.IsActive) return;
-            System.Windows.Interop.WindowInteropHelper h = new System.Windows.Interop.WindowInteropHelper(win);
+            System.Windows.Interop.WindowInteropHelper h = new(win);
             Serilog.Log.Information($"FWUF, Handle: {h.Handle}");
-            FLASHWINFO info = new FLASHWINFO
+            FLASHWINFO info = new()
             {
                 hwnd = h.Handle,
                 dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG,
@@ -143,9 +143,9 @@ namespace FasType.Utils
 
         public static bool StopFlashingWindow(this Window win)
         {
-            System.Windows.Interop.WindowInteropHelper h = new System.Windows.Interop.WindowInteropHelper(win);
+            System.Windows.Interop.WindowInteropHelper h = new(win);
             Serilog.Log.Information($"SFW, Handle: {h.Handle}");
-            FLASHWINFO info = new FLASHWINFO
+            FLASHWINFO info = new()
             {
                 hwnd = h.Handle,
                 dwFlags = FLASHW_STOP,

@@ -1,14 +1,15 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace FasType.Selectors
 {
     public class OrderSelector : DataTemplateSelector
     {
-        public DataTemplate First { get; set; }
-        public DataTemplate Default { get; set; }
-        public DataTemplate Last { get; set; }
-        public DataTemplate Only { get; set; }
+        [NotNull] public DataTemplate? First { get; set; }
+        [NotNull] public DataTemplate? Default { get; set; }
+        [NotNull] public DataTemplate? Last { get; set; }
+        [NotNull] public DataTemplate? Only { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {

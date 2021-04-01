@@ -11,7 +11,7 @@ namespace FasType.Converters.Xaml
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var aw = (double)value;
-            var offset = double.Parse(parameter.ToString());
+            var offset = double.Parse(parameter.ToString() ?? throw new NullReferenceException());
             return Math.Max(0, aw - offset);
         }
 

@@ -46,7 +46,7 @@ namespace FasType.Pages
             //Init();
         }
 
-        public override void SetModifyAbbreviation(BaseAbbreviation ba) => SetModifyAbbreviation(ba as SimpleAbbreviation);
+        public override void SetModifyAbbreviation(BaseAbbreviation ba) => SetModifyAbbreviation((SimpleAbbreviation)ba);
         public void SetModifyAbbreviation(SimpleAbbreviation abbrev)
         {
             DataContext = _currentVm = new ModifySimpleAbbreviationViewModel(abbrev);
@@ -57,7 +57,7 @@ namespace FasType.Pages
             //_currentVm.PluralForm = abbrev.PluralForm;
             //_currentVm.GenderPluralForm = abbrev.GenderPluralForm;
         }
-        public override void SetNewAbbreviation(string shortForm, string fullForm, params string[] others) => SetNewAbbreviation(shortForm, fullForm, others?[0] ?? string.Empty, others?[1] ?? string.Empty, others?[2] ?? string.Empty);
+        public override void SetNewAbbreviation(string shortForm, string fullForm, params string[] others) => SetNewAbbreviation(shortForm, fullForm, others.Length <= 1 ?others[0] : string.Empty, others.Length <= 2 ? others[1] : string.Empty, others.Length <= 3 ? others[2] : string.Empty);
         public void SetNewAbbreviation(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm)
         {
             DataContext = _currentVm = new AddSimpleAbbreviationViewModel(shortForm, fullForm, genderForm, pluralForm, genderPluralForm);

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -50,7 +51,7 @@ namespace FasType.Models.Abbreviations
             return false;
         }
 
-        public override string GetFullForm(string shortForm)
+        public override string? GetFullForm(string shortForm)
         {
             string sf = shortForm.ToLower();
 
@@ -66,7 +67,7 @@ namespace FasType.Models.Abbreviations
             return null;
         }
 
-        public override bool TryGetFullForm(string shortForm, out string fullForm)
+        public override bool TryGetFullForm(string shortForm, [MaybeNullWhen(false)] out string? fullForm)
         {
             fullForm = null;
             bool isAbrrev = IsAbbreviation(shortForm);

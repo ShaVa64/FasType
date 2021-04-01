@@ -62,10 +62,13 @@ namespace FasType.Models.Linguistics
             IsIn = position.HasFlag(SyllablePosition.In);
             IsAfter = position.HasFlag(SyllablePosition.After);
 
+            _ = _shortForm ?? throw new NullReferenceException();
+            _ = _fullForm ?? throw new NullReferenceException();
+
             PropertyChanged += AbbreviationMethod_PropertyChanged;
         }
 
-        private void AbbreviationMethod_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void AbbreviationMethod_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName is nameof(IsBefore) or nameof(IsIn) or nameof(IsAfter))
                 OnPropertyChanged(nameof(Position));

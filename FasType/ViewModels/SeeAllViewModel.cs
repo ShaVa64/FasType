@@ -64,6 +64,7 @@ namespace FasType.ViewModels
             RemoveCommand = new(Remove, CanRemove);
             _queryString = "";
             OrderAbbreviations();
+            _ = _allAbbreviations ?? throw new NullReferenceException();
             //AllAbbreviations = _storage.Take(2).ToList();
         }
 
@@ -87,8 +88,9 @@ namespace FasType.ViewModels
         }).ToList();
 
         bool CanRemove() => true;
-        void Remove(BaseAbbreviation abbrev)
+        void Remove(BaseAbbreviation? abbrev)
         {
+            _ = abbrev ?? throw new NullReferenceException();
             var message = string.Format(DialogResources.DeleteDialogFormat, Environment.NewLine, abbrev.ElementaryRepresentation);
             var res = MessageBox.Show(message, Resources.Delete, MessageBoxButton.OKCancel, MessageBoxImage.Question);
             if (res == MessageBoxResult.Cancel)

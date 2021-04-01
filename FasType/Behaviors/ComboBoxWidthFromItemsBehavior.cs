@@ -31,7 +31,7 @@ namespace FasType.Behaviors
 
         private static void OnComboBoxLoaded(object sender, RoutedEventArgs e)
         {
-            ComboBox comboBox = sender as ComboBox;
+            ComboBox comboBox = sender as ComboBox ?? throw new NullReferenceException();
             Action action = comboBox.SetWidthFromItems;
             comboBox.Dispatcher.BeginInvoke(DispatcherPriority.Render, action);
         }

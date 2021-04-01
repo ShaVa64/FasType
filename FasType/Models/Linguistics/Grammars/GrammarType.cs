@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace FasType.Models.Linguistics.Grammars
@@ -21,7 +22,7 @@ namespace FasType.Models.Linguistics.Grammars
             _ => throw new NotImplementedException()
         };
 
-        public bool TryUngrammarify(string form, out string shortForm) 
+        public bool TryUngrammarify(string form, out string? shortForm) 
         {
             shortForm = null;
             if (!SuitsGrammar(form))
@@ -52,6 +53,7 @@ namespace FasType.Models.Linguistics.Grammars
         {
             Name = name;
             Repr = repr;
+            _ = _repr ?? throw new NullReferenceException();
             Position = position;
         }
 
@@ -67,7 +69,7 @@ namespace FasType.Models.Linguistics.Grammars
             GrammarPosition.Postfix => form.EndsWith(Repr),
             _ => throw new NotImplementedException()
         };
-        public bool TryUngrammarify(string form, out string shortForm)
+        public bool TryUngrammarify(string form, [NotNullWhen(true)] out string? shortForm)
         {
             shortForm = null;
             if (!SuitsGrammar(form))

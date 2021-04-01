@@ -13,17 +13,17 @@ namespace FasType.Services
         int Count { get; }
 
         bool Contains(string fullForm);
-        BaseDictionaryElement GetElement(string fullForm);
-        bool TryGetElement(string fullForm, out BaseDictionaryElement s);
+        BaseDictionaryElement? GetElement(string fullForm);
+        bool TryGetElement(string fullForm, out BaseDictionaryElement? s);
 
-        BaseDictionaryElement[] GetElements(string regexFullForm, int regexAddLength);
-        bool TryGetElements(string fullForm, out BaseDictionaryElement[] s);
+        BaseDictionaryElement[]? GetElements(string regexFullForm, int regexAddLength);
+        bool TryGetElements(string fullForm, out BaseDictionaryElement[]? s);
 
-        bool Add(BaseAbbreviation abbrev);
-        bool Add(BaseDictionaryElement elem);
+        bool Add(BaseAbbreviation? abbrev);
+        bool Add(BaseDictionaryElement? elem);
 
         //bool Contains<T>(string fullForm) where T : BaseDictionaryElement;
-        T GetElement<T>(string fullForm) where T : BaseDictionaryElement;
-        bool TryGetElement<T>(string fullForm, out T s) where T : BaseDictionaryElement;
+        T? GetElement<T>(string fullForm) where T : BaseDictionaryElement;
+        bool TryGetElement<T>(string fullForm, out T? s) where T : BaseDictionaryElement;
     }
 }

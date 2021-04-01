@@ -44,9 +44,9 @@ namespace FasType.Controls
 
         public static void GroupNameChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            var bbtb = obj as BorderBrushTextBox;
-            string newGroup = e.NewValue as string;
-            string oldGroup = e.OldValue as string;
+            var bbtb = obj as BorderBrushTextBox ?? throw new NullReferenceException();
+            string newGroup = e.NewValue as string ?? throw new NullReferenceException();
+            string oldGroup = e.OldValue as string ?? throw new NullReferenceException();
 
             if (!string.IsNullOrEmpty(newGroup))
             {
@@ -57,7 +57,7 @@ namespace FasType.Controls
 
                 bbtb.Unloaded += (sender, e) => 
                 {
-                    SetGroupName(sender as DependencyObject, string.Empty);
+                    SetGroupName(sender as DependencyObject ?? throw new NullReferenceException(), string.Empty);
                 };
             }
 

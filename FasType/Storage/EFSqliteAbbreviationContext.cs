@@ -27,7 +27,10 @@ namespace FasType.Storage
 
         //public DbSet<VerbAbbreviation> VerbAbbreviations { get; set; }
 
-        public EFSqliteAbbreviationContext(DbContextOptions<EFSqliteAbbreviationContext> options) : base(options) { }
+        public EFSqliteAbbreviationContext(DbContextOptions<EFSqliteAbbreviationContext> options) : base(options) 
+        {
+            _ = Abbreviations ?? throw new NullReferenceException();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -130,7 +133,7 @@ namespace FasType.Storage
         public IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm)
         {
             var forms = new List<string>() { shortForm };
-            if (Linguistics.GenderType.TryUngrammarify(shortForm, out string form))
+            if (Linguistics.GenderType.TryUngrammarify(shortForm, out string? form))
                 forms.Add(form);
             if (Linguistics.PluralType.TryUngrammarify(shortForm, out form))
                 forms.Add(form);
