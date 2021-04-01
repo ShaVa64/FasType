@@ -15,6 +15,10 @@ namespace FasType.Services
         bool Contains(string fullForm);
         BaseDictionaryElement GetElement(string fullForm);
         bool TryGetElement(string fullForm, out BaseDictionaryElement s);
+
+        BaseDictionaryElement[] GetElements(string regexFullForm, int regexAddLength);
+        bool TryGetElements(string fullForm, out BaseDictionaryElement[] s);
+
         bool Add(BaseAbbreviation abbrev);
         bool Add(BaseDictionaryElement elem);
 

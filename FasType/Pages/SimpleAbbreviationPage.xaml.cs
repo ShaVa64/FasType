@@ -43,7 +43,6 @@ namespace FasType.Pages
 
             DataContext = _currentVm = addVm;
             FirstTB.Focus();
-
             //Init();
         }
 
@@ -62,6 +61,8 @@ namespace FasType.Pages
         public void SetNewAbbreviation(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm)
         {
             DataContext = _currentVm = new AddSimpleAbbreviationViewModel(shortForm, fullForm, genderForm, pluralForm, genderPluralForm);
+            if (!string.IsNullOrEmpty(fullForm))
+                MainButton.Focus();
         }
     }
 }

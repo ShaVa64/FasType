@@ -11,6 +11,9 @@ namespace FasType.Models.Dictionary
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + "}")]
     public abstract class BaseDictionaryElement
     {
+        public static readonly BaseDictionaryElement OtherElement = new SimpleDictionaryElement(Properties.Resources.Other, "", "", "");
+        public static readonly BaseDictionaryElement NoneElement = new SimpleDictionaryElement(Properties.Resources.None, "", "", "");
+
         [Key] public string FullForm { get; set; }
         public string[] Others { get; set; }
         public string[] AllForms { get; }
@@ -22,6 +25,17 @@ namespace FasType.Models.Dictionary
             Others = others.ToArray();
 
             AllForms = Others.Prepend(fullForm).ToArray();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is BaseDictionaryElement element &&
+                   FullForm == element.FullForm;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FullForm);
         }
     }
 

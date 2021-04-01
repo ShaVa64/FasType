@@ -14,6 +14,8 @@ namespace FasType.Models.Abbreviations
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public abstract class BaseAbbreviation
     {
+        public static readonly BaseAbbreviation OtherAbbreviation = new SimpleAbbreviation("", Properties.Resources.Other, 0, "", "", "");
+
         protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
 
         protected readonly static int _stringKeyLength = 2;

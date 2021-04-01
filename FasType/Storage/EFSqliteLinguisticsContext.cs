@@ -72,13 +72,25 @@ namespace FasType.Storage
             SaveChanges();
         }
 
+        const string WC = "%";
+        //PB: Catches too widely
         List<string> Words(string _curr, string from, List<string> poss)
         {
             if (from == string.Empty)
             {
-                poss.Add(_curr);
+                poss.Add(_curr.EndsWith(WC) ? _curr[..^(WC.Length)] : _curr);
                 return poss;
             }
+
+            //TODO: too long
+            //var vowels = "aeiouy";
+            //if (vowels.Contains(from[0]) == false && (_curr.Length == 0 || vowels.Contains(_curr[^1]) == false))
+            //{
+            //    foreach (var vowel in vowels)
+            //    {
+            //        Words(_curr + vowel, from, poss);
+            //    }
+            //}
 
             AbbreviationMethodRecord[] amrs = Array.Empty<AbbreviationMethodRecord>();
             if (_curr == string.Empty)
@@ -93,11 +105,15 @@ namespace FasType.Storage
 
             string temp = _curr;
             _curr += from[0];
-            Words(_curr, from[1..], poss);
+            //Words(_curr, from[1..], poss);
+            Words(_curr + WC, from[1..], poss);
 
             _curr = temp;
             foreach (var amr in amrs)
-                Words(_curr + amr.FullForm, from[(amr.ShortForm.Length)..], poss);
+            {
+                //Words(_curr + amr.FullForm, from[(amr.ShortForm.Length)..], poss);
+                Words(_curr + amr.FullForm + WC, from[(amr.ShortForm.Length)..], poss);
+            }
 
             return poss;
         }

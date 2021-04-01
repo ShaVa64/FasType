@@ -180,10 +180,13 @@ namespace FasType.ViewModels
         string _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
         string _sfToolTip, _ffToolTip, _preview;
         Brush _borderBrush;
+        bool _notSkipping;
+
 
         public string Title { get; }
         public string ButtonText { get; }
         public bool ShortFormReadOnly { get; }
+        public bool NotSkipping { get => _notSkipping; set => SetProperty(ref _notSkipping, value); }
         public string ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value/*, SetPreview*/); }
         public string FullForm { get => _fullForm; set => SetProperty(ref _fullForm, value/*, SetPreview*/); }
         public string GenderForm { get => _genderForm; set => SetProperty(ref _genderForm, value/*, SetPreview*/); }
@@ -216,6 +219,7 @@ namespace FasType.ViewModels
             ShortForm = FullForm = GenderForm = PluralForm = GenderPluralForm = string.Empty;
             SFToolTip = FFToolTip = null;
             BorderBrush = null;
+            NotSkipping = true;
             //AutoComplete = false;
 
             this.PropertyChanged += SimpleAbbreviationViewModel_PropertyChanged;
@@ -264,6 +268,7 @@ namespace FasType.ViewModels
             if (string.IsNullOrEmpty(FullForm))
             {
                 GenderForm = PluralForm = GenderPluralForm = string.Empty;
+                NotSkipping = true;
                 return;
             }
             //TODO: Get from dictionary
@@ -271,12 +276,14 @@ namespace FasType.ViewModels
             if (elem == null)
             {
                 GenderForm = PluralForm = GenderPluralForm = string.Empty;
+                NotSkipping = true;
                 return;
             }
 
             GenderForm = elem.GenderForm;
             PluralForm = elem.PluralForm;
             GenderPluralForm = elem.GenderPluralForm;
+            NotSkipping = false;
 
             //GenderForm = Linguistics.GenderCompletion.Grammarify(FullForm);// + "e";
             //PluralForm = Linguistics.PluralCompletion.Grammarify(FullForm);// + "s";

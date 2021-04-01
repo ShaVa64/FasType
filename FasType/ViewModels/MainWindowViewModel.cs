@@ -217,7 +217,7 @@ namespace FasType.ViewModels
                 //MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
                 //ChoosedFullForm = MatchingFullForms[0];
                 StartWindowAlert();
-                MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).ToList();
+                MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).Append(BaseAbbreviation.OtherAbbreviation).ToList();
                 ChoosedAbbrev = MatchingAbbrevs[0];
 
                 //foreach (var abbrev in abbrevs)
@@ -287,6 +287,23 @@ namespace FasType.ViewModels
                 //ChoosedFullForm = null;
                 //MatchingFullForms = null;
                 //CurrentWord = "";
+                if (ChoosedAbbrev == BaseAbbreviation.OtherAbbreviation)
+                {
+                    var aaw = App.Current.ServiceProvider.GetRequiredService<AbbreviationWindow>();
+                    var p = App.Current.ServiceProvider.GetRequiredService<Pages.SimpleAbbreviationPage>();
+
+                    aaw.Content = p;
+                    p.SetNewAbbreviation(CurrentWord, "", null);
+                    aaw.Show();
+                    aaw.Activate();
+
+                    StopWindowAlert();
+                    ChoosedAbbrev = null;
+                    MatchingAbbrevs = null;
+                    CurrentWord = "";
+                    return;
+                }
+
                 bool b = TryWriteAbbreviation(ChoosedAbbrev, CurrentWord, plusOne: true);
                 if (b)
                 {

@@ -76,24 +76,26 @@
             <Label Grid.Row="2" Grid.Column="0"
                    Content="{x:Static prop:Resources.GenderForm}" ContentStringFormat="{}{0}:"/>
             <ctrl:ClearableTextBox Grid.Row="2" Grid.Column="1" IsClearable="True" 
-                                   Text="{Binding GenderForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                   Text="{Binding GenderForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsTabStop="{Binding NotSkipping}"/>
             <Label Grid.Row="3" Grid.Column="0"
                    Content="{x:Static prop:Resources.PluralForm}" ContentStringFormat="{}{0}:"/>
             <ctrl:ClearableTextBox Grid.Row="3" Grid.Column="1" IsClearable="True"
-                                   Text="{Binding PluralForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                   Text="{Binding PluralForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsTabStop="{Binding NotSkipping}"/>
             <Label Grid.Row="4" Grid.Column="0"
                    Content="{x:Static prop:Resources.GnPForm}" ContentStringFormat="{}{0}:"/>
-            <ctrl:ClearableTextBox Grid.Row="4" Grid.Column="1" IsClearable="True"
+            <ctrl:ClearableTextBox Grid.Row="4" Grid.Column="1" IsClearable="True" IsTabStop="{Binding NotSkipping}"
                                    Text="{Binding GenderPluralForm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            <StackPanel Grid.Row="5" Grid.Column="1">
-                <CheckBox Margin="0, 5" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=FormsAutoComplete, Mode=TwoWay}"
+            <!--<StackPanel Grid.Row="5" Grid.Column="1">
+                <CheckBox Margin="0, 5" IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=FormsAutoComplete, Mode=TwoWay}" IsTabStop="False"
                           Content="{x:Static prop:Resources.AutoComplete}" HorizontalAlignment="Right" Command="{Binding AutoCompleteCommand}"/>
-                <Button Content="{x:Static prop:Resources.Linguistics}" Command="{Binding OpenLinguisticsCommand}"/>
-            </StackPanel>
+                <Button Content="{x:Static prop:Resources.Linguistics}" Command="{Binding OpenLinguisticsCommand}" IsTabStop="False"/>
+            </StackPanel>-->
+            <Button Grid.Row="5" Grid.Column="1" IsTabStop="False" Margin="5"
+                    Content="{x:Static prop:Resources.Linguistics}" Command="{Binding OpenLinguisticsCommand}"/>
         </Grid>
 
         <Button Command="{Binding CreateNewCommand}" CommandParameter="{x:Reference Page}"
-                Content="{Binding ButtonText}" DockPanel.Dock="Bottom" 
+                Content="{Binding ButtonText}" DockPanel.Dock="Bottom" x:Name="MainButton"
                 VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
 
         <Border MinHeight="100">

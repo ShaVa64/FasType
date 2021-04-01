@@ -29,7 +29,7 @@ namespace FasType.ViewModels
         public AbbreviationMethodsViewModel(ILinguisticsStorage storage)
         {
             _storage = storage;
-            _arr = _storage.AbbreviationMethods.Cast<AbbreviationMethodRecord>().ToArray();
+            _arr = _storage.AbbreviationMethods.Cast<AbbreviationMethodRecord>()/*.OrderBy(amr => amr.)*/.ToArray();
             Syllables = new(_storage.AbbreviationMethods);//new(UserGrammar.SyllabesAbbreviations.Cast<SyllableAbbreviation>());
 
             AddSyllableCommand = new(AddSyllable);

@@ -6,7 +6,16 @@ TODOS:
 	is about to create
 - Special abbreviations for
 	one-letter short form
+- PopupWindow excess space after sf
 
+
+
+//- If completed, pressing *Tab* -> goes to "Add button"
+- Linguistic -> Abbrev system window
+- Prefix/Suffix maybe too much ?
+- When choosing -> option to create new
+- Create other abbrev if completion is not good
+- "Add to dictionary ?" -> "Never create a abbrev out of it ?"/"FasType will nerver ask again ?"
 
 
 - Localized text

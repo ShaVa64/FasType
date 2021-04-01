@@ -27,7 +27,7 @@ namespace FasType.Storage
             
             modelBuilder.Entity<SimpleDictionaryElement>();
             modelBuilder.Entity<BaseDictionaryElement>()
-                .Property(nameof(BaseDictionaryElement.Others))
+                .Property<string[]>(nameof(BaseDictionaryElement.Others))
                 .HasConversion(splitStringConverter);
             modelBuilder.Entity<BaseDictionaryElement>()
                 .Property(nameof(BaseDictionaryElement.AllForms))
@@ -35,7 +35,11 @@ namespace FasType.Storage
         }
 
         public bool Contains(string fullForm) => Dictionary.Find(fullForm) != null;
-        public BaseDictionaryElement GetElement(string fullForm) => Dictionary.Find(fullForm);
+        public BaseDictionaryElement GetElement(string fullForm)
+        {
+            return Dictionary.Find(fullForm);
+        }
+
         public bool TryGetElement(string fullForm, out BaseDictionaryElement s)
         {
             s = null;
@@ -44,6 +48,18 @@ namespace FasType.Storage
             s = GetElement(fullForm);
             return true;
         }
+
+        public BaseDictionaryElement[] GetElements(string regexFullForm, int regexLength) => Dictionary.FromSqlRaw("SELECT * FROM Dictionary WHERE LOWER(FullForm) LIKE {0} AND LENGTH(FullForm) <= LENGTH({0}) + {1}", regexFullForm, regexLength).ToArray();
+        public bool TryGetElements(string regexFullForm, out BaseDictionaryElement[] s)
+        {
+            s = null;
+            var r = GetElements(regexFullForm, regexFullForm.Count(c => c == '%'));
+            if (r == null || r.Length == 0)
+                return false;
+            s = r;
+            return true;
+        }
+
         public bool Add(BaseAbbreviation abbrev) => Add(abbrev switch
         {
             SimpleAbbreviation sa => new SimpleDictionaryElement(sa),

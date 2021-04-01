@@ -1,4 +1,5 @@
 ﻿using FasType.Models;
+using FasType.Models.Dictionary;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -12,17 +13,19 @@ namespace FasType.ViewModels
 {
     public class PopupViewModel : ObservableObject
     {
-        string _shortForm, _selectedString;
-        ObservableCollection<string> _collection;
-        Models.Dictionary.BaseDictionaryElement[] _elements;
+        string _shortForm/*, _selectedString*/;
+        ObservableCollection<BaseDictionaryElement> _collection;
+        BaseDictionaryElement[] _elements;
+        BaseDictionaryElement _selectedElement;
 
         static Services.ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<Services.ILinguisticsStorage>();
         static Services.IDictionaryStorage Dictionary => App.Current.ServiceProvider.GetRequiredService<Services.IDictionaryStorage>();
 
-        public ObservableCollection<string> Collection { get => _collection; set => SetProperty(ref _collection, value); }
+        public ObservableCollection<BaseDictionaryElement> Collection { get => _collection; set => SetProperty(ref _collection, value); }
         public string ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value); }
         public Command<Window> CreateCommand { get; }
-        public string SelectedString { get => _selectedString; set => SetProperty(ref _selectedString, value); }
+        public BaseDictionaryElement SelectedElement { get => _selectedElement; set => SetProperty(ref _selectedElement, value); }
+        //public string SelectedString { get => _selectedString; set => SetProperty(ref _selectedString, value); }
 
 
         public PopupViewModel()
@@ -35,24 +38,27 @@ namespace FasType.ViewModels
             ShortForm = currentWord;
             var l = Linguistics.Words(currentWord).ToList();
 
-            _elements = l.Select(s => Dictionary.GetElement(s)).Where(e => e != null).ToArray();
+            _elements = l.SelectMany(s => Dictionary.GetElements(s, 1)).Where(e => e != null).Distinct().ToArray();
 
-            Collection = new ObservableCollection<string>(_elements.Select(e => e.FullForm))
+            Collection = new ObservableCollection<BaseDictionaryElement>(_elements/*.Select(e => e.FullForm)*/)
             {
-                Properties.Resources.Other,
-                Properties.Resources.None
+                BaseDictionaryElement.OtherElement,
+                BaseDictionaryElement.NoneElement
+                //Properties.Resources.Other,
+                //Properties.Resources.None
             };
-            SelectedString = Collection[0];
+            SelectedElement = Collection[0];
+            //SelectedString = Collection[0];
         }
 
-        bool CanCreate() => !string.IsNullOrEmpty(SelectedString);
+        bool CanCreate() => SelectedElement != null;//!string.IsNullOrEmpty(SelectedString);
         void Create(Window w)
         {
-            if (SelectedString == Properties.Resources.None)
+            if (SelectedElement == BaseDictionaryElement.NoneElement)//(SelectedString == Properties.Resources.None)
             {
                 var r = MessageBox.Show(Properties.DialogResources.AddDictionary, Properties.Resources.Dictionary, MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (r == MessageBoxResult.Yes)
-                    Dictionary.Add(new Models.Dictionary.SimpleDictionaryElement(ShortForm, string.Empty, string.Empty, string.Empty));
+                    Dictionary.Add(new SimpleDictionaryElement(ShortForm, string.Empty, string.Empty, string.Empty));
                 w.Close();
                 return;
             }
@@ -60,13 +66,14 @@ namespace FasType.ViewModels
             var window = App.Current.ServiceProvider.GetRequiredService<Windows.AbbreviationWindow>();
             var page = App.Current.ServiceProvider.GetRequiredService<Pages.SimpleAbbreviationPage>();
 
-            if (SelectedString == Properties.Resources.Other)
+            if (SelectedElement == BaseDictionaryElement.NoneElement)//(SelectedString == Properties.Resources.Other)
             {
                 page.SetNewAbbreviation(ShortForm, "", null);
             }
             else
             {
-                page.SetNewAbbreviation(ShortForm, SelectedString, Dictionary.GetElement(SelectedString)?.Others);
+                page.SetNewAbbreviation(ShortForm, SelectedElement.FullForm, SelectedElement.Others);
+                //page.SetNewAbbreviation(ShortForm, SelectedString, Dictionary.GetElement(SelectedString)?.Others);
             }
 
             window.Content = page;

@@ -114,34 +114,37 @@ namespace FasType
             MainWindow.Show();
         }
 
-        //void I()
-        //{
-        //    using var _context = ServiceProvider.GetRequiredService<IDictionaryStorage>() as EFSqliteDictionaryContext;
-        //    var l = new List<Models.Dictionary.BaseDictionaryElement>();
-        //    string fp = @"D:\Visual Studio Projects\FasType\Docs\Lexique383.tsv";
+        void I()
+        {
+            using var _context = ServiceProvider.GetRequiredService<IDictionaryStorage>() as EFSqliteDictionaryContext;
+            var l = new List<Models.Dictionary.BaseDictionaryElement>();
+            string fp = @"D:\Visual Studio Projects\FasType\Docs\Lexique383.tsv";
 
-        //    var lines = System.IO.File.ReadAllLines(fp).Skip(1).ToArray();
-        //    var xs = lines.Select(s => s.Split('\t')).Select(t => new { F = t[0], B = t[2], T = t[3], G = t[4], N = t[5] }).ToList();
+            var lines = System.IO.File.ReadAllLines(fp).Skip(1).ToArray();
+            var xs = lines.Select(s => s.Split('\t')).Select(t => new { F = t[0], B = t[2], T = t[3], G = t[4], N = t[5] }).ToList();
 
-        //    var rs = xs.Where(x => x.T != "VER" && x.T != "AUX").ToList();
+            var ks = xs.Select(x => x.T).Distinct().ToList();
+            var rs = xs.Where(x => x.T != "VER" && x.T != "AUX").ToList();
 
-        //    var ts = rs.Select(x => x.T).Distinct().Select(t => new { T = t, N = rs.Count(x => x.T == t) }).OrderByDescending(x => x.N).Select(x => $"{x.T}, ({x.N})").ToList();
+            var ts = rs.Select(x => x.T).Distinct().Select(t => new { T = t, N = rs.Count(x => x.T == t) }).OrderByDescending(x => x.N).Select(x => $"{x.T}, ({x.N})").ToList();
 
-        //    var gs = rs.GroupBy(x => x.B + "," + x.T).ToList();
-        //    var os = gs.Where(g => g.Count() >= 5).ToList();
+            var gs = rs.GroupBy(x => x.B + "," + x.T).ToList();
+            var os = gs.Where(g => g.Count() >= 5).ToList();
 
-        //    //gs = gs.Where(g => g.Count() < 5).ToList();
+            //gs = gs.Where(g => g.Count() < 5).ToList();
 
-        //    var keys = gs.Select(g => g.Key.Split(',')[0]).ToList();
-        //    var ggs = rs.Where(a => keys.Contains(a.B)).GroupBy(a => a.B).ToList();
+            var keys = gs.Select(g => g.Key.Split(',')[0]).ToList();
+            var ggs = rs.Where(a => keys.Contains(a.B)).GroupBy(a => a.B).ToList();
 
-        //    var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
-        //    var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
+            var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
+            var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
 
-        //    var r = ss.Where(g => g.Key.Contains("complot")).ToList();
+            var r = ss.Where(g => g.Key.Contains("complot")).ToList();
 
-        //    var solos = ss.Where(g => g.Key.Distinct().Count() == 1).ToList();
-        //}
+            var solos = ss.Where(g => g.Key.Distinct().Count() == 1).ToList();
+
+            var vs = ggs.Where(gg => gg.Any(a => a.T.Contains("PRO"))).ToList();
+        }
 
         //void H()
         //{
