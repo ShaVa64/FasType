@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Input;
 
 namespace FasType.LLKeyboardListener
@@ -91,7 +92,7 @@ namespace FasType.LLKeyboardListener
                 Key key = KeyInterop.KeyFromVirtualKey(vkCode);
                 newKey = new(key, vkCode);
                 eventArgs = new (oldKey, newKey);
-                OnKeyPressed?.Invoke(this, eventArgs);
+                OnKeyPressed(this, eventArgs);
             }
             oldKey = newKey;
 

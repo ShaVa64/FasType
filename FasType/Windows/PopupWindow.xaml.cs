@@ -29,7 +29,7 @@ namespace FasType.Windows
         public PopupWindow(PopupViewModel vm)
         {
             InitializeComponent();
-            Owner = App.Current.MainWindow;
+            Owner = App.Current.MainWindow.IsLoaded ? App.Current.MainWindow : null;
             DataContext = _vm = vm;
 
             KeyDown += PopupWindow_KeyDown;

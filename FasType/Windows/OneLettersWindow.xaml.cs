@@ -26,7 +26,7 @@ namespace FasType.Windows
         public OneLettersWindow(OneLettersViewModel vm)
         {
             InitializeComponent();
-            Owner = App.Current.MainWindow;
+            Owner = App.Current.MainWindow.IsLoaded ? App.Current.MainWindow : null;
 
             IsOpen = true;
             Closed += delegate { IsOpen = false; };

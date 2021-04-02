@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:FasType.Windows" xmlns:beha="clr-namespace:FasType.Behaviors" 
         xmlns:viewmodels="clr-namespace:FasType.ViewModels" xmlns:prop="clr-namespace:FasType.Properties"
         d:DataContext="{d:DesignInstance Type=viewmodels:PopupViewModel}"
-        mc:Ignorable="d" Title="{x:Static prop:Resources.AbbrevAutoCreation}" Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" Title="{x:Static prop:Resources.AbbrevAutoCreation}" Height="450" Width="800" 
+        WindowStartupLocation="CenterScreen" Topmost="True"
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" x:Name="Window">
 
     <Window.Resources>

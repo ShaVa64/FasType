@@ -8,9 +8,6 @@ TODOS:
 	one-letter short form
 - PopupWindow excess space after sf
 
-pçé pçé pacé  pçé  cùcù 
-pçé pçé fefaf
-dddd passé pçé passé pacé passé pçé 
 
 //- If completed, pressing *Tab* -> goes to "Add button"
 - Linguistic -> Abbrev system window

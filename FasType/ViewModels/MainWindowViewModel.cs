@@ -32,7 +32,6 @@ namespace FasType.ViewModels
         List<BaseAbbreviation>? _matchingAbbrevs;
         int _abbrevIndex;
         System.Windows.Media.Brush _background;
-        readonly SemaphoreSlim _sem;
 
         //string _choosedFullForm;
         //List<string> _matchingFullForms;
@@ -83,7 +82,6 @@ namespace FasType.ViewModels
             CurrentListenerState = ListenerStates.Inserting;
             Background = System.Windows.Media.Brushes.White;
             _ = _background ?? throw new NullReferenceException();
-            _sem = new(1, 1);
 
             AddNewCommand = new(AddNew, CanAddNew);
             SeeAllCommand = new(SeeAll, CanSeeAll);
@@ -150,38 +148,22 @@ namespace FasType.ViewModels
             return false;
         }
 
-        async void ListenerEvent(object? sender, KeyPressedEventArgs e)
+        void ListenerEvent(object? sender, KeyPressedEventArgs e)
         {
             if (IsPaused)
                 return;
-            try
+            Log.Information("Current Listener State: {listenerState}", CurrentListenerState);
+            switch (CurrentListenerState)
             {
-                await _sem.WaitAsync();
-                Log.Information("Current Listener State: {listenerState}", CurrentListenerState);
-                switch (CurrentListenerState)
-                {
-                    case ListenerStates.Inserting:
-                        Inserting(sender, e);
-                        break;
-                    case ListenerStates.Choosing:
-                        Choosing(sender, e);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                case ListenerStates.Inserting:
+                    Inserting(sender, e);
+                    break;
+                case ListenerStates.Choosing:
+                    Choosing(sender, e);
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
-            catch
-            {
-
-            }
-            finally
-            {
-                _sem.Release();
-            }
-            //if (CurrentListenerState is ListenerStates.Inserting)
-            //    Inserting(sender, e);
-            //else if (CurrentListenerState is ListenerStates.Choosing)
-            //    Choosing(sender, e);
         }
         async void StartWindowAlert()
         {
@@ -232,7 +214,9 @@ namespace FasType.ViewModels
                 if (abbrevs.Count == 1)
                 {
                     var abbrev = abbrevs.Single();
-                    e.StopChain |= TryWriteAbbreviation(abbrev, shortForm);
+                    var couldWrite = TryWriteAbbreviation(abbrev, shortForm);
+                    e.StopChain |= couldWrite;
+                    Log.Information("StopChain : {0}.", e.StopChain);
                     CurrentWord = "";
                     return;
                 }
@@ -390,13 +374,13 @@ namespace FasType.ViewModels
         }
 
         //public void Load() => Load(null, null);
-        public void Load(object sender, RoutedEventArgs e)
+        public void Load()
         {
             _listener.HookKeyboard();
             _listener.OnKeyPressed += ListenerEvent;
         }
         //public void Close() => Load(null, null);
-        public void Close(object sender, CancelEventArgs e)
+        public void Close()
         {
             _listener.OnKeyPressed -= ListenerEvent;
             _listener.UnHookKeyboard();

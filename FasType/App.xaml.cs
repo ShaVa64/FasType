@@ -115,8 +115,8 @@ namespace FasType
             base.OnStartup(e);
 
             taskbarIcon = (TaskbarIcon)FindResource("NotifyIcon");
-            //taskbarIcon.
             //taskbarIcon.ShowBalloonTip("TEST", "This is a test.", BalloonIcon.None);
+
             var mw = ServiceProvider.GetRequiredService<MainWindow>();
             MainWindow = mw;
             //MainWindow.Show();

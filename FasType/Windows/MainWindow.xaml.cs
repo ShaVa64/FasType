@@ -10,7 +10,6 @@ using System.Windows.Ink;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 
-
 namespace FasType.Windows
 {
     /// <summary>
@@ -30,10 +29,10 @@ namespace FasType.Windows
             Left = area.Right - Width;
             Top = area.Bottom - Height;
 
-
-            _vm.Load(this, new RoutedEventArgs());
+            _vm.Load();
             //Loaded += _vm.Load;
-            Closing += _vm.Close;
+
+            Closing += (s, e) => _vm.Close();
 
             StateChanged += delegate
             {

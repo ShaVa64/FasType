@@ -27,6 +27,7 @@ namespace FasType.Windows
         {
             InitializeComponent();
             IsOpen = true;
+            Owner = App.Current.MainWindow.IsLoaded ? App.Current.MainWindow : null;
 
             Closed += delegate { IsOpen = false; };
             //KeyDown += LinguisticsWindow_KeyDown;
