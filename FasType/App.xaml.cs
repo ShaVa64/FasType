@@ -56,18 +56,12 @@ namespace FasType
             _lingContext?.Database.Migrate();
             using var _dicContext = ServiceProvider.GetRequiredService<IDictionaryStorage>() as DbContext;
             _dicContext?.Database.Migrate();
-            //_context.Database.EnsureCreated();
-            //var x = System.Text.Json.JsonSerializer.Serialize(_lingContext as ILinguisticsStorage/*, new() { WriteIndented = true }*/);
 
             //I();
             //H();
             //G();
             //T();
             //F();
-
-            //var res = ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words("pçé");
-
-            //var bbtb = new FasType.Controls.BorderBrushTextBox();
         }
 
         private void ConfigureServices(ServiceCollection services)
