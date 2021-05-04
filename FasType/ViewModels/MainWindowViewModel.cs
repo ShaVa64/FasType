@@ -40,6 +40,7 @@ namespace FasType.ViewModels
         //public string ChoosedFullForm { get => _choosedFullForm; set => SetProperty(ref _choosedFullForm, value); }
         //public List<string> MatchingFullForms { get => _matchingFullForms; set => SetProperty(ref _matchingFullForms, value); }
         //public int FullFormIndex { get => _fullFormIndex; set => SetProperty(ref _fullFormIndex, value); }
+        
         public static bool IsPaused => SeeAllWindow.IsOpen
                                        || AbbreviationWindow.IsOpen
                                        || LinguisticsWindow.IsOpen
@@ -59,8 +60,6 @@ namespace FasType.ViewModels
                     OnPropertyChanged(nameof(IsChoosing));
             }
         }
-
-        private bool _hasAppeared;
 
         public bool IsChoosing => CurrentListenerState == ListenerStates.Choosing;
         public string CurrentWord { get => _currentWord; private set => SetProperty(ref _currentWord, value); }
@@ -165,14 +164,14 @@ namespace FasType.ViewModels
                     throw new NotImplementedException();
             }
         }
-        async void StartWindowAlert()
+        void StartWindowAlert()
         {
             new System.Media.SoundPlayer(@"Assets\sound.wav").Play();
-            while (App.Current.FlashApp() == false);
+            //while (App.Current.FlashApp() == false);
 
-            Background = System.Windows.Media.Brushes.Red;
-            await System.Threading.Tasks.Task.Delay(400);
-            Background = System.Windows.Media.Brushes.White;
+            //Background = System.Windows.Media.Brushes.Red;
+            //await System.Threading.Tasks.Task.Delay(400);
+            //Background = System.Windows.Media.Brushes.White;
         }
 
         static void StopWindowAlert()
@@ -226,11 +225,10 @@ namespace FasType.ViewModels
 
                 //MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
                 //ChoosedFullForm = MatchingFullForms[0];
-                if (App.Current.MainWindow.Visibility != Visibility.Visible)
-                {
-                    _hasAppeared = true;
-                    App.Current.MainWindow.Show();
-                }
+
+                var p = Caret.GetCaretPos();
+                var wa = Caret.GetWorkingArea(p);
+                App.Current.MainWnd.ShowAt(p, wa);
                 StartWindowAlert();
                 MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).Append(BaseAbbreviation.OtherAbbreviation).ToList();
                 ChoosedAbbrev = MatchingAbbrevs[0];
@@ -316,11 +314,7 @@ namespace FasType.ViewModels
                     ChoosedAbbrev = null;
                     MatchingAbbrevs = null;
                     CurrentWord = "";
-                    if (_hasAppeared)
-                    {
-                        App.Current.MainWindow.Hide();
-                        _hasAppeared = false;
-                    }
+                    App.Current.MainWindow.Hide();
                     return;
                 }
 
@@ -331,11 +325,7 @@ namespace FasType.ViewModels
                     ChoosedAbbrev = null;
                     MatchingAbbrevs = null;
                     CurrentWord = "";
-                    if (_hasAppeared)
-                    {
-                        App.Current.MainWindow.Hide();
-                        _hasAppeared = false;
-                    }
+                    App.Current.MainWindow.Hide();
                 }
                 else
                 {
@@ -365,11 +355,7 @@ namespace FasType.ViewModels
                 MatchingAbbrevs = null;
                 CurrentListenerState = ListenerStates.Inserting;
                 CurrentWord = "";
-                if (_hasAppeared)
-                {
-                    App.Current.MainWindow.Hide();
-                    _hasAppeared = false;
-                }
+                App.Current.MainWindow.Hide();
             }
         }
 

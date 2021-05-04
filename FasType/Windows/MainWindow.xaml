@@ -6,8 +6,9 @@
         xmlns:prop="clr-namespace:FasType.Properties" xmlns:local="clr-namespace:FasType"
         xmlns:page="clr-namespace:FasType.Pages" xmlns:vm="clr-namespace:FasType.ViewModels" 
         xmlns:cvt="clr-namespace:FasType.Converters.Xaml" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
-        mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True" WindowStartupLocation="Manual"
-        Title="{x:Static prop:Resources.AppName}" Height="250" Width="250">
+        mc:Ignorable="d" SizeToContent="Height" ShowInTaskbar="False" WindowStyle="None" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="Manual"
+        Title="{x:Static prop:Resources.AppName}" d:DesignHeight="250"  Width="250">
+        <!--ResizeMode="CanMinimize"--> 
 
     <Window.Resources>
         <ResourceDictionary>
@@ -19,10 +20,12 @@
             <cvt:IntToStringConverter x:Key="IntToString"/>
         </ResourceDictionary>
     </Window.Resources>
-    
-    <DockPanel>
-        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
-            <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={ex:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
+
+    <!--<DockPanel>-->
+        <!--<ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+            -->
+        <!--<ToggleButton Content="Run On Start Up" IsChecked="{Binding Source={ex:Static prop:Settings.Default}, Path=OnStartUp, Mode=TwoWay}"/>-->
+        <!--
             <Menu>
                 <MenuItem Header="{x:Static prop:Resources.AddNewHeader}" >
                     <MenuItem Header="{x:Static prop:Resources.SimpleAbbrevHeader}" Command="{Binding AddNewCommand}" CommandParameter="{x:Type page:SimpleAbbreviationPage}"/>
@@ -39,7 +42,8 @@
                               IsChecked="{Binding Source={x:Static prop:Settings.Default}, Path=AbbrevsAutoCreation, Mode=TwoWay}"/>
                 </MenuItem>
             </Menu>
-            <!--<Menu>
+            -->
+        <!--<Menu>
                 <MenuItem Header="S">
                     <MenuItem Header="Asterisk" Command="{Binding PlaySoundCommand}" CommandParameter="{x:Static media:SystemSounds.Asterisk}"/>
                     <MenuItem Header="Beep" Command="{Binding PlaySoundCommand}" CommandParameter="{x:Static media:SystemSounds.Beep}"/>
@@ -48,12 +52,13 @@
                     <MenuItem Header="Question" Command="{Binding PlaySoundCommand}" CommandParameter="{x:Static media:SystemSounds.Question}"/>
                 </MenuItem>
             </Menu>-->
+        <!--
         </ToolBar>
         
         <TextBox Name="label" Text="{Binding CurrentWord, Mode=OneWay}"
                  TextWrapping="Wrap" IsReadOnly="True"
                  HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                 Margin="10" DockPanel.Dock="Bottom"/>
+                 Margin="10" DockPanel.Dock="Bottom"/>-->
 
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
             <ListBox IsEnabled="{Binding IsChoosing}" ItemsSource="{Binding MatchingAbbrevs}"
@@ -91,5 +96,5 @@
         <!--<ProgressBar HorizontalAlignment="Center" VerticalAlignment="Center"
                      IsIndeterminate="True" Width="50" Height="20"/>-->
 
-    </DockPanel>
+    <!--</DockPanel>-->
 </Window>

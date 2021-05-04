@@ -33,6 +33,7 @@ namespace FasType
     public partial class App : Application
     {
         public static new App Current => (App)Application.Current;
+        public MainWindow MainWnd => (MainWindow)MainWindow;
         public IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 

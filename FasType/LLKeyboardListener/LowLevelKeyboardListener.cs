@@ -30,33 +30,6 @@ namespace FasType.LLKeyboardListener
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
 
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern bool GetGUIThreadInfo(uint idThread, ref GUITHREADINFO lpgui);
-        [StructLayout(LayoutKind.Sequential)] public struct GUITHREADINFO
-        {
-            public int cbSize;
-            public int flags;
-            public IntPtr hwndActive;
-            public IntPtr hwndFocus;
-            public IntPtr hwndCapture;
-            public IntPtr hwndMenuOwner;
-            public IntPtr hwndMoveSize;
-            public IntPtr hwndCaret;
-            public System.Drawing.Rectangle rcCaret;
-        }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
-        [StructLayout(LayoutKind.Sequential)] public struct RECT
-        {
-            public int Left;        // x position of upper-left corner
-            public int Top;         // y position of upper-left corner
-            public int Right;       // x position of lower-right corner
-            public int Bottom;      // y position of lower-right corner
-        }
-
-
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         public event EventHandler<KeyPressedEventArgs>? OnKeyPressed;
@@ -110,34 +83,9 @@ namespace FasType.LLKeyboardListener
             return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(mName), 0);
         }
 
-        private System.Windows.Point CaretPos()
-        {
-            int hwnd = 0;
-            GUITHREADINFO guiti = new();
-            guiti.cbSize = Marshal.SizeOf(guiti);
-
-            var b1 = GetGUIThreadInfo(0, ref guiti);
-
-            System.Windows.Point p = new(guiti.rcCaret.Left, guiti.rcCaret.Top);
-            Debug.WriteLine($"Caret Inside: ({p.X}, {p.Y})");
-
-            var b2 = GetWindowRect(guiti.hwndActive, out RECT rect);
-            p.Offset(rect.Left, rect.Top);
-            Debug.WriteLine($"Caret Outside: ({p.X}, {p.Y})");
-
-            System.Drawing.Point dp = new((int)p.X, (int)p.Y);
-            var screen = System.Windows.Forms.Screen.FromPoint(dp);
-            var wa = System.Windows.Forms.Screen.GetWorkingArea(dp);
-
-            Debug.WriteLine($"Caret Screen Name (Primary): {screen.DeviceName} ({screen.Primary})");
-            Debug.WriteLine($"Working Area: ({wa.Left}, {wa.Top}) {wa.Width}x{wa.Height}");
-            return p;
-        }
-
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             KeyPressedEventArgs? eventArgs = null;
-            CaretPos();
             if (OnKeyPressed is not null && nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 int vkCode = Marshal.ReadInt32(lParam);
