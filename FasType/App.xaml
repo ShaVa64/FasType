@@ -13,9 +13,9 @@
                 <ResourceDictionary>
 
 
+                    <!--DoubleClickCommand="{Binding ShowAppCommand}"-->
                     <tb:TaskbarIcon x:Key="NotifyIcon" IconSource="Assets\keyboard.ico"
-                                    DoubleClickCommand="{Binding ShowAppCommand}"
-                                    ToolTipText="Double-click for window, right-click for menu.">
+                                    ToolTipText="Right-click for menu.">
                         <tb:TaskbarIcon.DataContext>
                             <vm:TaskbarIconViewModel />
                         </tb:TaskbarIcon.DataContext>
