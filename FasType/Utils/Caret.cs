@@ -40,7 +40,11 @@ namespace FasType.Utils
         }
 
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool ClientToScreen(IntPtr hwnd, out Point lpRect);
+        private static extern bool ClientToScreen(IntPtr hwnd, ref Point lpRect);
+
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool ScreenToClient(IntPtr hwnd, ref Point lpRect);
 
         public static System.Drawing.Point GetCaretPos()
         {
@@ -50,14 +54,24 @@ namespace FasType.Utils
 
             var b1 = GetGUIThreadInfo(0, ref guiti);
 
-            Point p = new(guiti.rcCaret.Left, guiti.rcCaret.Bottom);
+            Point p = new(guiti.rcCaret.Left + 2, guiti.rcCaret.Top + 25);
             //p.Offset(guiti.rcCaret.Width, guiti.rcCaret.Height);
-            Debug.WriteLine($"Caret Inside, (bool): ({p.X}, {p.Y}), ({b1})");
+            var oldP = p;
+            Debug.WriteLine($"Caret Inside, (bool): ({p.X}, {p.Y}) , ({b1})");
 
-            var b2 = ClientToScreen(guiti.hwndActive, out p);
+            var b2 = ClientToScreen(guiti.hwndCaret, ref p);
             //var b2 = GetWindowRect(guiti.hwndActive, out RECT rect);
             //p.Offset(rect.Left, rect.Top);
             Debug.WriteLine($"Caret Outside, (bool): ({p.X}, {p.Y}), ({b2})");
+
+            var pPrime = p;
+            var b3 = ScreenToClient(guiti.hwndCaret, ref pPrime);
+
+            if (oldP != pPrime)
+            {
+
+            }
+
 
             //System.Drawing.Point dp = new((int)p.X, (int)p.Y);
             return p;
