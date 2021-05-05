@@ -227,8 +227,7 @@ namespace FasType.ViewModels
                 //ChoosedFullForm = MatchingFullForms[0];
 
                 var p = Caret.GetCaretPos();
-                var wa = Caret.GetWorkingArea(p);
-                App.Current.MainWnd.ShowAt(p, wa);
+                App.Current.MainWnd.ShowAt(p);
                 StartWindowAlert();
                 MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).Append(BaseAbbreviation.OtherAbbreviation).ToList();
                 ChoosedAbbrev = MatchingAbbrevs[0];

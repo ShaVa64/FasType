@@ -25,29 +25,19 @@ namespace FasType.Windows
 
             DataContext = _vm = vm;
 
-            //var area = SystemParameters.WorkArea;
-            //Left = area.Right - Width;
-            //Top = area.Bottom - Height;
-
             _vm.Load();
-            //Loaded += _vm.Load;
 
             Closing += (s, e) => _vm.Close();
+            SizeChanged += MainWindow_SizeChanged;
             ShowActivated = false;
-            //StateChanged += delegate
-            //{
-            //    if (WindowState == WindowState.Minimized)
-            //    {
-            //        WindowState = WindowState.Normal;
-            //        Hide();
-            //    }
-            //};
         }
 
-        public void ShowAt(System.Drawing.Point p, System.Drawing.Rectangle wa)
+        void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e) => UpdatePos();
+
+        void UpdatePos() => UpdatePos(new((int)Left, (int)Top));
+        void UpdatePos(System.Drawing.Point p)
         {
-            Left = p.X;
-            Top = p.Y;
+            var wa = Caret.GetWorkingArea(p);
 
             if (Left < wa.Left)
                 Left = wa.Left;
@@ -58,9 +48,15 @@ namespace FasType.Windows
                 Top = wa.Top;
             if (Top + Height > wa.Bottom)
                 Top = wa.Bottom - Height;
+        }
+
+        public void ShowAt(System.Drawing.Point p)
+        {
+            Left = p.X;
+            Top = p.Y;
+
+            UpdatePos(p);
             Show();
-            //Left = area.Right - Width;
-            //Top = area.Bottom - Height;
         }
     }
 }
