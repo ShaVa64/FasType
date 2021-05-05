@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -24,7 +25,7 @@ namespace FasType.Utils
             public IntPtr hwndMenuOwner;
             public IntPtr hwndMoveSize;
             public IntPtr hwndCaret;
-            public System.Drawing.Rectangle rcCaret;
+            public Rectangle rcCaret;
         }
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -38,6 +39,9 @@ namespace FasType.Utils
             public int Bottom;      // y position of lower-right corner
         }
 
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool ClientToScreen(IntPtr hwnd, out Point lpRect);
+
         public static System.Drawing.Point GetCaretPos()
         {
             //int hwnd = 0;
@@ -46,13 +50,14 @@ namespace FasType.Utils
 
             var b1 = GetGUIThreadInfo(0, ref guiti);
 
-            var p = guiti.rcCaret.Location;// new(guiti.rcCaret.Left, guiti.rcCaret.Top);
+            Point p = new(guiti.rcCaret.Left, guiti.rcCaret.Bottom);
             //p.Offset(guiti.rcCaret.Width, guiti.rcCaret.Height);
-            Debug.WriteLine($"Caret Inside: ({p.X}, {p.Y})");
+            Debug.WriteLine($"Caret Inside, (bool): ({p.X}, {p.Y}), ({b1})");
 
-            var b2 = GetWindowRect(guiti.hwndActive, out RECT rect);
-            p.Offset(rect.Left, rect.Top);
-            Debug.WriteLine($"Caret Outside: ({p.X}, {p.Y})");
+            var b2 = ClientToScreen(guiti.hwndActive, out p);
+            //var b2 = GetWindowRect(guiti.hwndActive, out RECT rect);
+            //p.Offset(rect.Left, rect.Top);
+            Debug.WriteLine($"Caret Outside, (bool): ({p.X}, {p.Y}), ({b2})");
 
             //System.Drawing.Point dp = new((int)p.X, (int)p.Y);
             return p;

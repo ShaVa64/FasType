@@ -8,6 +8,8 @@ TODOS:
 	one-letter short form
 - PopupWindow excess space after sf
 
+pçé pacé 
+
 //- If completed, pressing *Tab* -> goes to "Add button"
 - Linguistic -> Abbrev system window
 - Prefix/Suffix maybe too much ?
