@@ -110,7 +110,7 @@ namespace FasType.Utils
             //Don't flash if the window is active            
             //if (win.IsActive) return;
             System.Windows.Interop.WindowInteropHelper h = new(win);
-            Serilog.Log.Information($"FW, Handle: {h.Handle}");
+            //Serilog.Log.Information($"FW, Handle: {h.Handle}");
             FLASHWINFO info = new()
             {
                 hwnd = h.Handle,
@@ -128,7 +128,7 @@ namespace FasType.Utils
             //Don't flash if the window is active            
             //if (win.IsActive) return;
             System.Windows.Interop.WindowInteropHelper h = new(win);
-            Serilog.Log.Information($"FWUF, Handle: {h.Handle}");
+            //Serilog.Log.Information($"FWUF, Handle: {h.Handle}");
             FLASHWINFO info = new()
             {
                 hwnd = h.Handle,
@@ -144,7 +144,7 @@ namespace FasType.Utils
         public static bool StopFlashingWindow(this Window win)
         {
             System.Windows.Interop.WindowInteropHelper h = new(win);
-            Serilog.Log.Information($"SFW, Handle: {h.Handle}");
+            //Serilog.Log.Information($"SFW, Handle: {h.Handle}");
             FLASHWINFO info = new()
             {
                 hwnd = h.Handle,

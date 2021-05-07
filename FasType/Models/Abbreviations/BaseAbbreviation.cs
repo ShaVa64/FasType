@@ -44,7 +44,7 @@ namespace FasType.Models.Abbreviations
 
         public abstract bool IsAbbreviation(string shortForm);
         public abstract string? GetFullForm(string shortForm);
-        public abstract bool TryGetFullForm(string shortForm, [MaybeNullWhen(false)] out string? fullForm);
+        public abstract bool TryGetFullForm(string shortForm, [MaybeNullWhen(false)][NotNullWhen(true)] out string? fullForm);
 
         protected abstract string GetElementaryRepresentation();
         protected abstract string GetComplexRepresentation();

@@ -28,16 +28,34 @@ namespace FasType.Windows
             _vm.Load();
 
             Closing += (s, e) => _vm.Close();
-            SizeChanged += MainWindow_SizeChanged;
+            IsVisibleChanged += MainWindow_IsVisibleChanged;
             ShowActivated = false;
+
+            //Caret.GetCaretPos();
+            //UpdatePos();
+            //BeAt(Caret.GetCaretPos());
+
+            //Causes window to be loaded; won't have to load first time appearing causing slowdown
+            Show();
+            Hide();
         }
 
-        void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e) => UpdatePos();
-
-        void UpdatePos() => UpdatePos(new((int)Left, (int)Top));
-        void UpdatePos(System.Drawing.Point p)
+        private void MainWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            var wa = Caret.GetWorkingArea(p);
+            if (e.NewValue is bool b && b)
+            {
+                BeUnderCaret();
+            }
+        }
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            UpdatePos();
+            base.OnRenderSizeChanged(sizeInfo);
+        }
+        void UpdatePos() 
+        {
+            var wa = Caret.GetWorkingArea(new((int)Left, (int)Top));
 
             if (Left < wa.Left)
                 Left = wa.Left;
@@ -50,13 +68,20 @@ namespace FasType.Windows
                 Top = wa.Bottom - Height;
         }
 
-        public void ShowAt(System.Drawing.Point p)
+        void BeAt(System.Drawing.Point p)
         {
             Left = p.X;
             Top = p.Y;
 
-            UpdatePos(p);
-            Show();
+            //UpdatePos(p);
         }
+
+        //void ShowAt(System.Drawing.Point p)
+        //{
+        //    BeAt(p);
+        //    //Show();
+        //}
+
+        public void BeUnderCaret() => BeAt(Caret.GetCaretPos());
     }
 }

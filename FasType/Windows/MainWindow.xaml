@@ -7,7 +7,7 @@
         xmlns:page="clr-namespace:FasType.Pages" xmlns:vm="clr-namespace:FasType.ViewModels" 
         xmlns:cvt="clr-namespace:FasType.Converters.Xaml" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d" SizeToContent="Height" ShowInTaskbar="False" WindowStyle="None" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="Manual"
-        Title="{x:Static prop:Resources.AppName}" d:DesignHeight="250"  Width="250">
+        Title="{x:Static prop:Resources.AppName}" d:DesignHeight="250" MinWidth="250"  Width="250">
         <!--ResizeMode="CanMinimize"--> 
 
     <Window.Resources>
@@ -63,7 +63,7 @@
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
             <ListBox IsEnabled="{Binding IsChoosing}" ItemsSource="{Binding MatchingAbbrevs}"
                      SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"
-                     SelectionMode="Single" HorizontalContentAlignment="Stretch" Background="{Binding Background}">
+                     SelectionMode="Single" HorizontalContentAlignment="Stretch">
                 <!--ItemsSource="{Binding MatchingAbbrevs}" SelectedItem="{Binding ChoosedAbbrev}" SelectedIndex="{Binding AbbrevIndex}"-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -71,18 +71,18 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <!--<TextBlock Text="{Binding ElementaryRepresentation}">-->
-                            <TextBlock Grid.Column="0" HorizontalAlignment="Left">
+                        </Grid.ColumnDefinitions>
+                        <Grid.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ChooseCommand}"/>
+                        </Grid.InputBindings>
+                        <!--<TextBlock Text="{Binding ElementaryRepresentation}">-->
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Stretch" TextAlignment="Left">
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource AbbreviationToForm}">
                                         <Binding Path="."/>
                                         <Binding Path="DataContext.CurrentWord" RelativeSource="{RelativeSource AncestorType=Window}"/>
                                     </MultiBinding>
                                 </TextBlock.Text>
-                                <TextBlock.InputBindings>
-                                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ChooseCommand}" CommandParameter="{Binding .}"/>
-                                </TextBlock.InputBindings>
                             </TextBlock>
                             <TextBlock Grid.Column="1" HorizontalAlignment="Right" FontStyle="Italic"
                                        Text="{Binding Used, Converter={StaticResource IntToString}, 

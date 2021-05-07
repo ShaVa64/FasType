@@ -15,6 +15,7 @@ namespace FasType.LLKeyboardListener
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
         private const int WM_SYSKEYDOWN = 0x0104;
+        private const int VK_PACKET = 0xE7;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
@@ -52,7 +53,7 @@ namespace FasType.LLKeyboardListener
             if (_hookID == IntPtr.Zero)
             {
                 _hookID = SetHook(_proc);
-                Log.Information("{kblisetner} was hooked.", nameof(LowLevelKeyboardListener));
+                Log.Information("{kblisetner} was hooked, (hook id: {_hookID}).", nameof(LowLevelKeyboardListener), _hookID);
             }
             else
             {
@@ -83,16 +84,24 @@ namespace FasType.LLKeyboardListener
             return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(mName), 0);
         }
 
+        readonly SemaphoreSlim _sem = new(1);
+
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             KeyPressedEventArgs? eventArgs = null;
+
+            //Log.Debug("Code: {nCode}, wParam: {wParam}, lParam: {lParam}", nCode, wParam, lParam);
             if (OnKeyPressed is not null && nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                Key key = KeyInterop.KeyFromVirtualKey(vkCode);
-                newKey = new(key, vkCode);
-                eventArgs = new (oldKey, newKey);
-                OnKeyPressed(this, eventArgs);
+                if (vkCode != VK_PACKET)
+                {
+                    Key key = KeyInterop.KeyFromVirtualKey(vkCode);
+                    newKey = new(key, vkCode);
+                    eventArgs = new (oldKey, newKey);
+                    OnKeyPressed(this, eventArgs);
+                    Log.Debug("Chain Stopped on {key}: {StopChain}", eventArgs?.KeyPressed, eventArgs?.StopChain);
+                }
             }
             oldKey = newKey;
 

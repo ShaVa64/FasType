@@ -31,7 +31,7 @@ namespace FasType.ViewModels
         BaseAbbreviation? _choosedAbbrev;
         List<BaseAbbreviation>? _matchingAbbrevs;
         int _abbrevIndex;
-        System.Windows.Media.Brush _background;
+        //System.Windows.Media.Brush _background;
 
         //string _choosedFullForm;
         //List<string> _matchingFullForms;
@@ -40,7 +40,7 @@ namespace FasType.ViewModels
         //public string ChoosedFullForm { get => _choosedFullForm; set => SetProperty(ref _choosedFullForm, value); }
         //public List<string> MatchingFullForms { get => _matchingFullForms; set => SetProperty(ref _matchingFullForms, value); }
         //public int FullFormIndex { get => _fullFormIndex; set => SetProperty(ref _fullFormIndex, value); }
-        
+
         public static bool IsPaused => SeeAllWindow.IsOpen
                                        || AbbreviationWindow.IsOpen
                                        || LinguisticsWindow.IsOpen
@@ -65,10 +65,10 @@ namespace FasType.ViewModels
         public string CurrentWord { get => _currentWord; private set => SetProperty(ref _currentWord, value); }
         public Command<Type> AddNewCommand { get; }
         public Command SeeAllCommand { get; }
-        public Command<BaseAbbreviation> ChooseCommand { get; }
+        public Command ChooseCommand { get; }
         public Command OpenLinguisticsCommand { get; }
         public Command<System.Media.SystemSound> PlaySoundCommand { get; }
-        public System.Windows.Media.Brush Background { get => _background; set => SetProperty(ref _background, value); }
+        //public System.Windows.Media.Brush Background { get => _background; set => SetProperty(ref _background, value); }
 
         //static MainWindowViewModel() => _instance = App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>();
         public MainWindowViewModel(IAbbreviationStorage storage, IDictionaryStorage dictionary)
@@ -79,8 +79,9 @@ namespace FasType.ViewModels
             _storage = storage;
             _dictionary = dictionary;
             CurrentListenerState = ListenerStates.Inserting;
-            Background = System.Windows.Media.Brushes.White;
-            _ = _background ?? throw new NullReferenceException();
+
+            //Background = System.Windows.Media.Brushes.White;
+            //_ = _background ?? throw new NullReferenceException();
 
             AddNewCommand = new(AddNew, CanAddNew);
             SeeAllCommand = new(SeeAll, CanSeeAll);
@@ -120,27 +121,27 @@ namespace FasType.ViewModels
 
         #region IKeyboardListenerHandler
         bool CanChoose() => CurrentListenerState == ListenerStates.Choosing;
-        void Choose(BaseAbbreviation? abbrev)
+        void Choose()
         {
-            _ = abbrev ?? throw new NullReferenceException();
-            TryWriteAbbreviation(abbrev, CurrentWord, plusOne: true);
+            TryWriteAbbreviation(ChoosedAbbrev ?? throw new NullReferenceException(), CurrentWord);
 
-            //ChoosedFullForm = null;
-            //MatchingFullForms = null;
+            CurrentListenerState = ListenerStates.Inserting;
             ChoosedAbbrev = null;
             MatchingAbbrevs = null;
-            CurrentListenerState = ListenerStates.Inserting;
             CurrentWord = "";
+            App.Current.MainWindow.Hide();
         }
 
-        bool TryWriteAbbreviation(BaseAbbreviation abbrev, string shortForm, bool plusOne = false)
+        bool TryWriteAbbreviation(BaseAbbreviation abbrev, string shortForm)
         {
             if (abbrev.TryGetFullForm(shortForm, out string? fullForm))
             {
                 _ = fullForm ?? throw new NullReferenceException();
                 string word = CurrentWord.IsFirstCharUpper() ? fullForm.FirstCharToUpper() : fullForm;
-                Input.Erase(CurrentWord.Length + (plusOne ? 1 : 0));
-                Input.TextEntry(word + " ");
+                _listener.OnKeyPressed -= ListenerEvent;
+                Input.Erase(CurrentWord.Length);
+                Input.TextEntry(word + ' ');
+                _listener.OnKeyPressed += ListenerEvent;
                 _storage.UpdateUsed(abbrev);
                 return true;
             }
@@ -167,7 +168,7 @@ namespace FasType.ViewModels
         void StartWindowAlert()
         {
             new System.Media.SoundPlayer(@"Assets\sound.wav").Play();
-            //while (App.Current.FlashApp() == false);
+            while (App.Current.FlashApp() == false);
 
             //Background = System.Windows.Media.Brushes.Red;
             //await System.Threading.Tasks.Task.Delay(400);
@@ -182,6 +183,7 @@ namespace FasType.ViewModels
         {
             if (e.KeyPressed == Key.Space && !string.IsNullOrEmpty(CurrentWord))
             {
+                e.StopChain = true;
                 string shortForm = CurrentWord.ToLower();
 
                 var abbrevs = _storage[shortForm].ToList();
@@ -201,9 +203,9 @@ namespace FasType.ViewModels
                     //using var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
                     if (Properties.Settings.Default.AbbrevsAutoCreation && !_dictionary.Contains(shortForm))
                     {
-                        var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
-                        window.SearchForWord(shortForm);
-                        window.Show();
+                        //var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
+                        //window.SearchForWord(shortForm);
+                        //window.Show();
                     }
 
                     CurrentWord = "";
@@ -212,22 +214,20 @@ namespace FasType.ViewModels
 
                 if (abbrevs.Count == 1)
                 {
-                    var abbrev = abbrevs.Single();
+                    var abbrev = abbrevs[0];
                     var couldWrite = TryWriteAbbreviation(abbrev, shortForm);
-                    e.StopChain |= couldWrite;
-                    Log.Information("StopChain : {0}.", e.StopChain);
                     CurrentWord = "";
                     return;
                 }
                 //else if (abbrevs.Count > 1)
-
                 CurrentListenerState = ListenerStates.Choosing;
 
                 //MatchingFullForms = abbrevs.Select(a => a.GetFullForm(shortForm)).ToList();
                 //ChoosedFullForm = MatchingFullForms[0];
 
-                var p = Caret.GetCaretPos();
-                App.Current.MainWnd.ShowAt(p);
+                App.Current.MainWindow.Show();
+                //var p = Caret.GetCaretPos();
+                //App.Current.MainWnd.ShowAt(p);
                 StartWindowAlert();
                 MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).Append(BaseAbbreviation.OtherAbbreviation).ToList();
                 ChoosedAbbrev = MatchingAbbrevs[0];
@@ -271,18 +271,18 @@ namespace FasType.ViewModels
                 //newChar = e.IsShifted ? newChar.ToUpper() : newChar.ToLower();
                 CurrentWord += newChar.Single();
 
-                Log.Verbose("New Char Pressed: {pressedChar}, Current Word: {@currentWord}", newChar, CurrentWord);
+                Log.Verbose("New Char Pressed: '{pressedChar}' ({vkCode}), Current Word: \"{@currentWord}\"", newChar, e.New.VkCode, CurrentWord);
             }
             else if (e.KeyPressed == Key.Back && !string.IsNullOrEmpty(CurrentWord))
             {
                 CurrentWord = CurrentWord[..^1];//.Remove(CurrentWord.Length - 1);
-                Log.Verbose("Last char removed, Current Word: {@currentWord}", CurrentWord);
+                Log.Verbose("Last char removed, Current Word: \"{@currentWord}\"", CurrentWord);
             }
             else if (e.KeyPressed.IsModifier() || (e.KeyPressed == Key.Oem6 && e.Old?.KeyPressed != Key.Oem6)) { }
             else 
             {
                 CurrentWord = "";
-                Log.Verbose("Current Word Reset, Current Word: {@currentWord}", CurrentWord);
+                Log.Verbose("Current Word Reset ({char} {vkCode}), Current Word: \"{@currentWord}\"", e.KeyPressed, e.New.VkCode, CurrentWord);
             }
         }
 
@@ -317,10 +317,9 @@ namespace FasType.ViewModels
                     return;
                 }
 
-                bool b = TryWriteAbbreviation(ChoosedAbbrev ?? throw new NullReferenceException(), CurrentWord, plusOne: true);
+                bool b = TryWriteAbbreviation(ChoosedAbbrev ?? throw new NullReferenceException(), CurrentWord);
                 if (b)
                 {
-                    StopWindowAlert();
                     ChoosedAbbrev = null;
                     MatchingAbbrevs = null;
                     CurrentWord = "";
@@ -349,7 +348,6 @@ namespace FasType.ViewModels
             {
                 //ChoosedFullForm = null;
                 //MatchingFullForms = null;
-                StopWindowAlert();
                 ChoosedAbbrev = null;
                 MatchingAbbrevs = null;
                 CurrentListenerState = ListenerStates.Inserting;

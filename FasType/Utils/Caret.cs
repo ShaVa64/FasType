@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -24,7 +25,7 @@ namespace FasType.Utils
             public IntPtr hwndMenuOwner;
             public IntPtr hwndMoveSize;
             public IntPtr hwndCaret;
-            public Rectangle rcCaret;
+            public RECT rcCaret;
         }
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -41,9 +42,6 @@ namespace FasType.Utils
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool ClientToScreen(IntPtr hwnd, ref Point lpRect);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool ScreenToClient(IntPtr hwnd, ref Point lpRect);
-
         public static IntPtr CurrentCaretHwnd { get; private set; }
 
         public static Point GetCaretPos()
@@ -53,16 +51,19 @@ namespace FasType.Utils
             guiti.cbSize = Marshal.SizeOf(guiti);
 
             var b1 = GetGUIThreadInfo(0, ref guiti);
-
-            CurrentCaretHwnd = guiti.hwndCaret;
-            Point p = new(guiti.rcCaret.Left + 2, guiti.rcCaret.Top + 25);
+            if (CurrentCaretHwnd != guiti.hwndCaret)
+            {
+                CurrentCaretHwnd = guiti.hwndCaret;
+                //return GetCaretPos();
+            }
+            Point p = new(guiti.rcCaret.Left, guiti.rcCaret.Bottom + 5);
             //p.Offset(guiti.rcCaret.Width, guiti.rcCaret.Height);
-            Debug.WriteLine($"Caret Inside, (bool): ({p.X}, {p.Y}) , ({b1})");
+            Log.Debug($"Caret Inside, (bool): ({p.X}, {p.Y}), ({b1})");
 
             var b2 = ClientToScreen(CurrentCaretHwnd, ref p);
             //var b2 = GetWindowRect(guiti.hwndActive, out RECT rect);
             //p.Offset(rect.Left, rect.Top);
-            Debug.WriteLine($"Caret Outside, (bool): ({p.X}, {p.Y}), ({b2})");
+            Log.Debug($"Caret Outside, (bool): ({p.X}, {p.Y}), ({b2})");
 
             //System.Drawing.Point dp = new((int)p.X, (int)p.Y);
             return p;
@@ -70,11 +71,11 @@ namespace FasType.Utils
 
         public static Rectangle GetWorkingArea(Point dp)
         {
-            var screen = System.Windows.Forms.Screen.FromPoint(dp);
-            var wa = System.Windows.Forms.Screen.GetWorkingArea(dp);
+            //var screen = System.Windows.Forms.Screen.FromPoint(dp);
+            //Debug.WriteLine($"Caret Screen Name (Primary): {screen.DeviceName} ({screen.Primary})");
 
-            Debug.WriteLine($"Caret Screen Name (Primary): {screen.DeviceName} ({screen.Primary})");
-            Debug.WriteLine($"Working Area: ({wa.Left}, {wa.Top}) {wa.Width}x{wa.Height}");
+            var wa = System.Windows.Forms.Screen.GetWorkingArea(dp);
+            Log.Debug($"Working Area: ({wa.Left}, {wa.Top}) {wa.Width}x{wa.Height}");
 
             return wa;
         }

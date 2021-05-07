@@ -101,15 +101,20 @@ namespace FasType.Storage
             //return r > 0;
         }
 
+        int _updates = 0;
         public bool UpdateUsed(BaseAbbreviation abbrev)
         {
             if (!Contains(abbrev))
                 return false;
             abbrev.UpdateUsed();
             Abbreviations.Update(abbrev);
-
-            var r = SaveChanges();
-            return r > 0;
+            if (++_updates >= 3)
+            {
+                _updates = 0;
+                var r = SaveChanges();
+                return r > 0;
+            }
+            return true;
         }
         public bool UpdateAbbreviation(BaseAbbreviation abbrev)
         {

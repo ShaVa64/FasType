@@ -67,13 +67,13 @@ namespace FasType.Models.Abbreviations
             return null;
         }
 
-        public override bool TryGetFullForm(string shortForm, [MaybeNullWhen(false)] out string? fullForm)
+        public override bool TryGetFullForm(string shortForm, [MaybeNullWhen(false)][NotNullWhen(true)] out string? fullForm)
         {
             fullForm = null;
             bool isAbrrev = IsAbbreviation(shortForm);
             if (!isAbrrev)
                 return false;
-            fullForm = GetFullForm(shortForm);
+            fullForm = GetFullForm(shortForm) ?? throw new NullReferenceException();
             return true;
         }
 
