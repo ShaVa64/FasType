@@ -23,17 +23,35 @@ namespace FasType.Behaviors
             if (dpo is ComboBox comboBox)
             {
                 if ((bool)e.NewValue == true)
+                {
                     comboBox.Loaded += OnComboBoxLoaded;
+                    //comboBox.SelectionChanged += ComboBox_SelectionChanged;
+                    comboBox.IsVisibleChanged += ComboBox_IsVisibleChanged;
+                }
                 else
+                {
+
                     comboBox.Loaded -= OnComboBoxLoaded;
+                    //comboBox.SelectionChanged -= ComboBox_SelectionChanged;
+                    comboBox.IsVisibleChanged -= ComboBox_IsVisibleChanged;
+                }
             }
         }
 
-        private static void OnComboBoxLoaded(object sender, RoutedEventArgs e)
+
+        static void SetComboBoxWidthFromItems(ComboBox cb)
         {
-            ComboBox comboBox = sender as ComboBox ?? throw new NullReferenceException();
-            Action action = comboBox.SetWidthFromItems;
-            comboBox.Dispatcher.BeginInvoke(DispatcherPriority.Render, action);
+            Action action = cb.SetWidthFromItems;
+            cb.Dispatcher.BeginInvoke(DispatcherPriority.Render, action);
         }
+
+        private static void ComboBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue == true)
+                SetComboBoxWidthFromItems(sender as ComboBox ?? throw new NullReferenceException());
+        }
+
+        private static void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) => SetComboBoxWidthFromItems(sender as ComboBox ?? throw new NullReferenceException());
+        private static void OnComboBoxLoaded(object? sender, RoutedEventArgs e) => SetComboBoxWidthFromItems(sender as ComboBox ?? throw new NullReferenceException());
     }
 }

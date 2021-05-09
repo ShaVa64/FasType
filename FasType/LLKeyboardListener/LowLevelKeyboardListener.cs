@@ -84,8 +84,6 @@ namespace FasType.LLKeyboardListener
             return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(mName), 0);
         }
 
-        readonly SemaphoreSlim _sem = new(1);
-
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             KeyPressedEventArgs? eventArgs = null;
@@ -100,7 +98,7 @@ namespace FasType.LLKeyboardListener
                     newKey = new(key, vkCode);
                     eventArgs = new (oldKey, newKey);
                     OnKeyPressed(this, eventArgs);
-                    Log.Debug("Chain Stopped on {key}: {StopChain}", eventArgs?.KeyPressed, eventArgs?.StopChain);
+                    //Log.Debug("Chain Stopped on {key}: {StopChain}", eventArgs?.KeyPressed, eventArgs?.StopChain);
                 }
             }
             oldKey = newKey;

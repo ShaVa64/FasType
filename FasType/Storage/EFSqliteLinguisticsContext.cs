@@ -77,7 +77,7 @@ namespace FasType.Storage
             SaveChanges();
         }
 
-        const string WC = "%";
+        const string WC = ".?";
         //PB: Catches too widely
         List<string> Words(string _curr, string from, List<string> poss)
         {
@@ -108,17 +108,19 @@ namespace FasType.Storage
             }
             amrs = amrs.Concat(AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.After) && from.EndsWith(m.ShortForm) && from.Length == m.ShortForm.Length)).ToArray();
 
-            string temp = _curr;
-            _curr += from[0];
             //Words(_curr, from[1..], poss);
-            Words(_curr + WC, from[1..], poss);
+            Words(_curr + from[0] + WC, from[1..], poss);
 
-            _curr = temp;
-            foreach (var amr in amrs)
+            var gAmrs = amrs.GroupBy(amr => amr.ShortForm.Length).ToArray();
+            foreach (var g in gAmrs)
             {
-                //Words(_curr + amr.FullForm, from[(amr.ShortForm.Length)..], poss);
-                Words(_curr + amr.FullForm + WC, from[(amr.ShortForm.Length)..], poss);
+                Words(_curr + "(" + string.Join('|', g.Select(amr => amr.FullForm)) + ")" + WC, from[g.Key..], poss);
             }
+            //foreach (var amr in amrs)
+            //{
+            //    //Words(_curr + amr.FullForm, from[(amr.ShortForm.Length)..], poss);
+            //    Words(_curr + amr.FullForm + WC, from[(amr.ShortForm.Length)..], poss);
+            //}
 
             return poss;
         }

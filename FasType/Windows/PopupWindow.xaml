@@ -27,25 +27,56 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!--<TextBlock Grid.Column="0" Grid.Row="0" Text="Which abbreviation would you like to create ?"
-                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 10, 10"/>
-        <ComboBox Grid.Column="2" Grid.Row="0" beha:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True"
-                  ItemsSource="{Binding Collection}" HorizontalAlignment="Center" VerticalAlignment="Center"
-                  SelectedItem="{Binding SelectedString}" Margin="5, 0, 5, 10"/>
-
-        <Button Grid.Column="2" Grid.Row="1" Content="Create"
-                Command="{Binding CreateCommand}" CommandParameter="{x:Reference Window}"/>-->
-
-        <TextBlock Grid.Column="0" Grid.Row="0"
-                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 15, 0">
+        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0, 0, 15, 0"
+                   HorizontalAlignment="Center" VerticalAlignment="Center">
             <Run Text="{x:Static prop:DialogResources.PopupAbbrevCreation1}"/>
             <LineBreak/>
             <Run Text="{x:Static prop:DialogResources.PopupAbbrevCreation2}"/>
             <Run Text="{Binding ShortForm}"/><Run Text=")"/>
         </TextBlock>
+
+        <Canvas Width="20" Height="20" Grid.Column="1" Grid.Row="0" 
+                RenderTransformOrigin="0.5, 0.5" Margin="0, 0, 10, 0">
+            <Path Width="20" Height="20" StrokeThickness="2" Stroke="Blue" Data="M 2.93,2.93 A 10,10 0 0 1 17.07,2.93"/>
+            <Canvas.RenderTransform>
+                <RotateTransform/>
+            </Canvas.RenderTransform>
+            <Canvas.Style>
+                <Style TargetType="Canvas">
+                    <Style.Triggers>
+                        <Trigger Property="Visibility" Value="Visible">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard BeginTime="0">
+                                        <DoubleAnimationUsingKeyFrames BeginTime="0" RepeatBehavior="Forever"
+                                                                       Storyboard.TargetProperty="(Ellipse.RenderTransform).(RotateTransform.Angle)">
+                                            <!--<EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>-->
+                                            <!--<EasingDoubleKeyFrame KeyTime="00:00:0.5" Value="5"/>-->
+                                            <!--<EasingDoubleKeyFrame KeyTime="00:00:01" Value="180">
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <CircleEase EasingMode="EaseIn"/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>-->
+                                            <EasingDoubleKeyFrame KeyTime="00:00:1.5" Value="360">
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <CircleEase EasingMode="EaseInOut"/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>
+                                            <!--<EasingDoubleKeyFrame KeyTime="00:00:2.5" Value="365"/>-->
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Canvas.Style>
+        </Canvas>
+        
         <ComboBox Grid.Column="1" Grid.Row="0" beha:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True"
                   ItemsSource="{Binding Collection}" HorizontalAlignment="Center" VerticalAlignment="Center"
-                  SelectedItem="{Binding SelectedElement}" DisplayMemberPath="FullForm" Margin="0, 0, 10, 0"/>
+                  SelectedItem="{Binding SelectedElement}" DisplayMemberPath="FullForm" Margin="0, 0, 10, 0"
+                  Visibility="{Binding ComboBoxVisibility}" d:Visibility="Collapsed"/>
 
         <Button Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"
                 Height="30" Width="30" Padding="0" Margin="0, 0, 10, 0"

@@ -1,6 +1,7 @@
 ﻿using FasType.Models.Abbreviations;
 using FasType.Models.Dictionary;
 using FasType.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FasType.Storage
@@ -22,6 +24,15 @@ namespace FasType.Storage
         public EFSqliteDictionaryContext(DbContextOptions<EFSqliteDictionaryContext> options) : base(options) 
         {
             _ = Dictionary ?? throw new NullReferenceException();
+            if (Database.IsSqlite())
+            {
+                var connection = (SqliteConnection)Database.GetDbConnection();
+                connection.CreateFunction("regexp", (string input, string pattern) => Regex.IsMatch(input, pattern));
+            }
+            else
+            {
+                throw new InvalidOperationException("Database is not SQLite.");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -52,11 +63,22 @@ namespace FasType.Storage
             return true;
         }
 
-        public BaseDictionaryElement[] GetElements(string regexFullForm, int regexLength) => Dictionary.FromSqlRaw("SELECT * FROM Dictionary WHERE LOWER(FullForm) LIKE {0} AND LENGTH(FullForm) <= LENGTH({0}) + {1}", regexFullForm, regexLength).ToArray();
-        public bool TryGetElements(string regexFullForm, out BaseDictionaryElement[]? s)
+        public BaseDictionaryElement[] GetElements(string regexPattern)
+        {
+            //Regex r = new(regexPattern);
+
+
+            //return Dictionary.AsEnumerable().Where(bde => r.IsMatch(bde.FullForm)).ToArray();
+            //When EFCore6
+            //return Dictionary.Where(bde => r.IsMatch(bde.FullForm)).ToArray();
+            return Dictionary.FromSqlRaw("SELECT * FROM Dictionary WHERE regexp(FullForm, {0})", regexPattern).ToArray();
+        }
+
+        public bool TryGetElements(string regexPattern, out BaseDictionaryElement[]? s)
         {
             s = null;
-            var r = GetElements(regexFullForm, regexFullForm.Count(c => c == '%'));
+            var r = GetElements(regexPattern);
+            //var r = GetElements(regexFullForm, regexFullForm.Count(c => c == '%'));
             if (r == null || r.Length == 0)
                 return false;
             s = r;

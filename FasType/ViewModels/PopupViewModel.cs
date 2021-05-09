@@ -1,5 +1,6 @@
 ﻿using FasType.Models;
 using FasType.Models.Dictionary;
+using FasType.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,41 +15,55 @@ namespace FasType.ViewModels
     public class PopupViewModel : ObservableObject
     {
         string? _shortForm/*, _selectedString*/;
-        ObservableCollection<BaseDictionaryElement>? _collection;
+        ObservableCollection<BaseDictionaryElement> _collection;
         BaseDictionaryElement[]? _elements;
         BaseDictionaryElement? _selectedElement;
+        Visibility _comboBoxVisibility, _busyIndicatorVisibility;
 
-        static Services.ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<Services.ILinguisticsStorage>();
-        static Services.IDictionaryStorage Dictionary => App.Current.ServiceProvider.GetRequiredService<Services.IDictionaryStorage>();
+        //static Services.ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<Services.ILinguisticsStorage>();
+        //static Services.IDictionaryStorage Dictionary => App.Current.ServiceProvider.GetRequiredService<Services.IDictionaryStorage>();
 
-        public ObservableCollection<BaseDictionaryElement>? Collection { get => _collection; set => SetProperty(ref _collection, value); }
+        readonly ILinguisticsStorage _linguistics;
+        readonly IDictionaryStorage _dictionary;
+
+        public Visibility ComboBoxVisibility { get => _comboBoxVisibility; set => SetProperty(ref _comboBoxVisibility, value); }
+        public Visibility BusyIndicatorVisibility { get => _busyIndicatorVisibility; set => SetProperty(ref _busyIndicatorVisibility, value); }
+        public ObservableCollection<BaseDictionaryElement> Collection { get => _collection; set => SetProperty(ref _collection, value); }
         public string? ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value); }
         public Command<Window> CreateCommand { get; }
         public BaseDictionaryElement? SelectedElement { get => _selectedElement; set => SetProperty(ref _selectedElement, value); }
         //public string SelectedString { get => _selectedString; set => SetProperty(ref _selectedString, value); }
 
 
-        public PopupViewModel()
+        public PopupViewModel(ILinguisticsStorage linguistics, IDictionaryStorage dictionary)
         {
+            _linguistics = linguistics;
+            _dictionary = dictionary;
             CreateCommand = new(Create, CanCreate);
+            Collection = new();
+            _ = _collection ?? throw new NullReferenceException();
+
+            ComboBoxVisibility = Visibility.Collapsed;
+            BusyIndicatorVisibility = Visibility.Visible;
         }
 
         public void SearchForWord(string currentWord)
         {
             ShortForm = currentWord;
-            var l = Linguistics.Words(currentWord).ToList();
+            var l = _linguistics.Words(currentWord).Select(s => "^" + s + "$").ToList();
 
-            _elements = l.SelectMany(s => Dictionary.GetElements(s, 1) ?? Array.Empty<BaseDictionaryElement>()).Distinct().ToArray();
+            _elements = l.SelectMany(s => _dictionary.GetElements(s) ?? Array.Empty<BaseDictionaryElement>()).Distinct().ToArray();
 
-            Collection = new ObservableCollection<BaseDictionaryElement>(_elements/*.Select(e => e.FullForm)*/)
+            Collection = new ObservableCollection<BaseDictionaryElement>(_elements)
             {
                 BaseDictionaryElement.OtherElement,
                 BaseDictionaryElement.NoneElement
-                //Properties.Resources.Other,
-                //Properties.Resources.None
             };
             SelectedElement = Collection[0];
-            //SelectedString = Collection[0];
+
+            BusyIndicatorVisibility = Visibility.Collapsed;
+            ComboBoxVisibility = Visibility.Visible;
+            //System.Windows.Controls.ProgressBar
         }
 
         bool CanCreate() => SelectedElement != null;//!string.IsNullOrEmpty(SelectedString);
@@ -59,7 +74,7 @@ namespace FasType.ViewModels
             {
                 var r = MessageBox.Show(Properties.DialogResources.AddDictionary, Properties.Resources.Dictionary, MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (r == MessageBoxResult.Yes)
-                    Dictionary.Add(new SimpleDictionaryElement(ShortForm ?? throw new NullReferenceException(), string.Empty, string.Empty, string.Empty));
+                    _dictionary.Add(new SimpleDictionaryElement(ShortForm ?? throw new NullReferenceException(), string.Empty, string.Empty, string.Empty));
                 w.Close();
                 return;
             }

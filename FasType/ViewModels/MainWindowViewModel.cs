@@ -203,9 +203,10 @@ namespace FasType.ViewModels
                     //using var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
                     if (Properties.Settings.Default.AbbrevsAutoCreation && !_dictionary.Contains(shortForm))
                     {
-                        //var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
+                        var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
+                        Task.Run(() => window.SearchForWord(shortForm));
                         //window.SearchForWord(shortForm);
-                        //window.Show();
+                        window.Show();
                     }
 
                     CurrentWord = "";

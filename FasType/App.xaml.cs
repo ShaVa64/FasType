@@ -76,7 +76,7 @@ namespace FasType
 
             services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
-            services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")).EnableSensitiveDataLogging(), ServiceLifetime.Transient, ServiceLifetime.Transient);
             //services.AddTransient<IDataStorage, EFSqliteStorage>();
 
             services.AddSingleton(Configuration);
@@ -110,22 +110,87 @@ namespace FasType
             base.OnStartup(e);
 
             taskbarIcon = (TaskbarIcon)FindResource("NotifyIcon");
-            //taskbarIcon.ShowBalloonTip("TEST", "This is a test.", BalloonIcon.None);
 
             var mw = ServiceProvider.GetRequiredService<MainWindow>();
             MainWindow = mw;
-            //MainWindow.Show();
         }
 
         #region DB Methods
+
+
+        //record TempA(string F, string B, string T, string G, string N);
+        //static string GetOfType(string type, ref ILookup<string, TempA> lookup)
+        //{
+        //    if (lookup.Contains(type))
+        //    {
+        //        var a = lookup[type].ToArray();
+        //        if (a.Select(tmp => tmp.F.Replace("à", "a")).Distinct().Count() > 1)
+        //            throw new Exception();
+
+        //        var tmp = lookup.SelectMany(t => t).ToList();
+        //        foreach (var r in a)
+        //            tmp.Remove(r);
+        //        lookup = tmp.ToLookup(tmp => tmp.G + "," + tmp.N);
+        //        return a[0].F;
+        //    }
+        //    return "";
+        //}
+        //static Models.Dictionary.BaseDictionaryElement? ToBDE(IGrouping<string, TempA> group)
+        //{
+        //    var lookup = group.ToLookup(tmp => tmp.G + "," + tmp.N);//.ToArray();
+        //    try
+        //    {
+        //        string fullForm = "", genderForm = "", pluralForm = "", genderPluralForm = "";
+
+        //        fullForm = GetOfType("m,s", ref lookup);
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            fullForm = GetOfType("m,", ref lookup);
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            fullForm = GetOfType(",s", ref lookup);
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            fullForm = GetOfType("f,s", ref lookup);
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            fullForm = GetOfType("f,", ref lookup);
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            fullForm = GetOfType("m,p", ref lookup);
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            fullForm = GetOfType(",p", ref lookup);
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            fullForm = GetOfType("f,p", ref lookup);
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            fullForm = GetOfType(",", ref lookup);
+
+        //        if (string.IsNullOrEmpty(fullForm))
+        //            return null;
+
+        //        genderForm = GetOfType("f,s", ref lookup);
+        //        if (string.IsNullOrEmpty(genderForm))
+        //            genderForm = GetOfType("f,", ref lookup);
+
+        //        pluralForm = GetOfType("m,p", ref lookup);
+        //        if (string.IsNullOrEmpty(pluralForm))
+        //            pluralForm = GetOfType(",p", ref lookup);
+        //        if (string.IsNullOrEmpty(pluralForm))
+        //            pluralForm = GetOfType("f,p", ref lookup);
+
+        //        genderPluralForm = GetOfType("f,p", ref lookup);
+
+        //        return new Models.Dictionary.SimpleDictionaryElement(fullForm, genderForm, pluralForm, genderPluralForm);
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
+
         //void I()
         //{
-        //    using var _context = ServiceProvider.GetRequiredService<IDictionaryStorage>() as EFSqliteDictionaryContext;
+        //    using var _context = (EFSqliteDictionaryContext)ServiceProvider.GetRequiredService<IDictionaryStorage>();
         //    var l = new List<Models.Dictionary.BaseDictionaryElement>();
         //    string fp = @"D:\Visual Studio Projects\FasType\Docs\Lexique383.tsv";
 
         //    var lines = System.IO.File.ReadAllLines(fp).Skip(1).ToArray();
-        //    var xs = lines.Select(s => s.Split('\t')).Select(t => new { F = t[0], B = t[2], T = t[3], G = t[4], N = t[5] }).ToList();
+        //    var xs = lines.Select(s => s.Split('\t')).Select(t => new TempA(t[0], t[2], t[3], t[4], t[5])).ToList();
 
         //    var ks = xs.Select(x => x.T).Distinct().ToList();
         //    var rs = xs.Where(x => x.T != "VER" && x.T != "AUX").ToList();
@@ -137,17 +202,51 @@ namespace FasType
 
         //    //gs = gs.Where(g => g.Count() < 5).ToList();
 
-        //    var keys = gs.Select(g => g.Key.Split(',')[0]).ToList();
-        //    var ggs = rs.Where(a => keys.Contains(a.B)).GroupBy(a => a.B).ToList();
+        //    var keys = gs.Select(g => g.Key[..g.Key.LastIndexOf(',')]/*.Split(',')[0]*/).ToList();
+        //    var ggs = rs.GroupBy(a => a.B).ToList();
+        //    //var tmps = ggs.Select(g => ToBDE(g)).Where(t => t != null).ToArray();
+        //    foreach (var gg in ggs)
+        //    {
+        //        var tmp = ToBDE(gg);
+        //        if (tmp == null)
+        //            continue;
+        //        int index;
+        //        if ((index = l.IndexOf(tmp)) != -1)
+        //        {
+        //            var other = l[index];
+        //            if (other.AllForms.Count(s => s != "") < tmp.AllForms.Count(s => s != ""))
+        //            {
+        //                l.Remove(other);
+        //                l.Add(tmp);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            l.Add(tmp);
+        //        }
+        //    }
+        //    //(40656) 19911 - 24180 - 27507 - 27509 - 38613 - 40563 - 40505
 
-        //    var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
-        //    var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
+        //    //var nggs = rs.Where(a => !keys.Contains(a.B)).GroupBy(a => a.B).ToList();
 
-        //    var r = ss.Where(g => g.Key.Contains("complot")).ToList();
 
-        //    var solos = ss.Where(g => g.Key.Distinct().Count() == 1).ToList();
+        //    //var gggs = rs.GroupBy(a => a.B).ToList();
 
-        //    var vs = ggs.Where(gg => gg.Any(a => a.T.Contains("PRO"))).ToList();
+        //    //var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
+        //    //var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
+
+        //    //var r = ss.Where(g => g.Key.Contains("complot")).ToList();
+
+        //    //var solos = ss.Where(g => g.Key.Distinct().Count() == 1).ToList();
+
+        //    //var vs = ggs.Where(gg => gg.Any(a => a.T.Contains("PRO"))).ToList();
+
+
+
+        //    //_context.Dictionary.RemoveRange(_context.Dictionary);
+        //    //int r1 = _context.SaveChanges();
+        //    //_context.Dictionary.AddRange(l);
+        //    //int r2 = _context.SaveChanges();
         //}
 
         //void H()
