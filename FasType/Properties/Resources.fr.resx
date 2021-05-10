@@ -163,10 +163,10 @@
     <value>Linguistique</value>
   </data>
   <data name="Postfix" xml:space="preserve">
-    <value>Suffixe</value>
+    <value>Fin</value>
   </data>
   <data name="Prefix" xml:space="preserve">
-    <value>Préfixe</value>
+    <value>Début</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Sauver</value>
@@ -257,5 +257,11 @@
   </data>
   <data name="AbbrevAutoCreation" xml:space="preserve">
     <value>Création Automatique des Abréviations</value>
+  </data>
+  <data name="EmptyOneLetters1" xml:space="preserve">
+    <value>Vous n'avez aucune abréviation Lettre Seule.</value>
+  </data>
+  <data name="EmptyOneLetters2" xml:space="preserve">
+    <value>Il est fortement recommandé d'en utiliser le plus possible.</value>
   </data>
 </root>

@@ -128,21 +128,22 @@ namespace FasType.ViewModels
             CurrentListenerState = ListenerStates.Inserting;
             ChoosedAbbrev = null;
             MatchingAbbrevs = null;
-            CurrentWord = "";
             App.Current.MainWindow.Hide();
         }
 
-        bool TryWriteAbbreviation(BaseAbbreviation abbrev, string shortForm)
+        public bool TryWriteAbbreviation(BaseAbbreviation abbrev, string shortForm)
         {
-            if (abbrev.TryGetFullForm(shortForm, out string? fullForm))
+            if (abbrev.TryGetFullForm(shortForm.ToLower(), out string? fullForm))
             {
-                _ = fullForm ?? throw new NullReferenceException();
-                string word = CurrentWord.IsFirstCharUpper() ? fullForm.FirstCharToUpper() : fullForm;
+                //_ = fullForm ?? throw new NullReferenceException();
+                string word = shortForm.IsFirstCharUpper() ? fullForm.FirstCharToUpper() : fullForm;
                 _listener.OnKeyPressed -= ListenerEvent;
-                Input.Erase(CurrentWord.Length);
+                Input.Erase(shortForm.Length);
                 Input.TextEntry(word + ' ');
                 _listener.OnKeyPressed += ListenerEvent;
-                _storage.UpdateUsed(abbrev);
+                _storage.UpdateUsedAsync(abbrev);
+                CurrentWord = "";
+                //Task.Run(async () => await _storage.UpdateUsedAsync(abbrev));
                 return true;
             }
             return false;
@@ -201,14 +202,14 @@ namespace FasType.ViewModels
                     //}
 
                     //using var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
+
                     if (Properties.Settings.Default.AbbrevsAutoCreation && !_dictionary.Contains(shortForm))
                     {
                         var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
-                        Task.Run(() => window.SearchForWord(shortForm));
                         //window.SearchForWord(shortForm);
                         window.Show();
+                        Task.Run(() => window.SearchForWord(shortForm));
                     }
-
                     CurrentWord = "";
                     return;
                 }
@@ -216,8 +217,7 @@ namespace FasType.ViewModels
                 if (abbrevs.Count == 1)
                 {
                     var abbrev = abbrevs[0];
-                    var couldWrite = TryWriteAbbreviation(abbrev, shortForm);
-                    CurrentWord = "";
+                    var couldWrite = TryWriteAbbreviation(abbrev, CurrentWord);
                     return;
                 }
                 //else if (abbrevs.Count > 1)
@@ -323,7 +323,6 @@ namespace FasType.ViewModels
                 {
                     ChoosedAbbrev = null;
                     MatchingAbbrevs = null;
-                    CurrentWord = "";
                     App.Current.MainWindow.Hide();
                 }
                 else

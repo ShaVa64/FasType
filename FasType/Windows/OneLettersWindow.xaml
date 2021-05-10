@@ -75,6 +75,25 @@
                 <sel:OrderSelector First="{StaticResource FirstDisplayTemplate}" Default="{StaticResource DisplayTemplate}"
                                    Last="{StaticResource LastDisplayTemplate}" Only="{StaticResource OnlyDisplayTemplate}"/>
             </ItemsControl.ItemTemplateSelector>
+            <ItemsControl.Style>
+                <Style TargetType="ItemsControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Items.Count}" Value="0">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <TextBlock TextAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                                            <Run Text="{x:Static prop:Resources.EmptyOneLetters1}"/>
+                                            <LineBreak/>
+                                            <Run Text="{x:Static prop:Resources.EmptyOneLetters2}"/>
+                                        </TextBlock>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.Style>
             <!--<ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type mdl:BaseAbbreviation}">
                     <TextBlock Text="{Binding ComplexRepresentation}"/>

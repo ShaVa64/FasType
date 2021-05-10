@@ -171,10 +171,10 @@
     <value>Linguistics</value>
   </data>
   <data name="Postfix" xml:space="preserve">
-    <value>Postfix</value>
+    <value>End</value>
   </data>
   <data name="Prefix" xml:space="preserve">
-    <value>Prefix</value>
+    <value>Start</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
@@ -265,5 +265,11 @@
   </data>
   <data name="AbbrevAutoCreation" xml:space="preserve">
     <value>Abbreviation Auto-Creation</value>
+  </data>
+  <data name="EmptyOneLetters1" xml:space="preserve">
+    <value>You don't have any One-Letters abbreviations.</value>
+  </data>
+  <data name="EmptyOneLetters2" xml:space="preserve">
+    <value>It is highly recommended to use them as much as possible.</value>
   </data>
 </root>

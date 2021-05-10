@@ -71,7 +71,7 @@ namespace FasType.Storage
             //return Dictionary.AsEnumerable().Where(bde => r.IsMatch(bde.FullForm)).ToArray();
             //When EFCore6
             //return Dictionary.Where(bde => r.IsMatch(bde.FullForm)).ToArray();
-            return Dictionary.FromSqlRaw("SELECT * FROM Dictionary WHERE regexp(FullForm, {0})", regexPattern).ToArray();
+            return Dictionary.FromSqlRaw("SELECT * FROM Dictionary WHERE regexp(LOWER(FullForm), {0})", regexPattern).ToArray();
         }
 
         public bool TryGetElements(string regexPattern, out BaseDictionaryElement[]? s)

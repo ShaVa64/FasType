@@ -39,36 +39,36 @@ namespace FasType.ViewModels
         protected override void CreateNew(Page? p)
         {
             _ = p ?? throw new NullReferenceException();
-            if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
+            Window w = p.Parent as Window ?? throw new NullReferenceException();
+            if (CurrentAbbrev == null || string.IsNullOrEmpty(CurrentAbbrev.ShortForm) || string.IsNullOrEmpty(CurrentAbbrev.FullForm))
             {
                 MessageBox.Show(DialogResources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
-            if (Storage.Contains(_currentAbbrev))
+            if (Storage.Contains(CurrentAbbrev))
             {
                 var message = string.Format(DialogResources.AlreadyExistsErrorFormat, FullForm, Environment.NewLine);
                 var res = MessageBox.Show(message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No);
                 if (res == MessageBoxResult.No)
                     return;
-                var success = Storage.UpdateAbbreviation(_currentAbbrev);
+                var success = Storage.UpdateAbbreviation(CurrentAbbrev);
                 if (!success)
                 {
-                    message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                    message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, CurrentAbbrev.ElementaryRepresentation);
                     MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                     return;
                 }
-                (p.Parent as Window)?.Close();
-                return;
             }
-            if (!Storage.Add(_currentAbbrev))
+            else if (!Storage.Add(CurrentAbbrev))
             {
-                var message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                var message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, CurrentAbbrev.ElementaryRepresentation);
                 MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
 
             CheckDictionaryAdd();
-            (p.Parent as Window)?.Close();
+            w.DialogResult = true;
+            w.Close();
         }
 
         protected override void SetPreview()
@@ -88,20 +88,20 @@ namespace FasType.ViewModels
                 return;
             }
 
-            _currentAbbrev = new SimpleAbbreviation(ShortForm ?? throw new NullReferenceException(),
+            CurrentAbbrev = new SimpleAbbreviation(ShortForm ?? throw new NullReferenceException(),
                                                     FullForm ?? throw new NullReferenceException(),
                                                     0,
                                                     GenderForm ?? throw new NullReferenceException(),
                                                     PluralForm ?? throw new NullReferenceException(),
                                                     GenderPluralForm ?? throw new NullReferenceException());
-            if (Storage.Contains(_currentAbbrev))
+            if (Storage.Contains(CurrentAbbrev))
             {
                 BorderBrush = Controls.BorderBrushTextBox.WarningBrush;
                 FFToolTip = Resources.DupAbbrevToolTip;
                 //return;
             }
 
-            Preview = _currentAbbrev.ComplexRepresentation;
+            Preview = CurrentAbbrev.ComplexRepresentation;
         }
     }
 
@@ -123,7 +123,8 @@ namespace FasType.ViewModels
         protected override void CreateNew(Page? p)
         {
             _ = p ?? throw new NullReferenceException();
-            if (_currentAbbrev == null || string.IsNullOrEmpty(_currentAbbrev.ShortForm) || string.IsNullOrEmpty(_currentAbbrev.FullForm))
+            Window w = p.Parent as Window ?? throw new NullReferenceException();
+            if (CurrentAbbrev == null || string.IsNullOrEmpty(CurrentAbbrev.ShortForm) || string.IsNullOrEmpty(CurrentAbbrev.FullForm))
             {
                 MessageBox.Show(DialogResources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
@@ -143,15 +144,16 @@ namespace FasType.ViewModels
                 //}
                 return;
             }
-            if (!Storage.Add(_currentAbbrev))
+            if (!Storage.Add(CurrentAbbrev))
             {
-                var message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, _currentAbbrev.ElementaryRepresentation);
+                var message = string.Format(DialogResources.ErrorDialogFormat, Environment.NewLine, CurrentAbbrev.ElementaryRepresentation);
                 MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
             
             CheckDictionaryAdd();
-            (p.Parent as Window)?.Close();
+            w.DialogResult = true;
+            w.Close();
         }
 
         protected override void SetPreview()
@@ -171,14 +173,14 @@ namespace FasType.ViewModels
                 return;
             }
 
-            _currentAbbrev = new SimpleAbbreviation(ShortForm ?? throw new NullReferenceException(),
+            CurrentAbbrev = new SimpleAbbreviation(ShortForm ?? throw new NullReferenceException(),
                                                     FullForm ?? throw new NullReferenceException(),
                                                     0,
                                                     GenderForm ?? throw new NullReferenceException(),
                                                     PluralForm ?? throw new NullReferenceException(),
                                                     GenderPluralForm ?? throw new NullReferenceException());
 
-            Preview = _currentAbbrev.ComplexRepresentation;
+            Preview = CurrentAbbrev.ComplexRepresentation;
         }
     }
 
@@ -188,12 +190,11 @@ namespace FasType.ViewModels
         protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
         protected static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
 
-        protected SimpleAbbreviation? _currentAbbrev;
+        public SimpleAbbreviation? CurrentAbbrev { get; protected set; }
         string? _shortForm, _fullForm, _genderForm, _pluralForm, _genderPluralForm;
         string? _sfToolTip, _ffToolTip, _preview;
         Brush? _borderBrush;
         bool _notSkipping;
-
 
         public string Title { get; }
         public string ButtonText { get; }
@@ -222,7 +223,7 @@ namespace FasType.ViewModels
             ShortFormReadOnly = shortFormReadOnly;
             ButtonText = buttonText;
             
-            _currentAbbrev = null;
+            CurrentAbbrev = null;
 
             CreateNewCommand = new(CreateNew, CanCreateNew);
             OpenLinguisticsCommand = new(OpenLinguistics, CanOpenLinguistics);
@@ -272,7 +273,7 @@ namespace FasType.ViewModels
             if (res == MessageBoxResult.No)
                 return;
 
-            Dictionary.Add(_currentAbbrev);
+            Dictionary.Add(CurrentAbbrev);
         }
 
         void ComputeAutoComplete()

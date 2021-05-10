@@ -69,7 +69,7 @@ namespace FasType.Models.Linguistics.Grammars
             GrammarPosition.Postfix => form.EndsWith(Repr),
             _ => throw new NotImplementedException()
         };
-        public bool TryUngrammarify(string form, [NotNullWhen(true)] out string? shortForm)
+        public bool TryUngrammarify(string form, [NotNullWhen(true)][MaybeNullWhen(false)] out string? shortForm)
         {
             shortForm = null;
             if (!SuitsGrammar(form))

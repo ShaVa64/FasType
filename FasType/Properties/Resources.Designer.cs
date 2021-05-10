@@ -205,6 +205,24 @@ namespace FasType.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have any One-Letters abbreviations..
+        /// </summary>
+        public static string EmptyOneLetters1 {
+            get {
+                return ResourceManager.GetString("EmptyOneLetters1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is highly recommended to use them as much as possible..
+        /// </summary>
+        public static string EmptyOneLetters2 {
+            get {
+                return ResourceManager.GetString("EmptyOneLetters2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End.
         /// </summary>
         public static string End {
@@ -376,7 +394,7 @@ namespace FasType.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Postfix.
+        ///   Looks up a localized string similar to End.
         /// </summary>
         public static string Postfix {
             get {
@@ -385,7 +403,7 @@ namespace FasType.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefix.
+        ///   Looks up a localized string similar to Start.
         /// </summary>
         public static string Prefix {
             get {

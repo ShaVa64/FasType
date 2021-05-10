@@ -98,7 +98,7 @@ namespace FasType.LLKeyboardListener
                     newKey = new(key, vkCode);
                     eventArgs = new (oldKey, newKey);
                     OnKeyPressed(this, eventArgs);
-                    //Log.Debug("Chain Stopped on {key}: {StopChain}", eventArgs?.KeyPressed, eventArgs?.StopChain);
+                    Log.Debug("Chain Stopped on {key}: {StopChain}", eventArgs?.KeyPressed, eventArgs?.StopChain);
                 }
             }
             oldKey = newKey;

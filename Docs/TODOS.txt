@@ -1,4 +1,10 @@
 TODOS:
+
+
+- Word search potential bug
+- Word search not only full form
+- Write abbreviation after
+auto creation
 - Dictionary/anti-dictionary
 - Abbreviations Auto-creation
 (myinputbox)
@@ -7,8 +13,6 @@ TODOS:
 - Special abbreviations for
 	one-letter short form
 - PopupWindow excess space after sf
-
-pompompom 
 
 //- If completed, pressing *Tab* -> goes to "Add button"
 - Linguistic -> Abbrev system window

@@ -87,6 +87,14 @@ namespace FasType.Storage
                 return poss;
             }
 
+            if (_curr != string.Empty && from.Length == 1)
+            {
+                if (PluralType.Position == GrammarPosition.Postfix && PluralType.Repr == from 
+                    || GenderType.Position == GrammarPosition.Postfix && GenderType.Repr == from
+                    || GenderPluralType.Position == GrammarPosition.Postfix && GenderPluralType.Repr == from)
+                    poss.Add(_curr);
+            }
+
             //TODO: too long
             //var vowels = "aeiouy";
             //if (vowels.Contains(from[0]) == false && (_curr.Length == 0 || vowels.Contains(_curr[^1]) == false))
@@ -101,6 +109,11 @@ namespace FasType.Storage
             if (_curr == string.Empty)
             {
                 amrs = AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.Before) && from.StartsWith(m.ShortForm)).ToArray();//.AsEnumerable().Where(m => m.SatisfiesBefore(from)).ToArray();
+
+                if (PluralType.Position == GrammarPosition.Prefix && PluralType.SuitsGrammar(from)
+                    || GenderType.Position == GrammarPosition.Prefix && GenderType.SuitsGrammar(from)
+                    || GenderPluralType.Position == GrammarPosition.Prefix && GenderPluralType.SuitsGrammar(from))
+                    Words(string.Empty, from[1..], poss);
             }
             else
             {

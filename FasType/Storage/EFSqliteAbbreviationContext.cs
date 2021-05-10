@@ -12,6 +12,7 @@ using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FasType.Storage
 {
@@ -101,20 +102,21 @@ namespace FasType.Storage
             //return r > 0;
         }
 
-        int _updates = 0;
-        public bool UpdateUsed(BaseAbbreviation abbrev)
+        public async Task<bool> UpdateUsedAsync(BaseAbbreviation abbrev)
         {
             if (!Contains(abbrev))
                 return false;
             abbrev.UpdateUsed();
             Abbreviations.Update(abbrev);
-            if (++_updates >= 3)
-            {
-                _updates = 0;
-                var r = SaveChanges();
-                return r > 0;
-            }
-            return true;
+            int r = await SaveChangesAsync();
+            return r > 0;
+            //if (++_update >= 2)//Abbreviations.Local.Count >=p
+            //{
+            //    _update = 0;
+            //    var r = SaveChanges();
+            //    return r > 0;
+            //}
+            //return true;
         }
         public bool UpdateAbbreviation(BaseAbbreviation abbrev)
         {

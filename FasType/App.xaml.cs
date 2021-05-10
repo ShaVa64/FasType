@@ -51,13 +51,7 @@ namespace FasType
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            using var _abbrevContext = ServiceProvider.GetRequiredService<IAbbreviationStorage>() as DbContext;
-            _abbrevContext?.Database.Migrate();
-            using var _lingContext = ServiceProvider.GetRequiredService<ILinguisticsStorage>() as DbContext;
-            _lingContext?.Database.Migrate();
-            using var _dicContext = ServiceProvider.GetRequiredService<IDictionaryStorage>() as DbContext;
-            _dicContext?.Database.Migrate();
-
+            MigrateDbs();
             //I();
             //H();
             //G();
@@ -65,25 +59,35 @@ namespace FasType
             //F();
         }
 
-        private void ConfigureServices(ServiceCollection services)
+        void MigrateDbs()
+        {
+            var _abbrevContext = ServiceProvider.GetRequiredService<IAbbreviationStorage>() as DbContext;
+            _abbrevContext?.Database.Migrate();
+            var _lingContext = ServiceProvider.GetRequiredService<ILinguisticsStorage>() as DbContext;
+            _lingContext?.Database.Migrate();
+            var _dicContext = ServiceProvider.GetRequiredService<IDictionaryStorage>() as DbContext;
+            _dicContext?.Database.Migrate();
+        }
+
+        private void ConfigureServices(IServiceCollection services)
         {
             Log.Logger = new LoggerConfiguration()
                 //.ReadFrom.Configuration(Configuration)
                 .MinimumLevel.Verbose()
                 .WriteTo.Debug()
                 .CreateLogger();
-            
+
 
             services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
-            services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")).EnableSensitiveDataLogging(), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             //services.AddTransient<IDataStorage, EFSqliteStorage>();
 
             services.AddSingleton(Configuration);
 
             services.AddSingleton<MainWindow>();
-            services.AddTransient<MainWindowViewModel>();
-            
+            services.AddSingleton<MainWindowViewModel>();
+
             services.AddTransient<AbbreviationWindow>();
             services.AddTransient<SimpleAbbreviationPage>();
             services.AddTransient<AddSimpleAbbreviationViewModel>();
@@ -116,8 +120,6 @@ namespace FasType
         }
 
         #region DB Methods
-
-
         //record TempA(string F, string B, string T, string G, string N);
         //static string GetOfType(string type, ref ILookup<string, TempA> lookup)
         //{
@@ -406,7 +408,7 @@ namespace FasType
         {
             FasType.Properties.Settings.Default.Save();
             Log.Information("Default Settings saved!");
-            
+
             taskbarIcon?.Dispose();
             base.OnExit(e);
         }

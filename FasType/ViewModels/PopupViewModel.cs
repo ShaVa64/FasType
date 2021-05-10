@@ -1,6 +1,8 @@
-﻿using FasType.Models;
+﻿using FasType.LLKeyboardListener;
+using FasType.Models;
 using FasType.Models.Dictionary;
 using FasType.Services;
+using FasType.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -9,12 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace FasType.ViewModels
 {
     public class PopupViewModel : ObservableObject
     {
-        string? _shortForm/*, _selectedString*/;
+        string _shortForm/*, _selectedString*/;
         ObservableCollection<BaseDictionaryElement> _collection;
         BaseDictionaryElement[]? _elements;
         BaseDictionaryElement? _selectedElement;
@@ -29,7 +32,7 @@ namespace FasType.ViewModels
         public Visibility ComboBoxVisibility { get => _comboBoxVisibility; set => SetProperty(ref _comboBoxVisibility, value); }
         public Visibility BusyIndicatorVisibility { get => _busyIndicatorVisibility; set => SetProperty(ref _busyIndicatorVisibility, value); }
         public ObservableCollection<BaseDictionaryElement> Collection { get => _collection; set => SetProperty(ref _collection, value); }
-        public string? ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value); }
+        public string ShortForm { get => _shortForm; set => SetProperty(ref _shortForm, value); }
         public Command<Window> CreateCommand { get; }
         public BaseDictionaryElement? SelectedElement { get => _selectedElement; set => SetProperty(ref _selectedElement, value); }
         //public string SelectedString { get => _selectedString; set => SetProperty(ref _selectedString, value); }
@@ -40,8 +43,12 @@ namespace FasType.ViewModels
             _linguistics = linguistics;
             _dictionary = dictionary;
             CreateCommand = new(Create, CanCreate);
+
             Collection = new();
             _ = _collection ?? throw new NullReferenceException();
+
+            ShortForm = string.Empty;
+            _ = _shortForm ?? throw new NullReferenceException();
 
             ComboBoxVisibility = Visibility.Collapsed;
             BusyIndicatorVisibility = Visibility.Visible;
@@ -50,6 +57,7 @@ namespace FasType.ViewModels
         public void SearchForWord(string currentWord)
         {
             ShortForm = currentWord;
+            currentWord = currentWord.ToLower();
             var l = _linguistics.Words(currentWord).Select(s => "^" + s + "$").ToList();
 
             _elements = l.SelectMany(s => _dictionary.GetElements(s) ?? Array.Empty<BaseDictionaryElement>()).Distinct().ToArray();
@@ -63,7 +71,7 @@ namespace FasType.ViewModels
 
             BusyIndicatorVisibility = Visibility.Collapsed;
             ComboBoxVisibility = Visibility.Visible;
-            //System.Windows.Controls.ProgressBar
+            CommandManager.InvalidateRequerySuggested();
         }
 
         bool CanCreate() => SelectedElement != null;//!string.IsNullOrEmpty(SelectedString);
@@ -92,8 +100,13 @@ namespace FasType.ViewModels
                 //page.SetNewAbbreviation(ShortForm, SelectedString, Dictionary.GetElement(SelectedString)?.Others);
             }
 
+            w.Hide();
             window.Content = page;
-            window.Show();
+            if (window.ShowDialog() == true && window.DataContext is SimpleAbbreviationViewModel savm)
+            {
+                var abbrev = savm.CurrentAbbrev ?? throw new NullReferenceException();
+                App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>().TryWriteAbbreviation(abbrev, ShortForm);
+            }
 
             w.Close();
         }
