@@ -141,7 +141,7 @@ namespace FasType.ViewModels
                 Input.Erase(shortForm.Length);
                 Input.TextEntry(word + ' ');
                 _listener.OnKeyPressed += ListenerEvent;
-                _storage.UpdateUsedAsync(abbrev);
+                Task.Run(async () => await _storage.UpdateUsedAsync(abbrev));
                 CurrentWord = "";
                 //Task.Run(async () => await _storage.UpdateUsedAsync(abbrev));
                 return true;
