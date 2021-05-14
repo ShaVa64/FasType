@@ -67,8 +67,15 @@ namespace FasType.ViewModels
             }
 
             CheckDictionaryAdd();
-            w.DialogResult = true;
-            w.Close();
+            try
+            {
+                w.DialogResult = true;
+            }
+            catch { }
+            finally
+            {
+                w.Close();
+            }
         }
 
         protected override void SetPreview()

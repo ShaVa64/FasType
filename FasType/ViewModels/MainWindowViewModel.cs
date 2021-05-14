@@ -184,27 +184,15 @@ namespace FasType.ViewModels
         {
             if (e.KeyPressed == Key.Space && !string.IsNullOrEmpty(CurrentWord))
             {
-                e.StopChain = true;
                 string shortForm = CurrentWord.ToLower();
 
                 var abbrevs = _storage[shortForm].ToList();
 
                 if (abbrevs.Count == 0)
                 {
-                    //var vals = App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>().Words(CurrentWord);
-                    //var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
-
-                    //var elems = vals.Select(val => dict.GetElement(val)).Where(elem => elem != null).ToList();
-
-                    //if (elems.Count > 0)
-                    //{
-
-                    //}
-
-                    //using var dict = App.Current.ServiceProvider.GetRequiredService<IDictionaryStorage>();
-
                     if (Properties.Settings.Default.AbbrevsAutoCreation && !_dictionary.Contains(shortForm))
                     {
+                        e.StopChain = true;
                         var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
                         //window.SearchForWord(shortForm);
                         window.Show();
@@ -214,6 +202,7 @@ namespace FasType.ViewModels
                     return;
                 }
 
+                e.StopChain = true;
                 if (abbrevs.Count == 1)
                 {
                     var abbrev = abbrevs[0];

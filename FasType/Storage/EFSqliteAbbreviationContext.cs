@@ -147,7 +147,7 @@ namespace FasType.Storage
             if (Linguistics.GenderPluralType.TryUngrammarify(shortForm, out form))
                 forms.Add(form);
 
-            var l = Abbreviations.Where(a => forms.Contains(a.ShortForm))/*.OrderByDescending(a => a.Used)*/.ToList();
+            var l = Abbreviations.Where(a => forms.Contains(a.ShortForm))/*.OrderByDescending(a => a.Used)*/.ToList().Where(ba => ba.IsAbbreviation(shortForm));
             return l;
         }
 
