@@ -1,52 +1,25 @@
 TODOS:
+- Forms namings ("m.p" or "plural form")
+- Abbreviation methods window order by alphabetical
+- "ne" shoudn't proc
+- Sololetters does not proc ('o', 'q', 'e')
+- Verb are not in dictionnary
+- Change any abbreviations
 
+MISSES: -----> Ok if double wildcard (except entousiaste)
+- "crctm" -> "correctement"
+- "ststqk" -> "statistiques" (but "ststq" -> "statistique")
+- "vrm" -> "vraiment"
+- "ètzst" -> "enthousiaste"
+- "vtu" -> "voiture"
+- "lbrx" -> "laborieux"
+- "aprtçg" -> "apprentissage"
+- "ctè" -> "content"
+- "rmrqb" -> "remarquable"
 
-
-- Word search potential bug
-- Word search not only full form
-- Write abbreviation after
-auto creation
-- Dictionary/anti-dictionary
-- Abbreviations Auto-creation
-(myinputbox)
-- Show which shortform user 
-	is about to create
-- Special abbreviations for
-	one-letter short form
-- PopupWindow excess space after sf
-
-//- If completed, pressing *Tab* -> goes to "Add button"
-- Linguistic -> Abbrev system window
-- Prefix/Suffix maybe too much ?
-- When choosing -> option to create new
-- Create other abbrev if completion is not good
-- "Add to dictionary ?" -> "Never create a abbrev out of it ?"/"FasType will nerver ask again ?"
-
-- Localized text
-- SeeAllWindow possible memory leak
-- TextBox BorderBrush
-- Duplicate GrammarType
-- Add "x" Used
-- Remove Used==0
-- Multiple Window appearence
-- Other forms auto-completion
-- Duplicate abbrevs on FullForm
-
-
-QUESTIONS:
-- what to do of written text when myinputbox appears ?
-- Multiple form for same G&P (ex: ... *I()*)
-
-- duplicates on known abbreviations
-- #used by abbreviation or form ?
-- Import/Export simplified tools for Abbrevs/Linguistics
-
-
-PROBS:
-- Double first letter in word, etc..
-
-
-- Abbreviations auto-complete suggests not existing forms
-- (!) Sound when need choice for abbreviations
-- Upper Case problem on abbreviations
-- Special abbreviations for one-letter short form
+DONES:
+- Openable twice
+- Dictionary != Abbreviations (eg. "bc" -> "beaucoups")
+- Sololetters window
+- "Other" option in abbrev entry
+- DropDown open by default

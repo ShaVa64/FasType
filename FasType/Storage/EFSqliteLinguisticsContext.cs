@@ -22,8 +22,8 @@ namespace FasType.Storage
         public DbSet<GrammarTypeRecord> GrammarTypes { get; set; }
         public DbSet<AbbreviationMethodRecord> AbbreviationMethods { get; set; }
 
-        IEnumerable<AbbreviationMethod> ILinguisticsStorage.AbbreviationMethods 
-        { 
+        IEnumerable<AbbreviationMethod> ILinguisticsStorage.AbbreviationMethods
+        {
             get => GetAbbreviationMethods();
             set => SetAbbreviationMethods(value.Cast<AbbreviationMethodRecord>());
         }
@@ -31,7 +31,7 @@ namespace FasType.Storage
         public GrammarType PluralType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
         public GrammarType GenderPluralType { get => GetGrammarType(); set => SetGrammarType((GrammarTypeRecord)value); }
 
-        public EFSqliteLinguisticsContext(DbContextOptions<EFSqliteLinguisticsContext> options) : base(options) 
+        public EFSqliteLinguisticsContext(DbContextOptions<EFSqliteLinguisticsContext> options) : base(options)
         {
             _ = GrammarTypes ?? throw new NullReferenceException();
             _ = AbbreviationMethods ?? throw new NullReferenceException();
@@ -77,7 +77,8 @@ namespace FasType.Storage
             SaveChanges();
         }
 
-        const string WC = ".?";
+        const string WC = ".?.?";
+        //const string WC = ".?";
         //PB: Catches too widely
         List<string> Words(string _curr, string from, List<string> poss)
         {
@@ -89,7 +90,7 @@ namespace FasType.Storage
 
             if (_curr != string.Empty && from.Length == 1)
             {
-                if (PluralType.Position == GrammarPosition.Postfix && PluralType.Repr == from 
+                if (PluralType.Position == GrammarPosition.Postfix && PluralType.Repr == from
                     || GenderType.Position == GrammarPosition.Postfix && GenderType.Repr == from
                     || GenderPluralType.Position == GrammarPosition.Postfix && GenderPluralType.Repr == from)
                     poss.Add(_curr);

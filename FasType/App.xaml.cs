@@ -24,6 +24,7 @@ using System.Windows.Data;
 using FasType.Models.Linguistics;
 using System.Text;
 using Hardcodet.Wpf.TaskbarNotification;
+using System.Threading;
 
 namespace FasType
 {
@@ -32,16 +33,26 @@ namespace FasType
     /// </summary>
     public partial class App : Application
     {
+        const string MUTEX_NAME = "UNIQUE_MUTEX_NAME";
         public static new App Current => (App)Application.Current;
         //public MainWindow MainWnd => (MainWindow)MainWindow;
         public IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 
         TaskbarIcon? taskbarIcon;
+        Mutex? _appMutex;
 
         static App() => FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.Name)));
         public App()
         {
+            _appMutex = new(true, MUTEX_NAME, out bool createdNew);
+            if (createdNew == false)
+            {
+                _appMutex.Close();
+                Shutdown();
+            }
+
+
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -243,12 +254,10 @@ namespace FasType
 
         //    //var vs = ggs.Where(gg => gg.Any(a => a.T.Contains("PRO"))).ToList();
 
-
-
-        //    //_context.Dictionary.RemoveRange(_context.Dictionary);
-        //    //int r1 = _context.SaveChanges();
-        //    //_context.Dictionary.AddRange(l);
-        //    //int r2 = _context.SaveChanges();
+        //    _context.Dictionary.RemoveRange(_context.Dictionary);
+        //    int r1 = _context.SaveChanges();
+        //    _context.Dictionary.AddRange(l);
+        //    int r2 = _context.SaveChanges();
         //}
 
         //void H()
@@ -409,6 +418,9 @@ namespace FasType
             FasType.Properties.Settings.Default.Save();
             Log.Information("Default Settings saved!");
 
+            _appMutex?.ReleaseMutex();
+            _appMutex?.Close();
+            _appMutex?.Dispose();
             taskbarIcon?.Dispose();
             base.OnExit(e);
         }

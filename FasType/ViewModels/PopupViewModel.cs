@@ -17,6 +17,7 @@ namespace FasType.ViewModels
 {
     public class PopupViewModel : ObservableObject
     {
+        bool _dropdownOpen;
         string _shortForm/*, _selectedString*/;
         ObservableCollection<BaseDictionaryElement> _collection;
         BaseDictionaryElement[]? _elements;
@@ -29,6 +30,7 @@ namespace FasType.ViewModels
         readonly ILinguisticsStorage _linguistics;
         readonly IDictionaryStorage _dictionary;
 
+        public bool DropdownOpen { get => _dropdownOpen; set => SetProperty(ref _dropdownOpen, value); }
         public Visibility ComboBoxVisibility { get => _comboBoxVisibility; set => SetProperty(ref _comboBoxVisibility, value); }
         public Visibility BusyIndicatorVisibility { get => _busyIndicatorVisibility; set => SetProperty(ref _busyIndicatorVisibility, value); }
         public ObservableCollection<BaseDictionaryElement> Collection { get => _collection; set => SetProperty(ref _collection, value); }
@@ -52,6 +54,7 @@ namespace FasType.ViewModels
 
             ComboBoxVisibility = Visibility.Collapsed;
             BusyIndicatorVisibility = Visibility.Visible;
+            DropdownOpen = false;
         }
 
         public void SearchForWord(string currentWord)
@@ -71,6 +74,7 @@ namespace FasType.ViewModels
 
             BusyIndicatorVisibility = Visibility.Collapsed;
             ComboBoxVisibility = Visibility.Visible;
+            DropdownOpen = true;
             CommandManager.InvalidateRequerySuggested();
         }
 
@@ -90,12 +94,13 @@ namespace FasType.ViewModels
             var window = App.Current.ServiceProvider.GetRequiredService<Windows.AbbreviationWindow>();
             var page = App.Current.ServiceProvider.GetRequiredService<Pages.SimpleAbbreviationPage>();
 
-            if (SelectedElement == BaseDictionaryElement.NoneElement)//(SelectedString == Properties.Resources.Other)
+            if (SelectedElement == BaseDictionaryElement.OtherElement)//(SelectedString == Properties.Resources.Other)
             {
                 page.SetNewAbbreviation(ShortForm ?? throw new NullReferenceException(), "", Array.Empty<string>());
             }
             else
             {
+
                 page.SetNewAbbreviation(ShortForm ?? throw new NullReferenceException(), SelectedElement?.FullForm ?? throw new NullReferenceException(), SelectedElement.Others);
                 //page.SetNewAbbreviation(ShortForm, SelectedString, Dictionary.GetElement(SelectedString)?.Others);
             }
@@ -104,7 +109,7 @@ namespace FasType.ViewModels
             window.Content = page;
             if (window.ShowDialog() == true && window.DataContext is SimpleAbbreviationViewModel savm)
             {
-                var abbrev = savm.CurrentAbbrev ?? throw new NullReferenceException();
+                Models.Abbreviations.SimpleAbbreviation abbrev = savm.CurrentAbbrev ?? throw new NullReferenceException();
                 App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>().TryWriteAbbreviation(abbrev, ShortForm);
             }
 
