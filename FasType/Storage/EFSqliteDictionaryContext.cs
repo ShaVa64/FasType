@@ -5,6 +5,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,12 +41,12 @@ namespace FasType.Storage
             var splitStringConverter = new ValueConverter<string[], string>(v => string.Join(";", v), v => v.Split(new[] { ';' }));
             
             modelBuilder.Entity<SimpleDictionaryElement>();
-            modelBuilder.Entity<BaseDictionaryElement>()
-                .Property<string[]>(nameof(BaseDictionaryElement.Others))
-                .HasConversion(splitStringConverter);
-            modelBuilder.Entity<BaseDictionaryElement>()
-                .Property(nameof(BaseDictionaryElement.AllForms))
-                .HasConversion(splitStringConverter);
+            modelBuilder.Entity<BaseDictionaryElement>(b => 
+            {
+                b.Property(bde => bde.Others).HasConversion(splitStringConverter, new ArrayStructuralComparer<string>());
+            //modelBuilder.Entity<BaseDictionaryElement>()
+                b.Property(bde => bde.AllForms).HasConversion(splitStringConverter, new ArrayStructuralComparer<string>());
+            });
         }
 
         public bool Contains(string fullForm) => Dictionary.Find(fullForm) != null;

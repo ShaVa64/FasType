@@ -1,4 +1,13 @@
 TODOS:
+- Sololetters window button to "add" missing abbreviations
+- () -> "beaucoups doesn't exist in dictionary are you sure ?"
+- In all window add button to change abbrev
+- Remove all sololetters from dictionary
+- Add "ne" row in dictionary (maybe from emmanuel's docs)
+- Add alphabetical order abbreviation methods window
+- Esc to cancel popup
+
+POINTS:
 - Forms namings ("m.p" or "plural form")
 - Abbreviation methods window order by alphabetical
 - "ne" shoudn't proc

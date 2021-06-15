@@ -90,10 +90,12 @@ namespace FasType.Storage
 
             if (_curr != string.Empty && from.Length == 1)
             {
-                if (PluralType.Position == GrammarPosition.Postfix && PluralType.Repr == from
-                    || GenderType.Position == GrammarPosition.Postfix && GenderType.Repr == from
-                    || GenderPluralType.Position == GrammarPosition.Postfix && GenderPluralType.Repr == from)
+                if ((PluralType.Position == GrammarPosition.Postfix && PluralType.Repr == from)
+                    || (GenderType.Position == GrammarPosition.Postfix && GenderType.Repr == from)
+                    || (GenderPluralType.Position == GrammarPosition.Postfix && GenderPluralType.Repr == from))
+                {
                     poss.Add(_curr);
+                }
             }
 
             //TODO: too long
@@ -111,10 +113,12 @@ namespace FasType.Storage
             {
                 amrs = AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.Before) && from.StartsWith(m.ShortForm)).ToArray();//.AsEnumerable().Where(m => m.SatisfiesBefore(from)).ToArray();
 
-                if (PluralType.Position == GrammarPosition.Prefix && PluralType.SuitsGrammar(from)
-                    || GenderType.Position == GrammarPosition.Prefix && GenderType.SuitsGrammar(from)
-                    || GenderPluralType.Position == GrammarPosition.Prefix && GenderPluralType.SuitsGrammar(from))
-                    Words(string.Empty, from[1..], poss);
+                if ((PluralType.Position == GrammarPosition.Prefix && PluralType.SuitsGrammar(from))
+                    || (GenderType.Position == GrammarPosition.Prefix && GenderType.SuitsGrammar(from))
+                    || (GenderPluralType.Position == GrammarPosition.Prefix && GenderPluralType.SuitsGrammar(from)))
+                {
+                    _ = Words(string.Empty, from[1..], poss);
+                }
             }
             else
             {
@@ -123,12 +127,12 @@ namespace FasType.Storage
             amrs = amrs.Concat(AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.After) && from.EndsWith(m.ShortForm) && from.Length == m.ShortForm.Length)).ToArray();
 
             //Words(_curr, from[1..], poss);
-            Words(_curr + from[0] + WC, from[1..], poss);
+            _ = Words(_curr + from[0] + WC, from[1..], poss);
 
             var gAmrs = amrs.GroupBy(amr => amr.ShortForm.Length).ToArray();
             foreach (var g in gAmrs)
             {
-                Words(_curr + "(" + string.Join('|', g.Select(amr => amr.FullForm)) + ")" + WC, from[g.Key..], poss);
+                _ = Words(_curr + "(" + string.Join('|', g.Select(amr => amr.FullForm)) + ")" + WC, from[g.Key..], poss);
             }
             //foreach (var amr in amrs)
             //{
