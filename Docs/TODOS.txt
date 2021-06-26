@@ -5,6 +5,8 @@ TODOS:
 - Remove all sololetters from dictionary
 - Add "ne" row in dictionary (maybe from emmanuel's docs)
 - Add alphabetical order abbreviation methods window
+
+
 - Esc to cancel popup
 
 POINTS:

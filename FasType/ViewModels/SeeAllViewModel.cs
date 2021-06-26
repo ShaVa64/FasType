@@ -70,14 +70,14 @@ namespace FasType.ViewModels
 
         void OrderAndFilterAbbreviations() => AllAbbreviations = (OrderBy switch
         {
-            FormOrderBy.FullForm => _storage.Where(a => a.FullForm.Contains(QueryString)).OrderBy(a => a.FullForm),
-            FormOrderBy.ShortForm => _storage.Where(a => a.ShortForm.Contains(QueryString)).OrderBy(a => a.ShortForm),
+            FormOrderBy.FullForm => _storage.Where(a => a.FullForm.Contains(QueryString)).OrderBy(a => a.FullForm).ThenBy(a => a.ShortForm),
+            FormOrderBy.ShortForm => _storage.Where(a => a.ShortForm.Contains(QueryString)).OrderBy(a => a.ShortForm).ThenBy(a => a.FullForm),
             _ => throw new NotImplementedException()
         }).ToList();
         void OrderAbbreviations() => AllAbbreviations = (OrderBy switch
         {
-            FormOrderBy.FullForm => _storage.OrderBy(a => a.FullForm),
-            FormOrderBy.ShortForm => _storage.OrderBy(a => a.ShortForm),
+            FormOrderBy.FullForm => _storage.OrderBy(a => a.FullForm).ThenBy(a => a.ShortForm),
+            FormOrderBy.ShortForm => _storage.OrderBy(a => a.ShortForm).ThenBy(a => a.FullForm),
             _ => throw new NotImplementedException()
         }).ToList();
         void FilterAbbreviations() =>  AllAbbreviations = (OrderBy switch

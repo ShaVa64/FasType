@@ -31,17 +31,17 @@ namespace FasType.ViewModels
             OpenAbbreviationPageCommand = new(OpenAbbreviationPage, CanOpenAbbreviationPage);
         }
 
-        void Init(object sender, EventArgs e) => Init();
+        //void Init(object sender, EventArgs e) => Init();
         void Init()
         {
-            var ee = _soloLetters.Select(c => Storage[c.ToString()]).SelectMany(ba => ba);
+            var ee = _soloLetters.Select(c => Storage[c.ToString()]).SelectMany((ba, i) => !ba.Any() ? Enumerable.Repeat(new SimpleAbbreviation($"{_soloLetters[i]}", "", 0, "", "", ""), 1) : ba);
             OneLetters = new(ee);
         }
 
         bool CanOpenAbbreviationPage() => !Windows.AbbreviationWindow.IsOpen;
         void OpenAbbreviationPage(BaseAbbreviation? abbrev)
         {
-            _ = abbrev ?? throw new NullReferenceException();
+            _ = abbrev ?? throw new ArgumentNullException(nameof(abbrev));
 
             var aaw = App.Current.ServiceProvider.GetRequiredService<Windows.AbbreviationWindow>();
             var t = abbrev.GetModifyPageType();
@@ -50,9 +50,8 @@ namespace FasType.ViewModels
             p.SetModifyAbbreviation(abbrev);
 
             aaw.Content = p;
-            aaw.Show();
-
             aaw.Closed += delegate { Init(); };
+            aaw.Show();
         }
     }
 }

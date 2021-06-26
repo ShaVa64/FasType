@@ -40,7 +40,7 @@ namespace FasType.Windows
             Loaded += delegate
             {
                 new System.Media.SoundPlayer(@"Assets\sound.wav").Play();
-                this.FlashWindowUntillFocus();
+                _ = this.FlashWindowUntillFocus();
             };
         }
 
