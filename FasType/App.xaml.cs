@@ -33,14 +33,14 @@ namespace FasType
     /// </summary>
     public partial class App : Application
     {
-        const string MUTEX_NAME = "UNIQUE_MUTEX_NAME";
+        private const string MUTEX_NAME = "UNIQUE_MUTEX_NAME";
         public static new App Current => (App)Application.Current;
         //public MainWindow MainWnd => (MainWindow)MainWindow;
         public IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 
-        TaskbarIcon? taskbarIcon;
-        Mutex? _appMutex;
+        private TaskbarIcon? taskbarIcon;
+        private readonly Mutex _appMutex;
 
         static App() => FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.Name)));
         public App()
@@ -52,17 +52,16 @@ namespace FasType
                 Shutdown();
             }
 
-
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            var serviceCollection = new ServiceCollection();
+            ServiceCollection serviceCollection = new();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            MigrateDbs();
+            //MigrateDbs();
             //I();
             //H();
             //G();
@@ -70,15 +69,15 @@ namespace FasType
             //F();
         }
 
-        void MigrateDbs()
-        {
-            var _abbrevContext = ServiceProvider.GetRequiredService<IAbbreviationStorage>() as DbContext;
-            _abbrevContext?.Database.Migrate();
-            var _lingContext = ServiceProvider.GetRequiredService<ILinguisticsStorage>() as DbContext;
-            _lingContext?.Database.Migrate();
-            var _dicContext = ServiceProvider.GetRequiredService<IDictionaryStorage>() as DbContext;
-            _dicContext?.Database.Migrate();
-        }
+        //void MigrateDbs()
+        //{
+        //    var _abbrevContext = ServiceProvider.GetRequiredService<IAbbreviationStorage>() as DbContext;
+        //    _abbrevContext?.Database.Migrate();
+        //    var _lingContext = ServiceProvider.GetRequiredService<ILinguisticsStorage>() as DbContext;
+        //    _lingContext?.Database.Migrate();
+        //    var _dicContext = ServiceProvider.GetRequiredService<IDictionaryStorage>() as DbContext;
+        //    _dicContext?.Database.Migrate();
+        //}
 
         private void ConfigureServices(IServiceCollection services)
         {
@@ -87,7 +86,6 @@ namespace FasType
                 .MinimumLevel.Verbose()
                 .WriteTo.Debug()
                 .CreateLogger();
-
 
             services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
@@ -418,9 +416,9 @@ namespace FasType
             FasType.Properties.Settings.Default.Save();
             Log.Information("Default Settings saved!");
 
-            _appMutex?.ReleaseMutex();
-            _appMutex?.Close();
-            _appMutex?.Dispose();
+            _appMutex.ReleaseMutex();
+            _appMutex.Close();
+            _appMutex.Dispose();
             taskbarIcon?.Dispose();
             base.OnExit(e);
         }

@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasType", "FasType\FasType.csproj", "{39DE480E-9D13-4A3D-BBE7-4368E1C280CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FasType.Core", "FasType.Core\FasType.Core.csproj", "{375C8080-B690-42E2-AE7E-8D30DCAA14F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,12 +17,16 @@ Global
 		{39DE480E-9D13-4A3D-BBE7-4368E1C280CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39DE480E-9D13-4A3D-BBE7-4368E1C280CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39DE480E-9D13-4A3D-BBE7-4368E1C280CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375C8080-B690-42E2-AE7E-8D30DCAA14F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375C8080-B690-42E2-AE7E-8D30DCAA14F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375C8080-B690-42E2-AE7E-8D30DCAA14F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375C8080-B690-42E2-AE7E-8D30DCAA14F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_NeutralResourcesLanguage = en-US
 		SolutionGuid = {C763684D-06A0-4123-A27A-D5A728672EF9}
+		RESX_NeutralResourcesLanguage = en-US
 	EndGlobalSection
 EndGlobal
