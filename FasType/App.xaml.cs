@@ -1,5 +1,4 @@
-﻿using FasType.LLKeyboardListener;
-using FasType.Windows;
+﻿using FasType.Windows;
 using FasType.Pages;
 using FasType.Services;
 using FasType.Storage;
@@ -9,20 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
-using System.Windows.Data;
-using FasType.Models.Linguistics;
-using System.Text;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.Threading;
 

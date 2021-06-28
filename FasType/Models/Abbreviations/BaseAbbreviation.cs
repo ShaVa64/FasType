@@ -19,8 +19,8 @@ namespace FasType.Models.Abbreviations
 
         protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
 
-        protected readonly static int _stringKeyLength = 2;
-        protected readonly static string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
+        protected static readonly int _stringKeyLength = 2;
+        protected static readonly string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
 
         [Key] public Guid Key { get; private set; }
         [Required, MaxLength(50)] public string ShortForm { get; private set; }
