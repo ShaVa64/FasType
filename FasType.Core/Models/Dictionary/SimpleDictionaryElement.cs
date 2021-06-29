@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FasType.Core.Models.Dictionary
 {
-    class SimpleDictionaryElement
+    public class SimpleDictionaryElement
     {
     }
 }

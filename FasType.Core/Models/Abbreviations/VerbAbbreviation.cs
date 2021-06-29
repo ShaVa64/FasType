@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FasType.Core.Models.Abbreviations
 {
-    class VerbAbbreviation
+    public class VerbAbbreviation
     {
     }
 }

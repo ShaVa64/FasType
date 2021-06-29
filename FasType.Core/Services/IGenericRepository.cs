@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FasType.Core.Models.Dictionary
+namespace FasType.Core.Services
 {
-    public abstract class BaseDictionaryElement
+    public interface IGenericRepository<T>
     {
     }
 }
