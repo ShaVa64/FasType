@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace FasType.Core.Models.Abbreviations
 {
-    [Table("Abbreviations")]
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public abstract class BaseAbbreviation
     {
@@ -19,10 +18,10 @@ namespace FasType.Core.Models.Abbreviations
         protected static readonly int _stringKeyLength = 2;
         protected static readonly string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
 
-        [Key] public Guid Key { get; private set; }
-        [Required, MaxLength(50)] public string ShortForm { get; private set; }
-        [Required, MaxLength(50)] public string FullForm { get; private set; }
-        [Required] public ulong Used { get; private set; }
+        public Guid Key { get; private set; }
+        public string ShortForm { get; private set; }
+        public string FullForm { get; private set; }
+        public ulong Used { get; private set; }
 
         public string StringKey => string.Concat(ShortForm.Take(_stringKeyLength));
 

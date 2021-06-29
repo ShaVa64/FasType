@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace FasType.Core.Models.Dictionary
 {
-    public class VerbDictionaryElement
+    public class VerbDictionaryElement : BaseDictionaryElement
     {
+        public VerbDictionaryElement(string fullform) : base(fullform, Array.Empty<string>())
+        { }
+
+        public VerbDictionaryElement(Abbreviations.VerbAbbreviation va) : this(va.FullForm)
+        { }
     }
 }

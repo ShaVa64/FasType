@@ -13,9 +13,9 @@ namespace FasType.Core.Models.Abbreviations
         public bool HasGender => !string.IsNullOrEmpty(GenderForm);
         public bool HasGenderPlural => !string.IsNullOrEmpty(GenderPluralForm);
 
-        [MaxLength(50)] public string GenderForm { get; private set; }
-        [MaxLength(50)] public string PluralForm { get; private set; }
-        [MaxLength(50)] public string GenderPluralForm { get; private set; }
+        public string GenderForm { get; private set; }
+        public string PluralForm { get; private set; }
+        public string GenderPluralForm { get; private set; }
 
         public SimpleAbbreviation(string shortForm, string fullForm, ulong used, string genderForm, string pluralForm, string genderPluralForm)
             : base(shortForm.ToLower(), fullForm, used)

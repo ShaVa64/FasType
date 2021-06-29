@@ -39,10 +39,10 @@ namespace FasType.Storage
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<GrammarTypeRecord>().HasKey(nameof(GrammarTypeRecord.Name));
             modelBuilder.Entity<AbbreviationMethodRecord>().HasKey(nameof(AbbreviationMethodRecord.Key));
-
-            base.OnModelCreating(modelBuilder);
         }
 
         IEnumerable<AbbreviationMethod> GetAbbreviationMethods()
