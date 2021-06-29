@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FasType.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -25,45 +26,45 @@ namespace FasType.Core.Models.Abbreviations
             GenderPluralForm = genderPluralForm;
         }
 
-        public override bool IsAbbreviation(string shortForm)
+        public override bool IsAbbreviation(string shortForm, ILinguisticsRepository linguistics)
         {
             string sf = shortForm.ToLower();
 
             if (sf == ShortForm)
                 return true;
-            if (HasGender && sf == Linguistics.GenderType.Grammarify(ShortForm))
+            else if (HasGender && sf == linguistics.GenderType.Grammarify(ShortForm))
                 return true;
-            if (HasPlural && sf == Linguistics.PluralType.Grammarify(ShortForm))
+            else if (HasPlural && sf == linguistics.PluralType.Grammarify(ShortForm))
                 return true;
-            if (HasGenderPlural && sf == Linguistics.GenderPluralType.Grammarify(ShortForm))
+            else if (HasGenderPlural && sf == linguistics.GenderPluralType.Grammarify(ShortForm))
                 return true;
 
             return false;
         }
 
-        public override string? GetFullForm(string shortForm)
+        public override string? GetFullForm(string shortForm, ILinguisticsRepository linguistics)
         {
             string sf = shortForm.ToLower();
 
             if (sf == ShortForm)
                 return FullForm;
-            if (HasGender && sf == Linguistics.GenderType.Grammarify(ShortForm))
+            else if (HasGender && sf == linguistics.GenderType.Grammarify(ShortForm))
                 return GenderForm;
-            if (HasPlural && sf == Linguistics.PluralType.Grammarify(ShortForm))
+            else if (HasPlural && sf == linguistics.PluralType.Grammarify(ShortForm))
                 return PluralForm;
-            if (HasGenderPlural && sf == Linguistics.GenderPluralType.Grammarify(ShortForm))
+            else if (HasGenderPlural && sf == linguistics.GenderPluralType.Grammarify(ShortForm))
                 return GenderPluralForm;
 
             return null;
         }
 
-        public override bool TryGetFullForm(string shortForm, [NotNullWhen(true)] out string? fullForm)
+        public override bool TryGetFullForm(string shortForm, ILinguisticsRepository linguistics, [NotNullWhen(true)] out string? fullForm)
         {
             fullForm = null;
-            bool isAbrrev = IsAbbreviation(shortForm);
+            bool isAbrrev = IsAbbreviation(shortForm, linguistics);
             if (!isAbrrev)
                 return false;
-            fullForm = GetFullForm(shortForm) ?? throw new NullReferenceException();
+            fullForm = GetFullForm(shortForm, linguistics) ?? throw new NullReferenceException();
             return true;
         }
 

@@ -86,11 +86,7 @@ namespace FasType.Storage
             //return true;
         }
 
-        public bool Contains(BaseAbbreviation abbrev)
-        {
-            var b = Abbreviations.Where(a => a.FullForm == abbrev.FullForm /*&& a.ShortForm == abbrev.ShortForm*/).Count();
-            return b > 0;
-        }
+        public bool Contains(BaseAbbreviation abbrev) => Abbreviations.Where(a => a.FullForm == abbrev.FullForm).Any();
 
         public bool Clear()
         {

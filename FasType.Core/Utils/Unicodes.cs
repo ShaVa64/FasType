@@ -8,6 +8,6 @@ namespace FasType.Core.Utils
 {
     public static class Unicodes
     {
-        public readonly static string Arrow = "\u2794";
+        public const string Arrow = "\u2794";
     }
 }

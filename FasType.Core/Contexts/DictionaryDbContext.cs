@@ -25,7 +25,6 @@ namespace FasType.Core.Contexts
             modelBuilder.Entity<BaseDictionaryElement>(b =>
             {
                 var splitStringConverter = new ValueConverter<string[], string>(v => string.Join(";", v), v => v.Split(';', StringSplitOptions.None));
-                
                 b.HasKey(e => e.FullForm);
 
                 b.Property(e => e.FullForm).HasMaxLength(50).IsRequired();

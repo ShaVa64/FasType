@@ -23,9 +23,9 @@ namespace FasType.Core.Contexts
 
             modelBuilder.Entity<BaseAbbreviation>(b =>
             {
-                b.HasKey(a => a.Key);
+                b.HasKey(a => a.Id);
 
-                b.Property(a => a.Key).IsRequired();
+                b.Property(a => a.Id).ValueGeneratedOnAdd().IsRequired();
                 b.Property(a => a.ShortForm).HasMaxLength(50).IsRequired();
                 b.Property(a => a.FullForm).HasMaxLength(50).IsRequired();
                 b.Property(a => a.Used).IsRequired();
