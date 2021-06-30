@@ -37,7 +37,7 @@ namespace FasType.Core.Contexts
             {
                 b.HasKey(gt => gt.Name);
 
-                b.Property(gt => gt.Repr).HasMaxLength(1).IsRequired();
+                b.Property(gt => gt.Repr).HasMaxLength(4).IsRequired();
 
                 b.ToTable(nameof(GrammarTypes));
             });

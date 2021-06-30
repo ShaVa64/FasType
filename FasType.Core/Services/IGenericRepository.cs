@@ -15,7 +15,7 @@ namespace FasType.Core.Services
         void Add(T entity);
         bool Contains(T entity);
         IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
-        T GetById(TId id);
+        T? GetById(TId id);
         IEnumerable<T> GetAll();
         void Remove(T entity);
         void Update(T entity);
@@ -39,7 +39,7 @@ namespace FasType.Core.Services
         public virtual void Add(T entity) => Set.Add(entity);
         public virtual bool Contains(T entity) => Set.Contains(entity);
         public virtual IEnumerable<T> Where(Expression<Func<T, bool>> predicate) => Set.Where(predicate);
-        public virtual T GetById(TId id) => Set.Find(id);
+        public virtual T? GetById(TId id) => Set.Find(id);
         public IEnumerable<T> GetAll() => Set.ToArray();
         public virtual void Remove(T entity) => Set.Remove(entity);
         public virtual void Update(T entity) => Set.Update(entity);

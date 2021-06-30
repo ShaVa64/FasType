@@ -22,7 +22,6 @@ namespace FasType.Services
         bool Add(BaseAbbreviation? abbrev);
         bool Add(BaseDictionaryElement? elem);
 
-        //bool Contains<T>(string fullForm) where T : BaseDictionaryElement;
         T? GetElement<T>(string fullForm) where T : BaseDictionaryElement;
         bool TryGetElement<T>(string fullForm, out T? s) where T : BaseDictionaryElement;
     }
