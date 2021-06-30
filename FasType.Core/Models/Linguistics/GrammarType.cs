@@ -52,9 +52,6 @@ namespace FasType.Core.Models.Linguistics
         }
 
         public override string ToString() => Position == GrammarPosition.Prefix ? $"{Repr}*" : $"*{Repr}";
-
-        //public static explicit operator GrammarTypeRecord(GrammarType gt) => new(gt.Name, gt.Repr, gt.Position);
-        //public static explicit operator GrammarType(GrammarTypeRecord gtr) => new(gtr.Name, gtr.Repr, gtr.Position);
     }
 
     public enum GrammarPosition

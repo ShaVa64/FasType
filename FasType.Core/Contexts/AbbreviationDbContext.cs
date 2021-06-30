@@ -10,7 +10,7 @@ namespace FasType.Core.Contexts
 {
     public class AbbreviationDbContext : DbContext
     {
-        DbSet<BaseAbbreviation> Abbreviations { get; set; }
+        public DbSet<BaseAbbreviation> Abbreviations { get; set; }
 
         public AbbreviationDbContext(DbContextOptions<AbbreviationDbContext> options) : base(options)
         {

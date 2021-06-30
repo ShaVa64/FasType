@@ -10,8 +10,8 @@ namespace FasType.Core.Contexts
 {
     public class LinguisticsDbContext : DbContext
     {
-        DbSet<AbbreviationMethod> AbbreviationMethods { get; set; }
-        DbSet<GrammarType> GrammarTypes { get; set; }
+        public DbSet<AbbreviationMethod> AbbreviationMethods { get; set; }
+        public DbSet<GrammarType> GrammarTypes { get; set; }
 
         public LinguisticsDbContext(DbContextOptions<LinguisticsDbContext> options) : base(options)
         {

@@ -11,7 +11,7 @@ namespace FasType.Core.Contexts
 {
     public class DictionaryDbContext : DbContext
     {
-        DbSet<BaseDictionaryElement> Dictionary { get; set; }
+        public DbSet<BaseDictionaryElement> Dictionary { get; set; }
         
         public DictionaryDbContext(DbContextOptions<DictionaryDbContext> options) : base(options)
         {
