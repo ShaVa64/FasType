@@ -25,6 +25,7 @@ namespace FasType.Windows
         {
             InitializeComponent();
             IsOpen = true;
+            Owner = App.Current.MainWindow;
 
             Closed += delegate { IsOpen = false; };
 

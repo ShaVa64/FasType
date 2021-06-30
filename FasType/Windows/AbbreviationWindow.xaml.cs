@@ -23,7 +23,8 @@ namespace FasType.Windows
         public AbbreviationWindow()
         {
             InitializeComponent();
-            Owner = App.Current.MainWindow.IsLoaded ? App.Current.MainWindow : null;
+            //Owner = App.Current.MainWindow.IsLoaded ? App.Current.MainWindow : null;
+            Owner = App.Current.MainWindow;
             IsOpen = true;
 
             Closed += delegate { IsOpen = false; };
