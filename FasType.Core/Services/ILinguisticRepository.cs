@@ -21,19 +21,16 @@ namespace FasType.Core.Services
         string[] Words(string currentWord);
     }
 
-    public class LinguisticsRepository : GenericRepository<AbbreviationMethod, Guid>, ILinguisticsRepository
+    public class LinguisticsRepository : GenericRepository<AbbreviationMethod, Guid, LinguisticsDbContext>, ILinguisticsRepository
     {
         public GrammarType GenderType { get => GetGrammarType(); set => SetGrammarType(value); }
         public GrammarType PluralType { get => GetGrammarType(); set => SetGrammarType(value); }
         public GrammarType GenderPluralType { get => GetGrammarType(); set => SetGrammarType(value); }
         public IEnumerable<AbbreviationMethod> AbbreviationMethods { get => GetAll(); set => SetAbbreviationMethods(value); }
 
-        private readonly LinguisticsDbContext _context;
-
         public LinguisticsRepository(LinguisticsDbContext context) : base(context)
-        {
-            _context = context;
-        }
+        { }
+
         void SetAbbreviationMethods(IEnumerable<AbbreviationMethod> enumerable)
         {
             _context.AbbreviationMethods.RemoveRange(AbbreviationMethods);
@@ -50,13 +47,13 @@ namespace FasType.Core.Services
         }
         void SetGrammarType(GrammarType gt)
         {
-            GrammarType record = _context.GrammarTypes.Find(gt.Name);
-            if (gt == record)
-                return;
-            if (record is not null)
-                _context.GrammarTypes.Remove(record);
-            _context.GrammarTypes.Add(gt);
-
+            //GrammarType record = _context.GrammarTypes.Find(gt.Name);
+            //if (gt == record)
+            //    return;
+            //if (record is not null)
+            //    _context.GrammarTypes.Remove(record);
+            //_context.GrammarTypes.Add(gt);
+            _context.GrammarTypes.Update(gt);
             SaveChanges();
         }
 

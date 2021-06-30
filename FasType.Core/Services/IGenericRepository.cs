@@ -8,29 +8,30 @@ using System.Threading.Tasks;
 
 namespace FasType.Core.Services
 {
-    public interface IGenericRepository<T, U>
+    public interface IGenericRepository<T, TId>
     {
         int Count { get; }
 
         void Add(T entity);
         bool Contains(T entity);
         IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
-        T GetById(U id);
+        T GetById(TId id);
         IEnumerable<T> GetAll();
         void Remove(T entity);
         void Update(T entity);
         void SaveChanges();
     }
 
-    public abstract class GenericRepository<T, U> : IGenericRepository<T, U>
+    public abstract class GenericRepository<T, TId, TContext> : IGenericRepository<T, TId>
         where T : class
+        where TContext : DbContext
     {
-        private readonly DbContext _context;
+        protected readonly TContext _context;
 
         protected DbSet<T> Set => _context.Set<T>();
         public int Count => Set.Count();
 
-        public GenericRepository(DbContext context)
+        public GenericRepository(TContext context)
         {
             _context = context;
         }
@@ -38,11 +39,10 @@ namespace FasType.Core.Services
         public virtual void Add(T entity) => Set.Add(entity);
         public virtual bool Contains(T entity) => Set.Contains(entity);
         public virtual IEnumerable<T> Where(Expression<Func<T, bool>> predicate) => Set.Where(predicate);
-        public virtual T GetById(U id) => Set.Find(id);
+        public virtual T GetById(TId id) => Set.Find(id);
         public IEnumerable<T> GetAll() => Set.ToArray();
         public virtual void Remove(T entity) => Set.Remove(entity);
         public virtual void Update(T entity) => Set.Update(entity);
         public virtual void SaveChanges() => _context.SaveChanges();
-
     }
 }

@@ -13,7 +13,7 @@ namespace FasType.Core.Services
     {
     }
 
-    public class DictionaryRepository : GenericRepository<BaseDictionaryElement, string>, IDictionaryRepository
+    public class DictionaryRepository : GenericRepository<BaseDictionaryElement, string, DictionaryDbContext>, IDictionaryRepository
     {
         public DictionaryRepository(DictionaryDbContext context) : base(context)
         { }
