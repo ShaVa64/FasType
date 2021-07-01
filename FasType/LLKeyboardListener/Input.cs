@@ -1,6 +1,4 @@
-﻿using FasType.Models.Abbreviations;
-using FasType.Services;
-using FasType.Utils;
+﻿using FasType.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,48 +12,28 @@ namespace FasType.LLKeyboardListener
 {
     public static class Input
     {
-        static readonly InputSimulator _sim;
-        static IKeyboardSimulator Keyboard => _sim.Keyboard;
-
-        static Input() => _sim = new();
-
-
+        private static readonly InputSimulator _sim;
+        private static IKeyboardSimulator Keyboard => _sim.Keyboard;
 
         [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
+        private static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        static Input() => _sim = new();
 
         public static void Erase(int n)
         {
-            //var activeHwnd = GetFocus();
-            //if (activeHwnd != Utils.Caret.CurrentCaretHwnd)
-            SetForegroundWindow(Utils.Caret.CurrentCaretHwnd);
-            //if (SetForegroundWindow(Utils.Caret.CurrentCaretHwnd) == false)
-            //{
-            //    int err = Marshal.GetLastWin32Error();
-            //}
-
+            SetForegroundWindow(Caret.CurrentCaretHwnd);
             Keyboard.KeyPress(Enumerable.Repeat(VirtualKeyCode.BACK, n).ToArray());
         }
 
         public static void TextEntry(string text)
         {
-            //var activeHwnd = GetFocus();
-            //if (activeHwnd != Utils.Caret.CurrentCaretHwnd)
-            SetForegroundWindow(Utils.Caret.CurrentCaretHwnd);
-            //if (SetForegroundWindow(Utils.Caret.CurrentCaretHwnd) == false)
-            //{
-            //    int err = Marshal.GetLastWin32Error();
-            //}
-
+            SetForegroundWindow(Caret.CurrentCaretHwnd);
             Keyboard.TextEntry(text);
         }
-
-        //public static void KeyPress(VirtualKeyCode keyCode) => Keyboard.KeyPress(keyCode);
-        //public static void KeyPress(params VirtualKeyCode[] keyCodes) => Keyboard.KeyPress(keyCodes);
-        //public static void TextEntry(char character) => Keyboard.TextEntry(character);
     }
 }

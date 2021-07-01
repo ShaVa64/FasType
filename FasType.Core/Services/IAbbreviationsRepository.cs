@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace FasType.Core.Services
 {
-    public interface IAbbreviationRepository : IGenericRepository<BaseAbbreviation, Guid>
+    public interface IAbbreviationsRepository : IGenericRepository<BaseAbbreviation, Guid>
     {
         void UpdateUsed(BaseAbbreviation abbrev); 
         IEnumerable<BaseAbbreviation> this[string shortForm] => GetAbbreviations(shortForm);
         IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm);
     }
 
-    public class AbbreviationRepository : GenericRepository<BaseAbbreviation, Guid, AbbreviationsDbContext>, IAbbreviationRepository
+    public class AbbreviationsRepository : GenericRepository<BaseAbbreviation, Guid, AbbreviationsDbContext>, IAbbreviationsRepository
     {
         readonly ILinguisticsRepository _linguistics;
 
-        public AbbreviationRepository(ILinguisticsRepository linguistics, AbbreviationsDbContext context) : base(context)
+        public AbbreviationsRepository(ILinguisticsRepository linguistics, AbbreviationsDbContext context) : base(context)
         {
             _linguistics = linguistics;
         }

@@ -34,7 +34,7 @@ namespace FasType.Core.Models.Abbreviations
         }
 
         public string ElementaryRepresentation => GetElementaryRepresentation();
-        public string ComplexRepresentation => GetComplexRepresentation();
+        //public string ComplexRepresentation => GetComplexRepresentation();
 
         public void UpdateUsed() => Used++;
 
@@ -43,6 +43,6 @@ namespace FasType.Core.Models.Abbreviations
         public abstract bool TryGetFullForm(string shortForm, ILinguisticsRepository linguistics, [NotNullWhen(true)] out string? fullForm);
 
         protected abstract string GetElementaryRepresentation();
-        protected abstract string GetComplexRepresentation();
+        protected abstract string GetComplexRepresentation(ILinguisticsRepository linguistics);
     }
 }

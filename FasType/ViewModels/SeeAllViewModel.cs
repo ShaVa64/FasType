@@ -1,7 +1,8 @@
 ﻿using FasType.Models;
-using FasType.Models.Abbreviations;
+using FasType.Core.Models;
+using FasType.Core.Models.Abbreviations;
 using FasType.Properties;
-using FasType.Services;
+using FasType.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace FasType.ViewModels
     {
         string _queryString;
         FormOrderBy _sortBy;
-        readonly IAbbreviationStorage _storage;
+        readonly IRepositoriesManager _repositories;
         List<BaseAbbreviation> _allAbbreviations;
 
         public string Title => Resources.AllAbbrevs + $"  ({Count})";
@@ -57,33 +58,32 @@ namespace FasType.ViewModels
 
         public Command<BaseAbbreviation> RemoveCommand { get; }
 
-        public SeeAllViewModel(IAbbreviationStorage storage)
+        public SeeAllViewModel(IRepositoriesManager repositories)
         {
-            _storage = storage;
+            _repositories = repositories;
 
             RemoveCommand = new(Remove, CanRemove);
             _queryString = "";
             OrderAbbreviations();
             _ = _allAbbreviations ?? throw new NullReferenceException();
-            //AllAbbreviations = _storage.Take(2).ToList();
         }
 
         void OrderAndFilterAbbreviations() => AllAbbreviations = (OrderBy switch
         {
-            FormOrderBy.FullForm => _storage.Where(a => a.FullForm.Contains(QueryString)).OrderBy(a => a.FullForm).ThenBy(a => a.ShortForm),
-            FormOrderBy.ShortForm => _storage.Where(a => a.ShortForm.Contains(QueryString)).OrderBy(a => a.ShortForm).ThenBy(a => a.FullForm),
+            FormOrderBy.FullForm => _repositories.Abbreviations.Where(a => a.FullForm.Contains(QueryString)).OrderBy(a => a.FullForm).ThenBy(a => a.ShortForm),
+            FormOrderBy.ShortForm => _repositories.Abbreviations.Where(a => a.ShortForm.Contains(QueryString)).OrderBy(a => a.ShortForm).ThenBy(a => a.FullForm),
             _ => throw new NotImplementedException()
         }).ToList();
         void OrderAbbreviations() => AllAbbreviations = (OrderBy switch
         {
-            FormOrderBy.FullForm => _storage.OrderBy(a => a.FullForm).ThenBy(a => a.ShortForm),
-            FormOrderBy.ShortForm => _storage.OrderBy(a => a.ShortForm).ThenBy(a => a.FullForm),
+            FormOrderBy.FullForm => _repositories.Abbreviations.GetAll().OrderBy(a => a.FullForm).ThenBy(a => a.ShortForm),
+            FormOrderBy.ShortForm => _repositories.Abbreviations.GetAll().OrderBy(a => a.ShortForm).ThenBy(a => a.FullForm),
             _ => throw new NotImplementedException()
         }).ToList();
         void FilterAbbreviations() =>  AllAbbreviations = (OrderBy switch
         {
-            FormOrderBy.FullForm => _storage.Where(a => a.FullForm.Contains(QueryString)),
-            FormOrderBy.ShortForm => _storage.Where(a => a.ShortForm.Contains(QueryString)),
+            FormOrderBy.FullForm => _repositories.Abbreviations.Where(a => a.FullForm.Contains(QueryString)),
+            FormOrderBy.ShortForm => _repositories.Abbreviations.Where(a => a.ShortForm.Contains(QueryString)),
             _ => throw new NotImplementedException()
         }).ToList();
 
@@ -96,7 +96,8 @@ namespace FasType.ViewModels
             if (res == MessageBoxResult.Cancel)
                 return;
 
-            _storage.Remove(abbrev);
+            _repositories.Abbreviations.Remove(abbrev);
+            _repositories.Abbreviations.SaveChanges();
             OrderAndFilterAbbreviations();
         }
         public enum FormOrderBy

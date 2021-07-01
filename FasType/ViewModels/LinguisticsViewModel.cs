@@ -1,7 +1,6 @@
 ﻿using FasType.Models;
-using FasType.Models.Linguistics.Grammars;
+using FasType.Core.Models.Linguistics;
 using FasType.Properties;
-using FasType.Storage;
 using FasType.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,19 +10,19 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
-using FasType.Services;
+using FasType.Core.Models;
+using FasType.Core.Services;
 using Microsoft.Extensions.Configuration;
-using FasType.Models.Linguistics;
 
 namespace FasType.ViewModels
 {
-    public class LinguisticsViewModel: ObservableObject
+    public class LinguisticsViewModel : ObservableObject
     {
         //ObservableCollection<GrammarType> _plurals;
         //public Command<GrammarType> RemovePluralCommand { get; }
         //public Command AddPluralCommand { get; }
         //public ObservableCollection<GrammarType> Plurals { get => _plurals; set => SetProperty(ref _plurals, value); }
-        readonly ILinguisticsStorage _storage;
+        readonly IRepositoriesManager _repositories;
         readonly IConfiguration _config;
         static readonly Dictionary<string, string> PropertiesContextPair;
         static readonly string[] NoDupProperties;
@@ -41,20 +40,20 @@ namespace FasType.ViewModels
         {
             PropertiesContextPair = new()
             {
-                { nameof(GenderTypeContext), nameof(ILinguisticsStorage.GenderType) },
-                { nameof(PluralTypeContext), nameof(ILinguisticsStorage.PluralType) },
-                { nameof(GenderPluralTypeContext), nameof(ILinguisticsStorage.GenderPluralType) },
+                { nameof(GenderTypeContext), nameof(ILinguisticsRepository.GenderType) },
+                { nameof(PluralTypeContext), nameof(ILinguisticsRepository.PluralType) },
+                { nameof(GenderPluralTypeContext), nameof(ILinguisticsRepository.GenderPluralType) },
             };
             NoDupProperties = new string[] { nameof(GenderTypeContext), nameof(PluralTypeContext), nameof(GenderPluralTypeContext) };
         }
 
-        public LinguisticsViewModel(IConfiguration configuration, ILinguisticsStorage storage)
+        public LinguisticsViewModel(IConfiguration configuration, IRepositoriesManager repositories)
         {
             //Plurals = new();
             //AddPluralCommand = new(AddPlural);
             //RemovePluralCommand = new(RemovePlural);
             //SettingsToProperties();
-            _storage = storage;
+            _repositories = repositories;
             _config = configuration;
 
             SaveCommand = new(Save, CanSave);
@@ -62,9 +61,9 @@ namespace FasType.ViewModels
             ResetCommand = new(Reset, CanReset);
             OpenOneLettersCommand = new(OpenOneLetters, CanOpenOneLetters);
 
-            GenderTypeContext       = storage.GenderType;      //(GrammarType)UserGrammar.GenderRecord;
-            PluralTypeContext       = storage.PluralType;      //(GrammarType)UserGrammar.PluralRecord;
-            GenderPluralTypeContext = storage.GenderPluralType;//(GrammarType)UserGrammar.GenderPluralRecord;
+            GenderTypeContext = _repositories.Linguistics.GenderType;
+            PluralTypeContext = _repositories.Linguistics.PluralType;
+            GenderPluralTypeContext = _repositories.Linguistics.GenderPluralType;
         }
 
         bool CanOpenOneLetters() => !OneLettersWindow.IsOpen;
@@ -74,32 +73,6 @@ namespace FasType.ViewModels
 
             w.Show();
         }
-
-        //void RemovePlural(GrammarType gt)
-        //{
-        //    Plurals.Remove(gt);
-
-        //    int i = 0;
-        //    while (i < Plurals.Count)
-        //        Plurals[i].Name = $"Plural {++i}";
-        //}
-        //void AddPlural() => Plurals.Add(new($"Plural {Plurals.Count + 1}", "k", GrammarPosition.Prefix));
-        //bool CanSavePlural()
-        //{
-        //    bool emptyReprs = Plurals.Select(gt => gt.Repr).Any(string.IsNullOrEmpty);
-        //    if (emptyReprs)
-        //        return false;
-
-        //    bool emptyNames = Plurals.Select(gt => gt.Name).Any(string.IsNullOrEmpty);
-        //    if (emptyNames)
-        //        return false;
-
-        //    bool duplicateNames = Plurals.Select(gt => gt.Name).Distinct().Count() < Plurals.Count;
-        //    if (duplicateNames)
-        //        return false;
-
-        //    return true;
-        //}
 
         bool CanReset() => !AbbreviationMethodsWindow.IsOpen;
         void Reset()
@@ -113,7 +86,7 @@ namespace FasType.ViewModels
             PluralTypeContext = dto.PluralType;
             GenderPluralTypeContext = dto.GenderPluralType;
 
-            _storage.AbbreviationMethods = dto.AbbreviationMethods;
+            _repositories.Linguistics.AbbreviationMethods = dto.AbbreviationMethods;
             OnPropertyChanged(string.Empty);
         }
 
@@ -129,42 +102,25 @@ namespace FasType.ViewModels
         {
             _ = context ?? throw new NullReferenceException();
             _ = record ?? throw new NullReferenceException();
-            //if (string.IsNullOrEmpty(context.Repr)) //Empty Repr
-            //    return false;
 
-            //if (string.IsNullOrEmpty(context.Name)) //Empty Name
-            //    return false;
-
-            if (((GrammarTypeRecord)context) == ((GrammarTypeRecord)record)) //No Changes
+            if (context == record)
                 return false;
 
             return true;
         }
         bool EmptyRepr() => GetType().GetProperties().Where(pi => pi.PropertyType == typeof(GrammarType)).Select(pi => (pi.GetValue(this) as GrammarType ?? throw new NullReferenceException()).Repr).ToList().Any(string.IsNullOrEmpty);
-        //string.IsNullOrEmpty(GenderTypeContext.Repr)
-        //                    || string.IsNullOrEmpty(PluralTypeContext.Repr)
-        //                    || string.IsNullOrEmpty(GenderPluralTypeContext.Repr)
-        //                    || string.IsNullOrEmpty(GenderCompletionContext.Repr)
-        //                    || string.IsNullOrEmpty(PluralCompletionContext.Repr)
-        //                    || string.IsNullOrEmpty(GenderPluralCompletionContext.Repr);
-        bool CanSaveGrammarType(string propName) => CanSave(typeof(LinguisticsViewModel).GetProperty(propName)?.GetValue(this) as GrammarType, 
-            typeof(ILinguisticsStorage).GetProperty(PropertiesContextPair[propName])?.GetValue(_storage) as GrammarType);
+        bool CanSaveGrammarType(string propName) => CanSave(typeof(LinguisticsViewModel).GetProperty(propName)?.GetValue(this) as GrammarType,
+            typeof(ILinguisticsRepository).GetProperty(PropertiesContextPair[propName])?.GetValue(_repositories.Linguistics) as GrammarType);
 
-        bool NoDup() => NoDupProperties.Select(s => (typeof(LinguisticsViewModel).GetProperty(s)?.GetValue(this) as GrammarType)?.Repr).Distinct().Count() == NoDupProperties.Length;//.ToList()
-        //bool CanSavePluralType() => CanSave(PluralTypeContext, (GrammarTypeRecord)_storage.PluralType);
-        //bool CanSaveGenderType() => CanSave(GenderTypeContext, (GrammarTypeRecord)_storage.GenderType);
-        //bool CanSaveGenrePluralType() => CanSave(GenderPluralTypeContext, (GrammarTypeRecord)_storage.GenderPluralType);
-        //bool CanSavePluralCompletion() => CanSave(PluralCompletionContext, (GrammarTypeRecord)_storage.PluralCompletion);
-        //bool CanSaveGenderCompletion() => CanSave(GenderCompletionContext, (GrammarTypeRecord)_storage.GenderCompletion);
-        //bool CanSaveGenrePluralCompletion() => CanSave(GenderPluralCompletionContext, (GrammarTypeRecord)_storage.GenderPluralCompletion);
-        bool CanSave() => !EmptyRepr() && NoDup() && PropertiesContextPair.Keys.ToList().Any(CanSaveGrammarType);//(CanSavePluralType() || CanSaveGenderType() || CanSaveGenrePluralType() || CanSavePluralCompletion() || CanSaveGenderCompletion() || CanSaveGenrePluralCompletion());
+        bool NoDup() => NoDupProperties.Select(s => (typeof(LinguisticsViewModel).GetProperty(s)?.GetValue(this) as GrammarType)?.Repr).Distinct().Count() == NoDupProperties.Length;
+
+        bool CanSave() => !EmptyRepr() && NoDup() && PropertiesContextPair.Keys.ToList().Any(CanSaveGrammarType);
         void Save(Window? w)
         {
             _ = w ?? throw new NullReferenceException();
-            //PropertiesToSettings();
-            _storage.PluralType = PluralTypeContext;
-            _storage.GenderType = GenderTypeContext;
-            _storage.GenderPluralType = GenderPluralTypeContext;
+            _repositories.Linguistics.PluralType = PluralTypeContext;
+            _repositories.Linguistics.GenderType = GenderTypeContext;
+            _repositories.Linguistics.GenderPluralType = GenderPluralTypeContext;
 
             w.Close();
         }

@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using FasType.Services;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -30,10 +29,6 @@ namespace FasType.Windows
             Closing += (s, e) => _vm.Close();
             IsVisibleChanged += MainWindow_IsVisibleChanged;
             ShowActivated = false;
-
-            //Caret.GetCaretPos();
-            //UpdatePos();
-            //BeAt(Caret.GetCaretPos());
 
             //Causes window to be loaded; won't have to load first time appearing causing slowdown
             Show();
@@ -72,15 +67,7 @@ namespace FasType.Windows
         {
             Left = p.X;
             Top = p.Y;
-
-            //UpdatePos(p);
         }
-
-        //void ShowAt(System.Drawing.Point p)
-        //{
-        //    BeAt(p);
-        //    //Show();
-        //}
 
         public void BeUnderCaret() => BeAt(Caret.GetCaretPos());
     }

@@ -10,9 +10,6 @@ namespace FasType.Core.Models.Dictionary
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + "}")]
     public abstract class BaseDictionaryElement
     {
-        public static readonly BaseDictionaryElement OtherElement = new SimpleDictionaryElement(Properties.Resources.Other, "", "", "");
-        public static readonly BaseDictionaryElement NoneElement = new SimpleDictionaryElement(Properties.Resources.None, "", "", "");
-
         public string FullForm { get; set; }
         public string[] Others { get; set; }
         public string[] AllForms { get; }

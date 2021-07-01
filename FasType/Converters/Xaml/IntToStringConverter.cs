@@ -28,8 +28,8 @@ namespace FasType.Converters.Xaml
             };
         }
 
-        static string UsedMain(ulong val) => val == 0 ? "" : $"({val})";
-        static string UsedSeeAll(ulong val) => val == 0 ? "" : $"(x{val})";
+        private static string UsedMain(ulong val) => val == 0 ? "" : $"({val})";
+        private static string UsedSeeAll(ulong val) => val == 0 ? "" : $"(x{val})";
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

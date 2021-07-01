@@ -14,6 +14,7 @@ namespace FasType.Core.Services
 
         void Add(T entity);
         bool Contains(T entity);
+        bool Contains(TId id);
         IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
         T? GetById(TId id);
         IEnumerable<T> GetAll();
@@ -38,6 +39,7 @@ namespace FasType.Core.Services
 
         public virtual void Add(T entity) => Set.Add(entity);
         public virtual bool Contains(T entity) => Set.Contains(entity);
+        public virtual bool Contains(TId id) => Set.Find(id) != null;
         public virtual IEnumerable<T> Where(Expression<Func<T, bool>> predicate) => Set.Where(predicate);
         public virtual T? GetById(TId id) => Set.Find(id);
         public IEnumerable<T> GetAll() => Set.ToArray();

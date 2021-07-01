@@ -33,8 +33,8 @@ namespace FasType.Core.Services
 
         void SetAbbreviationMethods(IEnumerable<AbbreviationMethod> enumerable)
         {
-            _context.AbbreviationMethods.RemoveRange(AbbreviationMethods);
-            _context.AbbreviationMethods.AddRange(enumerable);
+            Set.RemoveRange(AbbreviationMethods);
+            Set.AddRange(enumerable);
 
             SaveChanges();
         }
@@ -79,7 +79,7 @@ namespace FasType.Core.Services
             AbbreviationMethod[] amrs = Array.Empty<AbbreviationMethod>();
             if (_curr == string.Empty)
             {
-                amrs = _context.AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.Before) && from.StartsWith(m.ShortForm)).ToArray();//.AsEnumerable().Where(m => m.SatisfiesBefore(from)).ToArray();
+                amrs = Set.Where(m => m.Position.HasFlag(SyllablePosition.Before) && from.StartsWith(m.ShortForm)).ToArray();//.AsEnumerable().Where(m => m.SatisfiesBefore(from)).ToArray();
 
                 if ((PluralType.Position == GrammarPosition.Prefix && PluralType.SuitsGrammar(from))
                     || (GenderType.Position == GrammarPosition.Prefix && GenderType.SuitsGrammar(from))
@@ -90,9 +90,9 @@ namespace FasType.Core.Services
             }
             else
             {
-                amrs = _context.AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.In) && from.StartsWith(m.ShortForm) && from.Length != m.ShortForm.Length).ToArray();
+                amrs = Set.Where(m => m.Position.HasFlag(SyllablePosition.In) && from.StartsWith(m.ShortForm) && from.Length != m.ShortForm.Length).ToArray();
             }
-            amrs = amrs.Concat(_context.AbbreviationMethods.Where(m => m.Position.HasFlag(SyllablePosition.After) && from.EndsWith(m.ShortForm) && from.Length == m.ShortForm.Length)).ToArray();
+            amrs = amrs.Concat(Set.Where(m => m.Position.HasFlag(SyllablePosition.After) && from.EndsWith(m.ShortForm) && from.Length == m.ShortForm.Length)).ToArray();
 
             _ = Words(_curr + from[0] + WC, from[1..], poss);
 

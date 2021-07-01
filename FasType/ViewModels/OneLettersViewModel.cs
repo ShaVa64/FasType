@@ -6,26 +6,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using FasType.Models;
-using FasType.Models.Abbreviations;
 using FasType.Pages;
-using FasType.Services;
+using FasType.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using FasType.Utils;
+using FasType.Core.Models.Abbreviations;
+using FasType.Core.Models;
 
 namespace FasType.ViewModels
 {
     public class OneLettersViewModel : ObservableObject
     {
         readonly static string _soloLetters;
+        readonly IRepositoriesManager _repositories;
         ObservableCollection<BaseAbbreviation>? _oneLetters;
 
-        static IAbbreviationStorage Storage => App.Current.ServiceProvider.GetRequiredService<IAbbreviationStorage>();
         public ObservableCollection<BaseAbbreviation>? OneLetters { get => _oneLetters; set => SetProperty(ref _oneLetters, value); }
         public Command<BaseAbbreviation> OpenAbbreviationPageCommand { get; }
 
         static OneLettersViewModel() => _soloLetters = @"befghikopqruvwxzéèçù";
-        public OneLettersViewModel()
+        public OneLettersViewModel(IRepositoriesManager repositories)
         {
+            _repositories = repositories;
             Init();
 
             OpenAbbreviationPageCommand = new(OpenAbbreviationPage, CanOpenAbbreviationPage);
@@ -34,7 +36,7 @@ namespace FasType.ViewModels
         //void Init(object sender, EventArgs e) => Init();
         void Init()
         {
-            var ee = _soloLetters.Select(c => Storage[c.ToString()]).SelectMany((ba, i) => !ba.Any() ? Enumerable.Repeat(new SimpleAbbreviation($"{_soloLetters[i]}", "", 0, "", "", ""), 1) : ba);
+            var ee = _soloLetters.Select(c => _repositories.Abbreviations[c.ToString()]).SelectMany((ba, i) => !ba.Any() ? Enumerable.Repeat(new SimpleAbbreviation($"{_soloLetters[i]}", "", 0, "", "", ""), 1) : ba);
             OneLetters = new(ee);
         }
 

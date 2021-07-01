@@ -1,4 +1,4 @@
-﻿using FasType.Models.Linguistics.Grammars;
+﻿using FasType.Core.Models.Linguistics;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,7 +23,7 @@ namespace FasType.Converters.Xaml
                 return (bool)value switch
                 {
                     true => GrammarPosition.Postfix,
-                    false => GrammarPosition.Prefix
+                    false => GrammarPosition.Prefix,
                 };
             }
 

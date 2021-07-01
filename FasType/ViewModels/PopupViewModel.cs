@@ -1,7 +1,8 @@
-﻿using FasType.LLKeyboardListener;
+﻿using FasType.Core.Models;
+using FasType.Core.Models.Dictionary;
+using FasType.Core.Services;
+using FasType.LLKeyboardListener;
 using FasType.Models;
-using FasType.Models.Dictionary;
-using FasType.Services;
 using FasType.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -24,11 +25,7 @@ namespace FasType.ViewModels
         BaseDictionaryElement? _selectedElement;
         Visibility _comboBoxVisibility, _busyIndicatorVisibility;
 
-        //static Services.ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<Services.ILinguisticsStorage>();
-        //static Services.IDictionaryStorage Dictionary => App.Current.ServiceProvider.GetRequiredService<Services.IDictionaryStorage>();
-
-        readonly ILinguisticsStorage _linguistics;
-        readonly IDictionaryStorage _dictionary;
+        readonly IRepositoriesManager _repositories;
 
         public bool DropdownOpen { get => _dropdownOpen; set => SetProperty(ref _dropdownOpen, value); }
         public Visibility ComboBoxVisibility { get => _comboBoxVisibility; set => SetProperty(ref _comboBoxVisibility, value); }
@@ -40,10 +37,9 @@ namespace FasType.ViewModels
         //public string SelectedString { get => _selectedString; set => SetProperty(ref _selectedString, value); }
 
 
-        public PopupViewModel(ILinguisticsStorage linguistics, IDictionaryStorage dictionary)
+        public PopupViewModel(IRepositoriesManager repositories)
         {
-            _linguistics = linguistics;
-            _dictionary = dictionary;
+            _repositories = repositories;
             CreateCommand = new(Create, CanCreate);
 
             Collection = new();
@@ -61,14 +57,14 @@ namespace FasType.ViewModels
         {
             ShortForm = currentWord;
             currentWord = currentWord.ToLower();
-            var l = _linguistics.Words(currentWord).Select(s => "^" + s + "$").ToList();
+            var l = _repositories.Linguistics.Words(currentWord).Select(s => "^" + s + "$").ToList();
 
-            _elements = l.SelectMany(s => _dictionary.GetElements(s) ?? Array.Empty<BaseDictionaryElement>()).Distinct().ToArray();
+            _elements = l.SelectMany(s => _repositories.Dictionary.GetElementsFromRegex(s) ?? Array.Empty<BaseDictionaryElement>()).Distinct().ToArray();
 
             Collection = new ObservableCollection<BaseDictionaryElement>(_elements)
             {
-                BaseDictionaryElement.OtherElement,
-                BaseDictionaryElement.NoneElement
+                DictionaryElements.OtherElement,
+                DictionaryElements.NoneElement
             };
             SelectedElement = Collection[0];
 
@@ -82,11 +78,11 @@ namespace FasType.ViewModels
         void Create(Window? w)
         {
             _ = w ?? throw new NullReferenceException();
-            if (SelectedElement == BaseDictionaryElement.NoneElement)//(SelectedString == Properties.Resources.None)
+            if (SelectedElement == DictionaryElements.NoneElement)//(SelectedString == Properties.Resources.None)
             {
                 var r = MessageBox.Show(Properties.DialogResources.AddDictionary, Properties.Resources.Dictionary, MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (r == MessageBoxResult.Yes)
-                    _dictionary.Add(new SimpleDictionaryElement(ShortForm ?? throw new NullReferenceException(), string.Empty, string.Empty, string.Empty));
+                    _repositories.Dictionary.Add(new SimpleDictionaryElement(ShortForm ?? throw new NullReferenceException(), string.Empty, string.Empty, string.Empty));
                 w.Close();
                 return;
             }
@@ -94,7 +90,7 @@ namespace FasType.ViewModels
             var window = App.Current.ServiceProvider.GetRequiredService<Windows.AbbreviationWindow>();
             var page = App.Current.ServiceProvider.GetRequiredService<Pages.SimpleAbbreviationPage>();
 
-            if (SelectedElement == BaseDictionaryElement.OtherElement)//(SelectedString == Properties.Resources.Other)
+            if (SelectedElement == DictionaryElements.OtherElement)//(SelectedString == Properties.Resources.Other)
             {
                 page.SetNewAbbreviation(ShortForm ?? throw new NullReferenceException(), "", Array.Empty<string>());
             }
@@ -109,8 +105,8 @@ namespace FasType.ViewModels
             window.Content = page;
             if (window.ShowDialog() == true && window.DataContext is SimpleAbbreviationViewModel savm)
             {
-                Models.Abbreviations.SimpleAbbreviation abbrev = savm.CurrentAbbrev ?? throw new NullReferenceException();
-                App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>().TryWriteAbbreviation(abbrev, ShortForm);
+                Core.Models.Abbreviations.SimpleAbbreviation abbrev = savm.CurrentAbbrev ?? throw new NullReferenceException();
+                ((MainWindowViewModel)App.Current.MainWindow.DataContext).TryWriteAbbreviation(abbrev, ShortForm);
             }
 
             w.Close();

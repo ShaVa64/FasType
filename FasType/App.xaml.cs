@@ -1,7 +1,7 @@
 ﻿using FasType.Windows;
 using FasType.Pages;
-using FasType.Services;
-using FasType.Storage;
+using FasType.Core.Services;
+using FasType.Core.Contexts;
 using FasType.ViewModels;
 using IWshRuntimeLibrary;
 using Microsoft.Extensions.Configuration;
@@ -78,10 +78,19 @@ namespace FasType
                 .WriteTo.Debug()
                 .CreateLogger();
 
-            services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
-            services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
-            services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            //services.AddDbContext<IAbbreviationStorage, EFSqliteAbbreviationContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFAbbreviation")), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            //services.AddDbContext<ILinguisticsStorage, EFSqliteLinguisticsContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFLinguistics")), ServiceLifetime.Transient, ServiceLifetime.Transient);
+            //services.AddDbContext<IDictionaryStorage, EFSqliteDictionaryContext>(options => options.UseSqlite(Configuration.GetConnectionString("EFDictionary")), ServiceLifetime.Transient, ServiceLifetime.Transient);
             //services.AddTransient<IDataStorage, EFSqliteStorage>();
+            services.AddDbContext<DictionaryDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DictionaryConnection")));
+            services.AddDbContext<LinguisticsDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("LinguisticsConnection")));
+            services.AddDbContext<AbbreviationsDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("AbbreviationConnection")));
+
+            services.AddScoped<IDictionaryRepository, DictionaryRepository>();
+            services.AddScoped<ILinguisticsRepository, LinguisticsRepository>();
+            services.AddScoped<IAbbreviationsRepository, AbbreviationsRepository>();
+
+            services.AddTransient<IRepositoriesManager, RepositoriesManager>();
 
             services.AddSingleton(Configuration);
 
@@ -107,6 +116,8 @@ namespace FasType
 
             services.AddTransient<PopupWindow>();
             services.AddTransient<PopupViewModel>();
+
+            services.AddSingleton<TaskbarIconViewModel>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -114,6 +125,7 @@ namespace FasType
             base.OnStartup(e);
 
             taskbarIcon = (TaskbarIcon)FindResource("NotifyIcon");
+            taskbarIcon.DataContext = ServiceProvider.GetRequiredService<TaskbarIconViewModel>();
 
             var mw = ServiceProvider.GetRequiredService<MainWindow>();
             MainWindow = mw;

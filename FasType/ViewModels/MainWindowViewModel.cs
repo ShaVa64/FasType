@@ -1,6 +1,6 @@
 ﻿using FasType.LLKeyboardListener;
 using FasType.Windows;
-using FasType.Services;
+using FasType.Core.Services;
 using FasType.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -13,21 +13,21 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using FasType.Models.Abbreviations;
 using FasType.Models;
+using FasType.Core.Models;
+using FasType.Core.Models.Abbreviations;
 using System.Threading.Channels;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasType.ViewModels
 {
-    public class MainWindowViewModel : ObservableObject, IKeyboardListenerHandler
+    public class MainWindowViewModel : ObservableObject
     {
         string _currentWord;
         readonly LowLevelKeyboardListener _listener;
         ListenerStates _currentListenerState;
-        readonly IAbbreviationStorage _storage;
-        readonly IDictionaryStorage _dictionary;
+        readonly IRepositoriesManager _repositories;
         BaseAbbreviation? _choosedAbbrev;
         List<BaseAbbreviation>? _matchingAbbrevs;
         int _abbrevIndex;
@@ -71,13 +71,12 @@ namespace FasType.ViewModels
         //public System.Windows.Media.Brush Background { get => _background; set => SetProperty(ref _background, value); }
 
         //static MainWindowViewModel() => _instance = App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>();
-        public MainWindowViewModel(IAbbreviationStorage storage, IDictionaryStorage dictionary)
+        public MainWindowViewModel(IRepositoriesManager repositories)
         {
             CurrentWord = string.Empty;
             _ = _currentWord ?? throw new NullReferenceException();
             _listener = new();
-            _storage = storage;
-            _dictionary = dictionary;
+            _repositories = repositories;
             CurrentListenerState = ListenerStates.Inserting;
 
             //Background = System.Windows.Media.Brushes.White;
@@ -111,7 +110,7 @@ namespace FasType.ViewModels
             aaw.Show();
         }
 
-        bool CanSeeAll() => _storage.Count > 0 && !SeeAllWindow.IsOpen;
+        bool CanSeeAll() => _repositories.Abbreviations.Count > 0 && !SeeAllWindow.IsOpen;
         void SeeAll()
         {
             var saw = App.Current.ServiceProvider.GetRequiredService<SeeAllWindow>();
@@ -133,7 +132,7 @@ namespace FasType.ViewModels
 
         public bool TryWriteAbbreviation(BaseAbbreviation abbrev, string shortForm)
         {
-            if (abbrev.TryGetFullForm(shortForm.ToLower(), out string? fullForm))
+            if (abbrev.TryGetFullForm(shortForm.ToLower(), _repositories.Linguistics, out string? fullForm))
             {
                 //_ = fullForm ?? throw new NullReferenceException();
                 string word = shortForm.IsFirstCharUpper() ? fullForm.FirstCharToUpper() : fullForm;
@@ -141,7 +140,7 @@ namespace FasType.ViewModels
                 Input.Erase(shortForm.Length);
                 Input.TextEntry(word + ' ');
                 _listener.OnKeyPressed += ListenerEvent;
-                Task.Run(async () => await _storage.UpdateUsedAsync(abbrev));
+                Task.Run(() => _repositories.Abbreviations.UpdateUsed(abbrev));
                 CurrentWord = "";
                 //Task.Run(async () => await _storage.UpdateUsedAsync(abbrev));
                 return true;
@@ -186,11 +185,11 @@ namespace FasType.ViewModels
             {
                 string shortForm = CurrentWord.ToLower();
 
-                var abbrevs = _storage[shortForm].ToList();
+                var abbrevs = _repositories.Abbreviations[shortForm].ToList();
 
                 if (abbrevs.Count == 0)
                 {
-                    if (Properties.Settings.Default.AbbrevsAutoCreation && !_dictionary.Contains(shortForm))
+                    if (Properties.Settings.Default.AbbrevsAutoCreation && !_repositories.Dictionary.Contains(shortForm))
                     {
                         e.StopChain = true;
                         var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();
@@ -207,6 +206,9 @@ namespace FasType.ViewModels
                 {
                     var abbrev = abbrevs[0];
                     var couldWrite = TryWriteAbbreviation(abbrev, CurrentWord);
+                    
+                    //TODO: Had scope creation
+                    //_repositories.Reload();
                     return;
                 }
                 //else if (abbrevs.Count > 1)
@@ -219,7 +221,7 @@ namespace FasType.ViewModels
                 //var p = Caret.GetCaretPos();
                 //App.Current.MainWnd.ShowAt(p);
                 StartWindowAlert();
-                MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).Append(BaseAbbreviation.OtherAbbreviation).ToList();
+                MatchingAbbrevs = abbrevs.OrderByDescending(a => a.Used).Append(Abbreviations.OtherAbbreviation).ToList();
                 ChoosedAbbrev = MatchingAbbrevs[0];
 
                 //foreach (var abbrev in abbrevs)
@@ -289,7 +291,7 @@ namespace FasType.ViewModels
                 //ChoosedFullForm = null;
                 //MatchingFullForms = null;
                 //CurrentWord = "";
-                if (ChoosedAbbrev == BaseAbbreviation.OtherAbbreviation)
+                if (ChoosedAbbrev == Abbreviations.OtherAbbreviation)
                 {
                     var aaw = App.Current.ServiceProvider.GetRequiredService<AbbreviationWindow>();
                     var p = App.Current.ServiceProvider.GetRequiredService<Pages.SimpleAbbreviationPage>();

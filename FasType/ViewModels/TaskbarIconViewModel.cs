@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using FasType.Core.Models;
+using FasType.Core.Services;
 using FasType.Models;
 using FasType.Windows;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,23 +15,24 @@ namespace FasType.ViewModels
 {
     public class TaskbarIconViewModel : ObservableObject
     {
+        private readonly IRepositoriesManager _repositories;
+
         public ICommand ExitApplicationCommand { get; }
-        public ICommand ShowAppCommand { get; }
         public ICommand AddNewCommand { get; }
         public ICommand SeeAllCommand { get; }
         public ICommand OpenLinguisticsCommand { get; }
 
-        public TaskbarIconViewModel()
+        public TaskbarIconViewModel(IRepositoriesManager repositories)
         {
+            _repositories = repositories;
             ExitApplicationCommand = new Command(ExitApplication);
-            ShowAppCommand = new Command(ShowApp);
 
             AddNewCommand = new Command<Type>(AddNew, CanAddNew);
             SeeAllCommand = new Command(SeeAll, CanSeeAll);
             OpenLinguisticsCommand = new Command(OpenLinguistics, CanOpenLinguistics);
         }
-        bool CanOpenLinguistics() => !LinguisticsWindow.IsOpen;
-        void OpenLinguistics()
+        private bool CanOpenLinguistics() => !LinguisticsWindow.IsOpen;
+        private void OpenLinguistics()
         {
             var lw = App.Current.ServiceProvider.GetRequiredService<LinguisticsWindow>();
 
@@ -47,17 +50,18 @@ namespace FasType.ViewModels
             aaw.Show();
         }
 
-        bool CanSeeAll() => App.Current.ServiceProvider.GetRequiredService<Services.IAbbreviationStorage>().Count > 0 && !SeeAllWindow.IsOpen;
+        bool CanSeeAll()
+        {
+            bool c = _repositories.Abbreviations.Count > 0;
+            _repositories.Reload();
+            return c && !SeeAllWindow.IsOpen;
+        }
+
         void SeeAll()
         {
             var saw = App.Current.ServiceProvider.GetRequiredService<SeeAllWindow>();
 
             saw.Show();
-        }
-
-        void ShowApp()
-        {
-            App.Current.MainWindow.Show();
         }
         void ExitApplication()
         {

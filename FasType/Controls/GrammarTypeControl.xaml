@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FasType.Controls" xmlns:prop="clr-namespace:FasType.Properties"
-             xmlns:cvt="clr-namespace:FasType.Converters.Xaml" xmlns:models="clr-namespace:FasType.Models.Linguistics.Grammars"
+             xmlns:cvt="clr-namespace:FasType.Converters.Xaml" xmlns:models="clr-namespace:FasType.Core.Models.Linguistics"
              d:DataContext="{d:DesignInstance models:GrammarType}"
              x:Name="CustomControl"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">

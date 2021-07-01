@@ -97,7 +97,7 @@ namespace FasType.Core.Models.Abbreviations
             return sb.ToString();
         }
 
-        protected override string GetComplexRepresentation()
+        protected override string GetComplexRepresentation(ILinguisticsRepository linguistics)
         {
             StringBuilder sb = new();
 
@@ -107,7 +107,7 @@ namespace FasType.Core.Models.Abbreviations
             if (HasGender)
             {
                 sb.AppendLine()
-                    .Append(Linguistics.GenderType.Grammarify(ShortForm))
+                    .Append(linguistics.GenderType.Grammarify(ShortForm))
                     .Append(SpacedArrow)
                     .Append(GenderForm);
             }
@@ -115,7 +115,7 @@ namespace FasType.Core.Models.Abbreviations
             if (HasPlural)
             {
                 sb.AppendLine()
-                    .Append(Linguistics.PluralType.Grammarify(ShortForm))
+                    .Append(linguistics.PluralType.Grammarify(ShortForm))
                     .Append(SpacedArrow)
                     .Append(PluralForm);
             }
@@ -123,7 +123,7 @@ namespace FasType.Core.Models.Abbreviations
             if (HasGenderPlural)
             {
                 sb.AppendLine()
-                    .Append(Linguistics.GenderPluralType.Grammarify(ShortForm))
+                    .Append(linguistics.GenderPluralType.Grammarify(ShortForm))
                     .Append(SpacedArrow)
                     .Append(GenderPluralForm);
             }

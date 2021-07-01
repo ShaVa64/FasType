@@ -12,15 +12,12 @@ namespace FasType.Converters.Xaml
     {
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Models.Linguistics.SyllablePosition p)
-                return p == Models.Linguistics.SyllablePosition.None ? System.Windows.Media.Brushes.Red : System.Windows.Media.Brushes.Gray;
+            if (value is Core.Models.Linguistics.SyllablePosition p)
+                return p == Core.Models.Linguistics.SyllablePosition.None ? System.Windows.Media.Brushes.Red : System.Windows.Media.Brushes.Gray;
 
             return null;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 }

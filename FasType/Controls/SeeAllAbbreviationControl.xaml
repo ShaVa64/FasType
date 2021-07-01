@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FasType.Controls" xmlns:mdl="clr-namespace:FasType.Models.Abbreviations"
+             xmlns:local="clr-namespace:FasType.Controls" xmlns:mdl="clr-namespace:FasType.Core.Models.Abbreviations;assembly=FasType.Core"
              xmlns:cvt="clr-namespace:FasType.Converters.Xaml"
              d:DataContext="{d:DesignInstance mdl:BaseAbbreviation}"
              mc:Ignorable="d"

@@ -1,8 +1,9 @@
-﻿using FasType.Models;
+﻿using FasType.Core.Models;
+using FasType.Models;
 using FasType.Utils;
-using FasType.Models.Linguistics;
+using FasType.Core.Models.Linguistics;
 using FasType.Properties;
-using FasType.Storage;
+using FasType.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,27 +11,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using FasType.Services;
 
 namespace FasType.ViewModels
 {
     public class AbbreviationMethodsViewModel : ObservableObject
     {
-        readonly ILinguisticsStorage _storage;
-        readonly AbbreviationMethodRecord[] _arr;
+        readonly IRepositoriesManager _repositories;
+        readonly AbbreviationMethod[] _arr;
         ObservableCollection<AbbreviationMethod> _syllables;
 
-        public string Title => Resources.AbbreviationMethod + $"  ({Syllables.Count})";
+        public string Title => Resources.AbbreviationMethod + $"  ({AbbreviationMethods.Count})";
         public Command<Window> SaveCommand { get; }
         public Command<AbbreviationMethod> RemoveSyllableCommand { get; }
         public Command AddSyllableCommand { get; }
-        public ObservableCollection<AbbreviationMethod> Syllables { get => _syllables; set => SetProperty(ref _syllables, value); }
+        public ObservableCollection<AbbreviationMethod> AbbreviationMethods { get => _syllables; set => SetProperty(ref _syllables, value); }
 
-        public AbbreviationMethodsViewModel(ILinguisticsStorage storage)
+        public AbbreviationMethodsViewModel(IRepositoriesManager repositories)
         {
-            _storage = storage;
-            _arr = _storage.AbbreviationMethods.Cast<AbbreviationMethodRecord>().OrderBy(amr => amr.ShortForm).ThenBy(amr => amr.FullForm).ToArray();
-            Syllables = new(_storage.AbbreviationMethods);//new(UserGrammar.SyllabesAbbreviations.Cast<SyllableAbbreviation>());
+            _repositories = repositories;
+            _arr = _repositories.Linguistics.AbbreviationMethods.OrderBy(amr => amr.ShortForm).ThenBy(amr => amr.FullForm).ToArray();
+            AbbreviationMethods = new(_repositories.Linguistics.AbbreviationMethods);
             _ = _syllables ?? throw new NullReferenceException();
 
             AddSyllableCommand = new(AddSyllable);
@@ -40,7 +40,7 @@ namespace FasType.ViewModels
 
         void AddSyllable()
         {
-            Syllables.Add(new(Guid.NewGuid(), string.Empty, string.Empty, SyllablePosition.None));//Syllables.Add(new(Guid.NewGuid(), "a", "a", SyllablePosition.In));
+            AbbreviationMethods.Add(new(Guid.NewGuid(), string.Empty, string.Empty, SyllablePosition.None));//Syllables.Add(new(Guid.NewGuid(), "a", "a", SyllablePosition.In));
             OnPropertyChanged(nameof(Title));
         }
 
@@ -51,7 +51,7 @@ namespace FasType.ViewModels
     
             if (r == MessageBoxResult.Yes)
             {
-                Syllables.Remove(sa);
+                AbbreviationMethods.Remove(sa);
                 OnPropertyChanged(nameof(Title));
             }
         }
@@ -59,13 +59,13 @@ namespace FasType.ViewModels
         bool CanSaveSyllable(AbbreviationMethod sa) => !string.IsNullOrEmpty(sa.ShortForm) && !string.IsNullOrEmpty(sa.FullForm) && sa.Position != SyllablePosition.None;
         bool CanSave()
         {
-            if (!Syllables.All(CanSaveSyllable))
+            if (!AbbreviationMethods.All(CanSaveSyllable))
                 return false;
 
-            if (Syllables.Count != _arr.Length)
+            if (AbbreviationMethods.Count != _arr.Length)
                 return true;
 
-            if (Syllables.Any(sa => !_arr.Contains((AbbreviationMethodRecord)sa)))
+            if (AbbreviationMethods.Any(sa => !_arr.Contains(sa)))
                 return true;
 
             return false;
@@ -73,7 +73,8 @@ namespace FasType.ViewModels
         void Save(Window? w)
         {
             _ = w ?? throw new NullReferenceException();
-            _storage.AbbreviationMethods = Syllables;
+            _repositories.Linguistics.AbbreviationMethods = AbbreviationMethods;
+            _repositories.Linguistics.SaveChanges();
             w.Close();
         }
     }

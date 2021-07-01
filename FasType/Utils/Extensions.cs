@@ -6,8 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using FasType.Models.Linguistics;
-using FasType.Models.Linguistics.Grammars;
 
 namespace FasType.Utils
 {
@@ -19,10 +17,10 @@ namespace FasType.Utils
 
     public static class AbbreviationExtensions
     {
-        public static Type GetModifyPageType(this Models.Abbreviations.BaseAbbreviation ba) => ba switch
+        public static Type GetModifyPageType(this Core.Models.Abbreviations.BaseAbbreviation ba) => ba switch
         {
-            Models.Abbreviations.SimpleAbbreviation => typeof(Pages.SimpleAbbreviationPage),
-            Models.Abbreviations.VerbAbbreviation => throw new NotImplementedException(),
+            Core.Models.Abbreviations.SimpleAbbreviation => typeof(Pages.SimpleAbbreviationPage),
+            Core.Models.Abbreviations.VerbAbbreviation => throw new NotImplementedException(),
             _ => throw new NotImplementedException(),
         };
     }
@@ -55,14 +53,14 @@ namespace FasType.Utils
         }
     }
 
-    public static class LinqExtensions
-    {
-        public static IEnumerable<T> Cast<T>(this IEnumerable<AbbreviationMethodRecord> enumerable) where T : AbbreviationMethod => enumerable.Select(sar => (T)sar);
-        public static IEnumerable<T> Cast<T>(this IEnumerable<AbbreviationMethod> enumerable) where T : AbbreviationMethodRecord => enumerable.Select(sa => (T)sa);
+    //public static class LinqExtensions
+    //{
+    //    public static IEnumerable<T> Cast<T>(this IEnumerable<AbbreviationMethodRecord> enumerable) where T : AbbreviationMethod => enumerable.Select(sar => (T)sar);
+    //    public static IEnumerable<T> Cast<T>(this IEnumerable<AbbreviationMethod> enumerable) where T : AbbreviationMethodRecord => enumerable.Select(sa => (T)sa);
 
-        public static IEnumerable<T> Cast<T>(this IEnumerable<GrammarTypeRecord> enumerable) where T : GrammarType => enumerable.Select(gtr => (T)gtr);
-        public static IEnumerable<T> Cast<T>(this IEnumerable<GrammarType> enumerable) where T : GrammarTypeRecord => enumerable.Select(gt => (T)gt);
-    }
+    //    public static IEnumerable<T> Cast<T>(this IEnumerable<GrammarTypeRecord> enumerable) where T : GrammarType => enumerable.Select(gtr => (T)gtr);
+    //    public static IEnumerable<T> Cast<T>(this IEnumerable<GrammarType> enumerable) where T : GrammarTypeRecord => enumerable.Select(gt => (T)gt);
+    //}
 
     public static class ComboBoxExtensions
     {

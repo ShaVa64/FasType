@@ -1,6 +1,5 @@
 ﻿using FasType.Models;
-using FasType.Models.Abbreviations;
-using FasType.Services;
+using FasType.Core.Models.Abbreviations;
 using FasType.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FasType.Core.Services;
 
 namespace FasType.Pages
 {
@@ -35,10 +35,12 @@ namespace FasType.Pages
 
     public partial class SimpleAbbreviationPage : AbbreviationPage
     {
-        SimpleAbbreviationViewModel _currentVm;
+        private readonly IRepositoriesManager _repositories;
+        private SimpleAbbreviationViewModel _currentVm;
 
-        public SimpleAbbreviationPage(AddSimpleAbbreviationViewModel addVm)
+        public SimpleAbbreviationPage(IRepositoriesManager repositories, AddSimpleAbbreviationViewModel addVm)
         {
+            _repositories = repositories;
             InitializeComponent();
 
             DataContext = _currentVm = addVm;
@@ -47,20 +49,11 @@ namespace FasType.Pages
         }
 
         public override void SetModifyAbbreviation(BaseAbbreviation ba) => SetModifyAbbreviation((SimpleAbbreviation)ba);
-        public void SetModifyAbbreviation(SimpleAbbreviation abbrev)
-        {
-            DataContext = _currentVm = new ModifySimpleAbbreviationViewModel(abbrev);
-
-            //_currentVm.ShortForm = abbrev.ShortForm;
-            //_currentVm.FullForm = abbrev.FullForm;
-            //_currentVm.GenderForm = abbrev.GenderForm;
-            //_currentVm.PluralForm = abbrev.PluralForm;
-            //_currentVm.GenderPluralForm = abbrev.GenderPluralForm;
-        }
+        public void SetModifyAbbreviation(SimpleAbbreviation abbrev) => DataContext = _currentVm = new ModifySimpleAbbreviationViewModel(_repositories, abbrev);
         public override void SetNewAbbreviation(string shortForm, string fullForm, params string[] others) => SetNewAbbreviation(shortForm, fullForm, others.Length >= 1 ? others[0] : string.Empty, others.Length >= 2 ? others[1] : string.Empty, others.Length >= 3 ? others[2] : string.Empty);
         public void SetNewAbbreviation(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm)
         {
-            DataContext = _currentVm = new AddSimpleAbbreviationViewModel(shortForm, fullForm, genderForm, pluralForm, genderPluralForm);
+            DataContext = _currentVm = new AddSimpleAbbreviationViewModel(_repositories, shortForm, fullForm, genderForm, pluralForm, genderPluralForm);
             if (!string.IsNullOrEmpty(fullForm))
                 MainButton.Focus();
         }

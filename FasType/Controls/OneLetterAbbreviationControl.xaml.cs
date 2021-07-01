@@ -1,5 +1,5 @@
 ﻿using FasType.Models;
-using FasType.Models.Abbreviations;
+using FasType.Core.Models.Abbreviations;
 using System;
 using System.Collections.Generic;
 using System.Linq;

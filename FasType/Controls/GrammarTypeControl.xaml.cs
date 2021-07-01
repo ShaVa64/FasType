@@ -1,4 +1,4 @@
-﻿using FasType.Models.Linguistics.Grammars;
+﻿using FasType.Core.Models.Linguistics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,13 +27,7 @@ namespace FasType.Controls
         public string GrammarTypeName
         {
             get => (string)GetValue(GrammarTypeNameProperty);
-            set
-            {
-                SetValue(GrammarTypeNameProperty, value);
-                //string oldVal = NameTextBlock.Text;
-                //NameTextBlock.Text = value;
-                //OnPropertyChanged(new(GrammarTypeNameProperty, oldVal, value));
-            }
+            set => SetValue(GrammarTypeNameProperty, value);
         }
         public int MaxLength
         {
