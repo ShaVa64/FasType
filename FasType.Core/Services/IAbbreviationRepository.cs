@@ -16,11 +16,11 @@ namespace FasType.Core.Services
         IEnumerable<BaseAbbreviation> GetAbbreviations(string shortForm);
     }
 
-    public class AbbreviationRepository : GenericRepository<BaseAbbreviation, Guid, AbbreviationDbContext>, IAbbreviationRepository
+    public class AbbreviationRepository : GenericRepository<BaseAbbreviation, Guid, AbbreviationsDbContext>, IAbbreviationRepository
     {
         readonly ILinguisticsRepository _linguistics;
 
-        public AbbreviationRepository(ILinguisticsRepository linguistics, AbbreviationDbContext context) : base(context)
+        public AbbreviationRepository(ILinguisticsRepository linguistics, AbbreviationsDbContext context) : base(context)
         {
             _linguistics = linguistics;
         }

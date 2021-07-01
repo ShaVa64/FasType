@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace FasType.Core.Contexts
 {
-    public class AbbreviationDbContext : DbContext
+    public class AbbreviationsDbContext : DbContext
     {
         public DbSet<BaseAbbreviation> Abbreviations { get; set; }
 
-        public AbbreviationDbContext(DbContextOptions<AbbreviationDbContext> options) : base(options)
+        public AbbreviationsDbContext(DbContextOptions<AbbreviationsDbContext> options) : base(options)
         {
             _ = Abbreviations ?? throw new NullReferenceException();
         }

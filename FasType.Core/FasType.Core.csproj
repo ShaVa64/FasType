@@ -19,4 +19,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contexts\Migrations\AbbreviationsDbContext\" />
+    <Folder Include="Contexts\Migrations\DictionaryDbContext\" />
+    <Folder Include="Contexts\Migrations\LinguisticsDbContext\" />
+  </ItemGroup>
+
 </Project>
