@@ -84,7 +84,7 @@ namespace FasType
             //services.AddTransient<IDataStorage, EFSqliteStorage>();
             services.AddDbContext<DictionaryDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DictionaryConnection")));
             services.AddDbContext<LinguisticsDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("LinguisticsConnection")));
-            services.AddDbContext<AbbreviationsDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("AbbreviationConnection")));
+            services.AddDbContext<AbbreviationsDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("AbbreviationsConnection")));
 
             services.AddScoped<IDictionaryRepository, DictionaryRepository>();
             services.AddScoped<ILinguisticsRepository, LinguisticsRepository>();

@@ -29,6 +29,11 @@ namespace FasType.Core.Contexts
 
                 b.Property(am => am.ShortForm).HasMaxLength(10).IsRequired();
                 b.Property(am => am.FullForm).HasMaxLength(20).IsRequired();
+                b.Property(am => am.Position);
+
+                b.Ignore(am => am.IsBefore)
+                 .Ignore(am => am.IsIn)
+                 .Ignore(am => am.IsAfter);
 
                 b.ToTable(nameof(AbbreviationMethods));
             });
