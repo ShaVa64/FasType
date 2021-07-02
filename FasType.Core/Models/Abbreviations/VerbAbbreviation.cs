@@ -18,7 +18,7 @@ namespace FasType.Core.Models.Abbreviations
         public override bool IsAbbreviation(string shortForm, ILinguisticsRepository linguistics) => throw new NotImplementedException();
         public override bool TryGetFullForm(string shortForm, ILinguisticsRepository linguistics, [NotNullWhen(true)] out string? fullForm) => throw new NotImplementedException();
 
-        protected override string GetComplexRepresentation(ILinguisticsRepository linguistics) => throw new NotImplementedException();
+        public override string GetComplexRepresentation(ILinguisticsRepository linguistics) => throw new NotImplementedException();
         protected override string GetElementaryRepresentation() => throw new NotImplementedException();
     }
 }

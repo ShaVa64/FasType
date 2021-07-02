@@ -12,10 +12,6 @@ namespace FasType.Core.Models.Abbreviations
     [DebuggerDisplay("{" + nameof(ElementaryRepresentation) + "}")]
     public abstract class BaseAbbreviation
     {
-        //public static readonly BaseAbbreviation OtherAbbreviation = new SimpleAbbreviation("", Properties.Resources.Other, 0, "", "", "");
-
-        //protected static ILinguisticsStorage Linguistics => App.Current.ServiceProvider.GetRequiredService<ILinguisticsStorage>();
-
         protected static readonly int _stringKeyLength = 2;
         protected static readonly string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
 
@@ -43,6 +39,6 @@ namespace FasType.Core.Models.Abbreviations
         public abstract bool TryGetFullForm(string shortForm, ILinguisticsRepository linguistics, [NotNullWhen(true)] out string? fullForm);
 
         protected abstract string GetElementaryRepresentation();
-        protected abstract string GetComplexRepresentation(ILinguisticsRepository linguistics);
+        public abstract string GetComplexRepresentation(ILinguisticsRepository linguistics);
     }
 }

@@ -97,7 +97,7 @@ namespace FasType.Core.Models.Abbreviations
             return sb.ToString();
         }
 
-        protected override string GetComplexRepresentation(ILinguisticsRepository linguistics)
+        public override string GetComplexRepresentation(ILinguisticsRepository linguistics)
         {
             StringBuilder sb = new();
 

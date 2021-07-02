@@ -17,31 +17,33 @@ namespace FasType.ViewModels
 {
     public class OneLettersViewModel : ObservableObject
     {
-        readonly static string _soloLetters;
-        readonly IRepositoriesManager _repositories;
-        ObservableCollection<BaseAbbreviation>? _oneLetters;
+        private readonly static string _soloLetters;
+        private readonly IRepositoriesManager _repositories;
+        private ObservableCollection<OneLettersAbbreviationViewModel> _oneLetters;
 
-        public ObservableCollection<BaseAbbreviation>? OneLetters { get => _oneLetters; set => SetProperty(ref _oneLetters, value); }
+        public ObservableCollection<OneLettersAbbreviationViewModel> OneLetters { get => _oneLetters; set => SetProperty(ref _oneLetters, value); }
         public Command<BaseAbbreviation> OpenAbbreviationPageCommand { get; }
 
         static OneLettersViewModel() => _soloLetters = @"befghikopqruvwxzéèçù";
         public OneLettersViewModel(IRepositoriesManager repositories)
         {
             _repositories = repositories;
+            _oneLetters = new();
             Init();
 
             OpenAbbreviationPageCommand = new(OpenAbbreviationPage, CanOpenAbbreviationPage);
         }
 
-        //void Init(object sender, EventArgs e) => Init();
-        void Init()
+        private void Init()
         {
             var ee = _soloLetters.Select(c => _repositories.Abbreviations[c.ToString()]).SelectMany((ba, i) => !ba.Any() ? Enumerable.Repeat(new SimpleAbbreviation($"{_soloLetters[i]}", "", 0, "", "", ""), 1) : ba);
-            OneLetters = new(ee);
+
+            var vms = ee.Select(ba => new OneLettersAbbreviationViewModel(_repositories, ba, OpenAbbreviationPageCommand));
+            OneLetters = new(vms);
         }
 
-        bool CanOpenAbbreviationPage() => !Windows.AbbreviationWindow.IsOpen;
-        void OpenAbbreviationPage(BaseAbbreviation? abbrev)
+        private bool CanOpenAbbreviationPage() => !Windows.AbbreviationWindow.IsOpen;
+        private void OpenAbbreviationPage(BaseAbbreviation? abbrev)
         {
             _ = abbrev ?? throw new ArgumentNullException(nameof(abbrev));
 
@@ -49,10 +51,20 @@ namespace FasType.ViewModels
             var t = abbrev.GetModifyPageType();
             var p = (AbbreviationPage)App.Current.ServiceProvider.GetRequiredService(t);
 
-            p.SetModifyAbbreviation(abbrev);
+            if (abbrev.FullForm != string.Empty)
+            {
+                p.SetModifyAbbreviation(abbrev);
+            }
+            else
+            {
+                p.SetNewAbbreviation(abbrev.ShortForm, string.Empty);
+            }
 
             aaw.Content = p;
-            aaw.Closed += delegate { Init(); };
+            aaw.Closed += delegate
+            {
+                Init();
+            };
             aaw.Show();
         }
     }

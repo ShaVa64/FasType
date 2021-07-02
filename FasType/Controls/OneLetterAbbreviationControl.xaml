@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FasType.Controls" xmlns:prop="clr-namespace:FasType.Properties"
+             xmlns:local="clr-namespace:FasType.Controls" xmlns:prop="clr-namespace:FasType.Properties" 
+             xmlns:viewmodels="clr-namespace:FasType.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:OneLettersAbbreviationViewModel}"
              mc:Ignorable="d" x:Name="CustomControl"
              d:DesignHeight="450" d:DesignWidth="800">
     
@@ -15,8 +16,8 @@
         
         <TextBlock Grid.Column="0" Text="{Binding ComplexRepresentation}" TextAlignment="Center" 
                    VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <Button Grid.Column="1" Content="{x:Static prop:Resources.Modify}" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                Padding="10, 2"  CommandParameter="{Binding .}"
-                Command="{Binding ElementName=CustomControl, Path='ModifyCommand'}"/>
+        <Button Grid.Column="1" Content="{Binding ButtonText}" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                Padding="10, 2"  CommandParameter="{Binding Abbreviation}"
+                Command="{Binding PageCommand}"/>
     </Grid>
 </UserControl>

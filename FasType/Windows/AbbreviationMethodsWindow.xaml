@@ -22,7 +22,7 @@
 
         <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Disabled"  VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical" Margin="5">
-                <ItemsControl HorizontalContentAlignment="Stretch" ItemsSource="{Binding Syllables}">
+                <ItemsControl HorizontalContentAlignment="Stretch" ItemsSource="{Binding AbbreviationMethods}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>

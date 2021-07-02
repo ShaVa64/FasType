@@ -29,8 +29,8 @@ namespace FasType.ViewModels
         public AbbreviationMethodsViewModel(IRepositoriesManager repositories)
         {
             _repositories = repositories;
-            _arr = _repositories.Linguistics.AbbreviationMethods.OrderBy(amr => amr.ShortForm).ThenBy(amr => amr.FullForm).ToArray();
-            AbbreviationMethods = new(_repositories.Linguistics.AbbreviationMethods);
+            _arr = _repositories.Linguistics.AbbreviationMethods.ToArray();
+            AbbreviationMethods = new(_repositories.Linguistics.AbbreviationMethods.OrderBy(amr => amr.ShortForm).ThenBy(amr => amr.FullForm));
             _ = _syllables ?? throw new NullReferenceException();
 
             AddSyllableCommand = new(AddSyllable);
