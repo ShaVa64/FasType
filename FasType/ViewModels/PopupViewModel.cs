@@ -59,7 +59,7 @@ namespace FasType.ViewModels
             currentWord = currentWord.ToLower();
             var l = _repositories.Linguistics.Words(currentWord).Select(s => "^" + s + "$").ToList();
 
-            _elements = l.SelectMany(s => _repositories.Dictionary.GetElementsFromRegex(s) ?? Array.Empty<BaseDictionaryElement>()).Distinct().ToArray();
+            _elements = l.SelectMany(s => _repositories.Dictionary.GetElementsFromRegex(s) ?? Array.Empty<BaseDictionaryElement>()).Distinct().OrderBy(bde => bde.FullForm).ToArray();
 
             Collection = new ObservableCollection<BaseDictionaryElement>(_elements)
             {

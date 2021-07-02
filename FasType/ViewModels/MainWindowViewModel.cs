@@ -189,7 +189,7 @@ namespace FasType.ViewModels
 
                 if (abbrevs.Count == 0)
                 {
-                    if (Properties.Settings.Default.AbbrevsAutoCreation && !_repositories.Dictionary.Contains(shortForm))
+                    if (Properties.Settings.Default.AbbrevsAutoCreation)// && !_repositories.Dictionary.Contains(shortForm))
                     {
                         e.StopChain = true;
                         var window = App.Current.ServiceProvider.GetRequiredService<PopupWindow>();

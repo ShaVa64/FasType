@@ -23,9 +23,9 @@ namespace FasType.Core.Contexts
 
             modelBuilder.Entity<BaseAbbreviation>(b =>
             {
-                b.HasKey(a => a.Id);
+                b.HasKey(a => a.Key);
 
-                b.Property(a => a.Id).ValueGeneratedOnAdd().IsRequired();
+                b.Property(a => a.Key).ValueGeneratedOnAdd().IsRequired();
                 b.Property(a => a.ShortForm).HasMaxLength(50).IsRequired();
                 b.Property(a => a.FullForm).HasMaxLength(50).IsRequired();
                 b.Property(a => a.Used).IsRequired();
@@ -42,10 +42,10 @@ namespace FasType.Core.Contexts
                 b.Property(a => a.GenderPluralForm).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<VerbAbbreviation>(b =>
-            {
-                b.HasBaseType<BaseAbbreviation>();
-            });
+            //modelBuilder.Entity<VerbAbbreviation>(b =>
+            //{
+            //    b.HasBaseType<BaseAbbreviation>();
+            //});
         }
     }
 }

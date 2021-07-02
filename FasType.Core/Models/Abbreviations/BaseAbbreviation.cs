@@ -19,7 +19,7 @@ namespace FasType.Core.Models.Abbreviations
         protected static readonly int _stringKeyLength = 2;
         protected static readonly string SpacedArrow = $" {Utils.Unicodes.Arrow} ";
 
-        public Guid Id { get; private set; }
+        public Guid Key { get; private set; }
         public string ShortForm { get; private set; }
         public string FullForm { get; private set; }
         public ulong Used { get; private set; }
