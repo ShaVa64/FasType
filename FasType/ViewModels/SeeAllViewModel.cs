@@ -34,6 +34,8 @@ namespace FasType.ViewModels
             }
         }
 
+        public ILinguisticsRepository Linguistics => _repositories.Linguistics;
+
         public string QueryString
         {
             get => _queryString;

@@ -47,12 +47,14 @@ namespace FasType.ViewModels
                 MessageBox.Show(DialogResources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
+            //TODO: Change Replacement Check
             if (_repositories.Abbreviations.Contains(CurrentAbbrev))
             {
                 var message = string.Format(DialogResources.AlreadyExistsErrorFormat, FullForm, Environment.NewLine);
                 var res = MessageBox.Show(message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No);
                 if (res == MessageBoxResult.No)
                     return;
+
                 _repositories.Abbreviations.Update(CurrentAbbrev);
             }
             else
@@ -105,8 +107,7 @@ namespace FasType.ViewModels
             }
 
             //TODO: Here
-            //Preview = CurrentAbbrev.GetComplexRepresentation();
-            //Preview = CurrentAbbrev.ComplexRepresentation;
+            Preview = CurrentAbbrev.GetComplexRepresentation(_repositories.Linguistics);
         }
     }
 
@@ -134,12 +135,21 @@ namespace FasType.ViewModels
                 MessageBox.Show(DialogResources.EmptyAbbrevDialog, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 return;
             }
-            _repositories.Abbreviations.Update(CurrentAbbrev);
+
+            var modify = _toModify.With(ShortForm ?? "", FullForm ?? "", GenderForm ?? "", PluralForm ?? "", GenderPluralForm ?? "");
+            _repositories.Abbreviations.Update(modify);
             _repositories.Abbreviations.SaveChanges();
 
             CheckDictionaryAdd();
-            w.DialogResult = true;
-            w.Close();
+            try
+            {
+                w.DialogResult = true;
+            }
+            catch { }
+            finally
+            {
+                w.Close();
+            }
         }
 
         protected override void SetPreview()
@@ -166,7 +176,7 @@ namespace FasType.ViewModels
                                                     PluralForm ?? throw new NullReferenceException(),
                                                     GenderPluralForm ?? throw new NullReferenceException());
             //TODO: Here
-            //Preview = CurrentAbbrev.ComplexRepresentation;
+            Preview = CurrentAbbrev.GetComplexRepresentation(_repositories.Linguistics);
         }
     }
 

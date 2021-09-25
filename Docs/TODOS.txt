@@ -1,5 +1,4 @@
 TODOS:
-- Sololetters window button to "add" missing abbreviations
 - () -> "beaucoups doesn't exist in dictionary are you sure ?"
 - In all window add button to change abbrev
 - Remove all sololetters from dictionary
@@ -29,6 +28,7 @@ MISSES: -----> Ok if double wildcard (except entousiaste)
 - "rmrqb" -> "remarquable"
 
 DONES:
+- Sololetters window button to "add" missing abbreviations
 - Openable twice
 - Dictionary != Abbreviations (eg. "bc" -> "beaucoups")
 - Sololetters window

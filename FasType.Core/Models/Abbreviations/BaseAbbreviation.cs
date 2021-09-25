@@ -29,6 +29,11 @@ namespace FasType.Core.Models.Abbreviations
             Used = used;
         }
 
+        protected BaseAbbreviation(Guid key, string shortForm, string fullForm, ulong used) : this(shortForm, fullForm, used)
+        {
+            Key = key;
+        }
+
         public string ElementaryRepresentation => GetElementaryRepresentation();
         //public string ComplexRepresentation => GetComplexRepresentation();
 

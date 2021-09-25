@@ -21,10 +21,20 @@ namespace FasType.Core.Models.Abbreviations
         public SimpleAbbreviation(string shortForm, string fullForm, ulong used, string genderForm, string pluralForm, string genderPluralForm)
             : base(shortForm.ToLower(), fullForm, used)
         {
-            PluralForm = pluralForm;
             GenderForm = genderForm;
+            PluralForm = pluralForm;
             GenderPluralForm = genderPluralForm;
         }
+
+        private SimpleAbbreviation(Guid key, string shortForm, string fullForm, ulong used, string genderForm, string pluralForm, string genderPluralForm)
+            : base(key, shortForm, fullForm, used)
+        {
+            GenderForm = genderForm;
+            PluralForm = pluralForm;
+            GenderPluralForm = genderPluralForm;
+        }
+
+        public SimpleAbbreviation With(string shortForm, string fullForm, string genderForm, string pluralForm, string genderPluralForm) => new(Key, shortForm, fullForm, Used, genderForm, pluralForm, genderPluralForm);
 
         public override bool IsAbbreviation(string shortForm, ILinguisticsRepository linguistics)
         {

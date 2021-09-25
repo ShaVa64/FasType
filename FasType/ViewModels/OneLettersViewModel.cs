@@ -29,9 +29,9 @@ namespace FasType.ViewModels
         {
             _repositories = repositories;
             _oneLetters = new();
-            Init();
-
             OpenAbbreviationPageCommand = new(OpenAbbreviationPage, CanOpenAbbreviationPage);
+
+            Init();
         }
 
         private void Init()
@@ -63,6 +63,7 @@ namespace FasType.ViewModels
             aaw.Content = p;
             aaw.Closed += delegate
             {
+                _repositories.Reload();
                 Init();
             };
             aaw.Show();
