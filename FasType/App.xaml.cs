@@ -199,73 +199,77 @@ namespace FasType
             }
         }
 
-        void I()
-        {
-            using var _context = ServiceProvider.GetRequiredService<DictionaryDbContext>();
-            var l = new List<Core.Models.Dictionary.BaseDictionaryElement>();
-            string fp = @"D:\Visual Studio Projects\FasType\Docs\Lexique383.tsv";
+        //void I()
+        //{
+        //    using var _context = ServiceProvider.GetRequiredService<DictionaryDbContext>();
+        //    var l = new List<Core.Models.Dictionary.BaseDictionaryElement>();
+        //    string fp = @"D:\Visual Studio Projects\FasType\Docs\Lexique383.tsv";
 
-            var lines = System.IO.File.ReadAllLines(fp).Skip(1).ToArray();
-            var xs = lines.Select(s => s.Split('\t')).Select(t => new TempA(t[0], t[2], t[3], t[4], t[5])).ToList();
+        //    var lines = System.IO.File.ReadAllLines(fp).Skip(1).ToArray();
+        //    var xs = lines.Select(s => s.Split('\t')).Select(t => new TempA(t[0], t[2], t[3], t[4], t[5])).ToList();
 
-            var ks = xs.Select(x => x.T).Distinct().ToList();
-            var rs = xs.Where(x => x.T != "VER" && x.T != "AUX").ToList();
+        //    var ks = xs.Select(x => x.T).Distinct().ToList();
+        //    var rs = xs.Where(x => x.T != "VER" && x.T != "AUX").ToList();
 
-            var ts = rs.Select(x => x.T).Distinct().Select(t => new { T = t, N = rs.Count(x => x.T == t) }).OrderByDescending(x => x.N).Select(x => $"{x.T}, ({x.N})").ToList();
+        //    var ts = rs.Select(x => x.T).Distinct().Select(t => new { T = t, N = rs.Count(x => x.T == t) }).OrderByDescending(x => x.N).Select(x => $"{x.T}, ({x.N})").ToList();
 
-            var gs = rs.GroupBy(x => x.B + "," + x.T).ToList();
-            var os = gs.Where(g => g.Count() >= 5).ToList();
+        //    var gs = rs.GroupBy(x => x.B + "," + x.T).ToList();
+        //    var os = gs.Where(g => g.Count() >= 5).ToList();
 
-            //gs = gs.Where(g => g.Count() < 5).ToList();
+        //    //gs = gs.Where(g => g.Count() < 5).ToList();
 
-            var keys = gs.Select(g => g.Key[..g.Key.LastIndexOf(',')]/*.Split(',')[0]*/).ToList();
-            var ggs = rs.GroupBy(a => a.B).ToList();
-            //var tmps = ggs.Select(g => ToBDE(g)).Where(t => t != null).ToArray();
-            var ll = new List<IGrouping<string, TempA>>();
-            foreach (var gg in gs)
-            {
-                var tmp = ToBDE(gg);
-                if (tmp == null)
-                {
-                    ll.Add(gg);
-                    continue;
-                }
-                int index;
-                if ((index = l.IndexOf(tmp)) != -1)
-                {
-                    var other = l[index];
-                    if (other.AllForms.Count(s => s != "") < tmp.AllForms.Count(s => s != ""))
-                    {
-                        l.Remove(other);
-                        l.Add(tmp);
-                    }
-                }
-                else
-                {
-                    l.Add(tmp);
-                }
-            }
-            //(40656) 19911 - 24180 - 27507 - 27509 - 38613 - 40563 - 40505
+        //    var keys = gs.Select(g => g.Key[..g.Key.LastIndexOf(',')]/*.Split(',')[0]*/).ToList();
+        //    var ggs = rs.GroupBy(a => a.B).ToList();
+        //    //var tmps = ggs.Select(g => ToBDE(g)).Where(t => t != null).ToArray();
+        //    var ll = new List<IGrouping<string, TempA>>();
+        //    foreach (var gg in gs)
+        //    {
+        //        var tmp = ToBDE(gg);
+        //        if (tmp == null)
+        //        {
+        //            ll.Add(gg);
+        //            continue;
+        //        }
+        //        int index;
+        //        if ((index = l.IndexOf(tmp)) != -1)
+        //        {
+        //            var other = l[index];
+        //            if (other.AllForms.Count(s => s != "") < tmp.AllForms.Count(s => s != ""))
+        //            {
+        //                l.Remove(other);
+        //                l.Add(tmp);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (tmp.FullForm.Length == 1 && tmp.Others.All(s => s.Length <= 1))
+        //                continue;
 
-            //var nggs = rs.Where(a => !keys.Contains(a.B)).GroupBy(a => a.B).ToList();
+        //            l.Add(tmp);
+        //        }
+        //    }
+        //    l.Add(new Core.Models.Dictionary.SimpleDictionaryElement("ne", "", "", ""));
+        //    //(40656) 19911 - 24180 - 27507 - 27509 - 38613 - 40563 - 40505
+
+        //    //var nggs = rs.Where(a => !keys.Contains(a.B)).GroupBy(a => a.B).ToList();
 
 
-            //var gggs = rs.GroupBy(a => a.B).ToList();
+        //    //var gggs = rs.GroupBy(a => a.B).ToList();
 
-            //var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
-            //var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
+        //    //var ds = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() >= 2).ToList();
+        //    //var ss = ggs.Where(gg => gg.Select(a => a.T).Distinct().Count() < 2).ToList();
 
-            //var r = ss.Where(g => g.Key.Contains("complot")).ToList();
+        //    //var r = ss.Where(g => g.Key.Contains("complot")).ToList();
 
-            //var solos = ss.Where(g => g.Key.Distinct().Count() == 1).ToList();
+        //    //var solos = ss.Where(g => g.Key.Distinct().Count() == 1).ToList();
 
-            //var vs = ggs.Where(gg => gg.Any(a => a.T.Contains("PRO"))).ToList();
+        //    //var vs = ggs.Where(gg => gg.Any(a => a.T.Contains("PRO"))).ToList();
 
-            //_context.Dictionary.RemoveRange(_context.Dictionary);
-            //int r1 = _context.SaveChanges();
-            //_context.Dictionary.AddRange(l);
-            //int r2 = _context.SaveChanges();
-        }
+        //    //_context.Dictionary.RemoveRange(_context.Dictionary);
+        //    //int r1 = _context.SaveChanges();
+        //    //_context.Dictionary.AddRange(l);
+        //    //int r2 = _context.SaveChanges();
+        //}
 
         //void H()
         //{

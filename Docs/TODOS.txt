@@ -1,11 +1,11 @@
 TODOS:
 - () -> "beaucoups doesn't exist in dictionary are you sure ?"
-- In all window add button to change abbrev
 - Remove all sololetters from dictionary
 - Add "ne" row in dictionary (maybe from emmanuel's docs)
+
+
+- In see all window add button to change abbrev
 - Add alphabetical order abbreviation methods window
-
-
 - Esc to cancel popup
 
 POINTS:
