@@ -12,6 +12,10 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
+using FasType.Utils;
+using FasType.Pages;
+using FasType.Windows;
 
 namespace FasType.ViewModels
 {
@@ -59,12 +63,14 @@ namespace FasType.ViewModels
         }
 
         public Command<BaseAbbreviation> RemoveCommand { get; }
+        public Command<BaseAbbreviation> ChangeCommand { get; }
 
         public SeeAllViewModel(IRepositoriesManager repositories)
         {
             _repositories = repositories;
 
             RemoveCommand = new(Remove, CanRemove);
+            ChangeCommand = new(Change, CanChange);
             _queryString = "";
             OrderAbbreviations();
             _ = _allAbbreviations ?? throw new NullReferenceException();
@@ -101,6 +107,25 @@ namespace FasType.ViewModels
             _repositories.Abbreviations.Remove(abbrev);
             _repositories.Abbreviations.SaveChanges();
             OrderAndFilterAbbreviations();
+        }
+        bool CanChange() => !AbbreviationWindow.IsOpen;
+        void Change(BaseAbbreviation? abbrev)
+        {
+            _ = abbrev ?? throw new NullReferenceException();
+
+            var aaw = App.Current.ServiceProvider.GetRequiredService<AbbreviationWindow>();
+            var t = abbrev.GetModifyPageType();
+            var p = (AbbreviationPage)App.Current.ServiceProvider.GetRequiredService(t);
+
+            p.SetModifyAbbreviation(abbrev);
+
+            aaw.Content = p;
+            bool? changed = aaw.ShowDialog();
+            if (changed == true)
+            {
+                _repositories.Reload();
+                OrderAndFilterAbbreviations();
+            }
         }
         public enum FormOrderBy
         {

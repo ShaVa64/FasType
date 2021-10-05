@@ -10,6 +10,15 @@
         <LineGeometry StartPoint="0, 0.5" EndPoint="1, 0.5" />
         <LineGeometry StartPoint="0.5, 0" EndPoint="0.5, 1" />
     </GeometryGroup>
+    <GeometryGroup x:Key="PenGeometry">
+        <LineGeometry StartPoint="1.0, 0.3" EndPoint="0.7, 0.0" />
+        <LineGeometry StartPoint="0.7, 0.0" EndPoint="0.0, 0.7" />
+        <LineGeometry StartPoint="0.0, 0.7" EndPoint="0.0, 1.0" />
+        <LineGeometry StartPoint="0.0, 1.0" EndPoint="0.3, 1.0" />
+        <LineGeometry StartPoint="0.3, 1.0" EndPoint="1.0, 0.3" />
+        
+        <LineGeometry StartPoint="0.7, 0.6" EndPoint="0.4, 0.3" />
+    </GeometryGroup>
 
     <Path x:Key="PlusPath" Stretch="Uniform" Stroke="Black"
               Data="{StaticResource PlusGeometry}" StrokeThickness="2" 
@@ -28,6 +37,22 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.5"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}" x:Key="OrangeButtonStyle">
+        <Setter Property="Background" Value="#FFFF8000"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="LightGray"/>
+                <Setter Property="Background" Value="#FFFFab00"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}" x:Key="RedButtonStyle">
@@ -35,8 +60,8 @@
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="LightGray"/>
                 <Setter Property="Background" Value="#f75"/>
+                <Setter Property="BorderBrush" Value="LightGray"/>
             </Trigger>
         </Style.Triggers>
     </Style>
