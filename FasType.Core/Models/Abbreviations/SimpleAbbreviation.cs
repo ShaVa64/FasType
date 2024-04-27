@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace FasType.Core.Models.Abbreviations
 {
+    // Toute la gestion en RT d'une SimpleAbbreviation par rapport aux abbrev prédefinies
     public class SimpleAbbreviation : BaseAbbreviation
     {
         public bool HasPlural => !string.IsNullOrEmpty(PluralForm);

@@ -436,8 +436,10 @@ namespace FasType
             base.OnExit(e);
         }
 
-        static void CreateStartupShortcut(string path)
-        {
+       // Le Shortcut est un mécanisme qui fait que l'exe se lance au démarrage d'une session Windows
+       // Via le dépot d'un Shortcut dans un folder spécifique
+       static void CreateStartupShortcut(string path)
+       {
             var shell = new WshShellClass();
             var shortcut = (IWshShortcut)shell.CreateShortcut(path);
 

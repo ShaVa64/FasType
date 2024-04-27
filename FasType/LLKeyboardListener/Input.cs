@@ -10,6 +10,7 @@ using WindowsInput.Native;
 
 namespace FasType.LLKeyboardListener
 {
+    // Injecter les keys dand l'application.
     public static class Input
     {
         private static readonly InputSimulator _sim;

@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30406.217
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasType", "FasType\FasType.csproj", "{39DE480E-9D13-4A3D-BBE7-4368E1C280CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FasType.Core", "FasType.Core\FasType.Core.csproj", "{375C8080-B690-42E2-AE7E-8D30DCAA14F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasType.Core", "FasType.Core\FasType.Core.csproj", "{375C8080-B690-42E2-AE7E-8D30DCAA14F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{BFDBDCCD-D05D-4E96-89C0-F5DA77BB077F}"
+	ProjectSection(SolutionItems) = preProject
+		info.docx = info.docx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,7 +31,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C763684D-06A0-4123-A27A-D5A728672EF9}
 		RESX_NeutralResourcesLanguage = en-US
+		SolutionGuid = {C763684D-06A0-4123-A27A-D5A728672EF9}
 	EndGlobalSection
 EndGlobal
